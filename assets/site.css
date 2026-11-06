@@ -1,0 +1,376 @@
+/* Findom Wiki: the site layer, for what the kit does not have. Copied by tools/build.py to site/assets/site.css,
+   loaded after the tokens, the base and the kit modules.
+   The 18+ gate (fw-gate*), the layout of a chapter around its rail, the home sections, the category list, the
+   dictionary, the registry, the search page (fw-search-page*), the pack, and print. Classes are fw-site-*, fw-gate*
+   and fw-search-page*. A kit family is never restyled as a whole: where a page needs it, it is adjusted under a site
+   hook only (data-fw-site-fit on a comparison, .fw-site-flow, .fw-site-chapter, .fw-site-entry, .fw-site-chatmodel).
+   Every colour is a token or a color-mix of a token; a mask may use #000. Motion uses the motion tokens, so reduced
+   motion and Pause motion stop it like the kit's. */
+
+html, body { margin: 0; background: var(--fw-surface); }
+
+/* ================================================================== a chapter */
+.fw-site-chapter { padding-block: var(--fw-space-8) var(--fw-section); }
+.fw-site-solo { max-width: 800px; margin-inline: auto; }
+.fw-site-flow > * + * { margin-top: var(--fw-space-8); }
+.fw-site-flow [id] { scroll-margin-top: var(--fw-space-5); }
+
+/* the head, with the category emblem beside it (a still drawn icon without WebGL) */
+.fw-site-headrow { display: grid; grid-template-columns: minmax(0, 1fr) clamp(180px, 19vw, 240px); align-items: start; gap: var(--fw-space-5) var(--fw-space-6); }
+.fw-site-headrow--solo { grid-template-columns: minmax(0, 1fr); }
+.fw-site-emblem { width: 100%; height: clamp(200px, 21vw, 264px); margin-top: var(--fw-space-7); }
+.fw-site-flow > .fw-site-sensitive { margin-top: var(--fw-space-6); }
+.fw-site-sensitive { max-width: var(--fw-measure-read); font: italic var(--fw-weight-regular) var(--fw-fs-read)/1.45 var(--fw-font-read); color: var(--fw-ink-soft); }
+
+/* In 30 seconds: the points as short lines; its title answers the h2 of the sections */
+.fw-site-flow .fw-summary { --fwl-fs-block: calc(var(--fw-fs-heading) * 1.3); }
+.fw-site-points { display: flex; flex-direction: column; gap: var(--fw-space-3); }
+.fw-site-points > li { position: relative; padding-left: 1em; }
+.fw-site-points > li::before { content: ""; position: absolute; left: .05em; top: .6em; width: 7px; height: 7px; border-radius: 50%; background: var(--fw-accent-light); }
+
+/* the opening, in Vivian's voice, signed */
+.fw-site-opening { max-width: var(--fw-measure-lead); }
+.fw-site-opening > .fw-read-lead + .fw-read-lead { margin-top: .75em; }
+
+/* the body: one section per ## heading, parted by space (many kit blocks end on their own hairline) */
+.fw-site-flow > .fw-site-section, .fw-site-flow > .fw-site-check { margin-top: var(--fw-section); }
+.fw-site-flow > .fw-site-section--cont { margin-top: var(--fw-block); }
+.fw-site-section > * + * { margin-top: var(--fw-block); }
+.fw-site-section > .fw-site-after-head { margin-top: var(--fw-head-gap); }
+/* block titles inside a chapter sit under the section headings, whatever their family */
+.fw-site-flow :is(.fw-explain, .fw-chat, .fw-choice, .fw-steps, .fw-quiz, .fw-remember, .fw-flash, .fw-timeline, .fw-tells, .fw-tut) { --fwl-fs-block: var(--fw-fs-heading); }
+.fw-site-flow :is(.fw-table, .fw-compare) { --fwc-h2: var(--fw-fs-heading); }
+.fw-site-blocktitle { margin-bottom: var(--fw-head-gap); font: var(--fw-weight-regular) var(--fw-fs-heading)/var(--fw-lh-heading) var(--fw-font-display); color: var(--fw-ink-title); text-wrap: balance; }
+.fw-site-block > .fw-site-blocktitle + .fw-code { margin-top: 0; }
+.fw-site-block > .fw-code + .fw-code { margin-top: var(--fw-space-6); }
+
+/* words inside reading text */
+.fw-site-code { font-family: var(--fw-font-mono); font-size: max(.84em, var(--fw-fs-meta)); color: var(--fw-ink-title); padding: .04em .32em; border-radius: var(--fw-radius-mark); background: var(--fw-surface-raised); overflow-wrap: anywhere; }
+.fw-site-flow a:not([class]) { color: var(--fw-accent-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 50%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-flow a:not([class]):hover { text-decoration-color: currentColor; }
+}
+
+/* a field note ({D}) in reading text: the glyph alone in a small ring, one per run of field notes; its name is the
+   button's accessible name and its meaning the same tip as the full pill. A, B, C and E keep the full pill. */
+.fw-site-evmini > .fw-ev__btn { width: 26px; height: 26px; padding: 0; gap: 0; justify-content: center; }
+.fw-site-evmini > button.fw-ev__btn::after { inset: -9px; }
+
+/* the sources of a claim, inside its badge tip */
+.fw-site-tipsrc { display: block; margin-top: var(--fw-space-2); padding-top: var(--fw-space-2); border-top: 1px solid var(--fw-line); }
+.fw-site-tipline { display: block; color: var(--fw-ink-soft); }
+.fw-site-tipline + .fw-site-tipline { margin-top: var(--fw-space-1); }
+.fw-site-tipline a { color: var(--fw-accent-ink); font-weight: var(--fw-weight-strong); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 50%, transparent); }
+
+/* a fold (details.fw-site-fold): a dictionary word's "More about <word>", a long Check it's "Show all N claims".
+   The toggle is a quiet line of words with a chevron that turns; it opens on click and keyboard, when an anchor
+   targets something inside it (site.js) and on paper (print, below). */
+.fw-site-toggle { display: inline-flex; align-items: center; gap: var(--fw-space-2); min-height: var(--fw-tap); list-style: none; cursor: pointer; color: var(--fw-accent-ink); font: var(--fw-weight-strong) var(--fw-fs-ui-small)/1.2 var(--fw-font-ui); transition: color var(--fw-dur-hover) var(--fw-ease-hover), transform var(--fw-dur-press) var(--fw-ease-out); }
+.fw-site-toggle::-webkit-details-marker { display: none; }
+.fw-site-toggle::marker { content: ""; }
+.fw-site-toggle > span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-site-toggle:active { transform: scale(var(--fw-press-scale)); }
+.fw-site-toggle__chev { width: 18px; height: 18px; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-site-fold[open] > .fw-site-toggle .fw-site-toggle__chev { transform: rotate(180deg); }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-toggle:hover { color: var(--fw-ink-title); }
+  .fw-site-toggle:hover > span { text-decoration-color: currentColor; }
+}
+
+/* a long Check it (more than 40 claims): the legend, the first twelve claims, then the rest behind "Show all N
+   claims"; the numbers run on from 13 */
+.fw-site-checkmore { margin-top: var(--fw-space-4); }
+.fw-sources__list.fw-site-checkrest { margin-top: var(--fw-space-2); counter-reset: fwc-src 12; }
+
+/* the end of a chapter: Check it, the PDF, related chapters, previous and next, the help line */
+.fw-site-flow > .fw-site-end { margin-top: var(--fw-block); }
+.fw-site-k { margin-bottom: var(--fw-space-4); font: italic var(--fw-weight-regular) 21px/1.3 var(--fw-font-read); color: var(--fw-accent-soft); }
+/* one download card: the kit's own single-column form (its layout under 1180 px) */
+.fw-site-dl { grid-template-columns: minmax(0, 1fr); max-width: 36rem; }
+
+/* what only paper shows: every answer, every file, every card */
+.fw-site-print { display: none; }
+
+/* a descent runs across the whole width of the page */
+.fw-site-bleed { margin-block: var(--fw-block); }
+
+/* a comparison of two or three columns (data-fw-site-fit, set by the build) fits the reading column: the cells wrap
+   and nothing scrolls sideways. On a phone each row stacks, every value under the name of its column, as the kit's
+   reference table does. Four columns or more keep the kit's sideways scroll. */
+.fw-compare[data-fw-site-fit] .fw-compare__grid { min-width: 0; }
+.fw-compare[data-fw-site-fit] .fw-compare__grid :is(th, td) { overflow-wrap: break-word; hyphens: auto; }
+@media (max-width: 600px) {
+  .fw-compare[data-fw-site-fit] .fw-compare__grid,
+  .fw-compare[data-fw-site-fit] .fw-compare__grid :is(tbody, tr, th, td) { display: block; width: auto; min-width: 0; }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid tbody tr { padding: 18px 18px 20px; border-bottom: 1px solid var(--fwc-hair); }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid tbody tr:last-child { border-bottom: 0; }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid tbody th { position: static; padding: 0 0 var(--fw-space-3); border: 0; background: none; box-shadow: none; font: var(--fw-weight-regular) 22px/1.2 var(--fw-font-display); color: var(--fw-ink-title); }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid td { padding: 0; border: 0; font-size: 18px; }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid td + td { margin-top: var(--fw-space-3); }
+  .fw-compare[data-fw-site-fit] .fw-compare__grid td::before { content: attr(data-label); display: block; margin-bottom: 2px; font: var(--fw-weight-label) var(--fw-fs-meta)/1.3 var(--fw-font-ui); color: var(--fw-ink-soft); }
+}
+
+/* a block without a title starts at its first line: the space the kit keeps under a title goes with the title, and
+   flashcards without a title keep their counter level with the top of the card instead of floating in the middle */
+.fw-site-flow :is(.fw-choice__text, .fw-chat__instr, .fw-chat__label):first-child { margin-top: 0; }
+.fw-site-flow .fw-flash:not(:has(.fw-flash__title)) { align-items: start; }
+
+/* a conversation with no red flag is a model to read (Blocks.chat_model): the kit's bubbles, without the look of a
+   control */
+.fw-site-chatmodel .fw-chat__msg { cursor: auto; }
+.fw-site-chatmodel .fw-chat__msg:active { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-chatmodel .fw-chat__msg:hover { background-color: var(--fw-surface-selected); box-shadow: inset 0 0 0 1px var(--fwl-edge); }
+  .fw-site-chatmodel .fw-chat__row[data-voice="you"] .fw-chat__msg:hover { background-color: var(--fw-accent-deep); }
+}
+
+/* a tutorial in a chapter: the steps take the reading width and the progress line sticks above them, as in the kit's
+   own layout under 1040 px (beside an 800 px column the kit's side column left the steps 414 px) */
+@media (min-width: 1041px) {
+  .fw-site-flow .fw-tut { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "need" "prog" "steps" "note" "done"; }
+  .fw-site-flow .fw-tut__side { display: contents; }
+  .fw-site-flow .fw-tut__side .fw-tut__progress { grid-area: prog; position: sticky; z-index: 8; top: 0; display: flex; align-items: center; gap: 16px; margin: 0 0 40px; padding: 12px 0 14px; border-top: 0; box-shadow: 0 1px 0 var(--fwl-hair); }
+  /* its ground, so the steps pass under it; where the browser can tell, it shows only while the line is stuck */
+  .fw-site-flow .fw-tut__side .fw-tut__progress::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--fw-surface); box-shadow: 0 1px 0 var(--fwl-hair), 0 16px 28px -18px color-mix(in srgb, var(--fw-surface-deepest) 90%, transparent); transition: opacity var(--fw-dur-hover) var(--fw-ease-hover); }
+  @supports (container-type: scroll-state) {
+    .fw-site-flow .fw-tut__side .fw-tut__progress { container-type: scroll-state; }
+    .fw-site-flow .fw-tut__side .fw-tut__progress::before { opacity: 0; }
+    @container scroll-state(stuck: top) {
+      .fw-site-flow .fw-tut__side .fw-tut__progress::before { opacity: 1; }
+    }
+  }
+  .fw-site-flow .fw-tut__side .fw-tut__line { flex: none; font-size: 22px; }
+  .fw-site-flow .fw-tut__side .fw-tut__bar { flex: 1; margin-top: 0; }
+}
+
+/* the stepper strip (phone, tablet): the stations take the first line (more than fit scroll sideways inside it, the
+   current one kept in view by site.js); "Step k of n" and the whole name of the current section take a line of
+   their own under them. The strip's height (--fw-site-strip, measured by site.js) keeps anchors and a tutorial's
+   progress line below it. */
+.fw-site-railnow { display: none; }
+@media (max-width: 1040px) {
+  .fw-site-chapter .fw-rail__nav { flex-wrap: wrap; justify-content: flex-start; row-gap: 0; padding-bottom: 10px; }
+  .fw-site-chapter .fw-rail__list { flex: 0 1 auto; min-width: 0; max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .fw-site-chapter .fw-rail__list::-webkit-scrollbar { display: none; }
+  .fw-site-railnow { display: block; flex: 1 1 100%; padding-bottom: 2px; font: var(--fw-weight-strong) 16px/1.3 var(--fw-font-ui); color: var(--fw-ink-title); overflow-wrap: anywhere; }
+  .fw-site-railnow__step { margin-right: var(--fw-space-2); font: var(--fw-weight-label) var(--fw-fs-meta)/1.3 var(--fw-font-ui); color: var(--fw-ink-quiet); }
+  .fw-site-flow [id] { scroll-margin-top: calc(var(--fw-site-strip, 84px) + 16px); }
+  /* under the chapter's stepper strip, a tutorial's own progress line sticks below the strip, not behind it */
+  .fw-rail .fw-site-flow .fw-tut__side .fw-tut__progress { top: var(--fw-site-strip, 84px); }
+}
+@media (max-width: 760px) {
+  .fw-site-chapter { padding-top: var(--fw-space-5); }
+  .fw-site-headrow { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .fw-site-emblem { order: -1; justify-self: center; width: min(100%, 240px); height: 168px; margin: 0 0 var(--fw-space-2); }
+}
+
+/* ================================================================== the home */
+.fw-site-homesec { padding-top: var(--fw-section); }
+.fw-site-homesec--help { padding-bottom: var(--fw-section); }
+.fw-site-h2 { margin-bottom: var(--fw-head-gap); font: var(--fw-weight-regular) var(--fw-fs-display-l)/1.02 var(--fw-font-display); letter-spacing: -.005em; color: var(--fw-ink-title); text-wrap: balance; }
+/* the chapter count of a category tile, under its line */
+.fw-site-count { display: block; grid-column: 2; margin-top: var(--fw-space-3); font: var(--fw-weight-label) var(--fw-fs-meta)/1.3 var(--fw-font-ui); color: var(--fw-ink-soft); }
+/* "How every chapter works": under the title, the real chapter the steps open; each step's name opens its part */
+.fw-site-methodnote { margin-top: var(--fw-space-5); color: var(--fw-ink-soft); }
+.fw-site-methodgo { margin-top: var(--fw-space-1); }
+.fw-site-methodlink { position: relative; color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: color-mix(in srgb, var(--fw-accent-light) 55%, transparent); transition: color var(--fw-dur-hover) var(--fw-ease-hover), text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
+/* the tap area reaches 44 px without moving the words */
+.fw-site-methodlink::after { content: ""; position: absolute; inset: -7px -4px; }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-methodlink:hover { color: var(--fw-accent-ink); text-decoration-color: currentColor; }
+}
+
+/* ================================================================== a category */
+.fw-site-cat { padding-block: var(--fw-space-8) var(--fw-section); }
+.fw-site-catblock { margin-top: var(--fw-block); }
+.fw-site-catlist { max-width: 60rem; border-bottom: 1px solid var(--fw-line-soft); }
+.fw-site-catlist__item { position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--fw-space-5); padding-block: var(--fw-space-6); border-top: 1px solid var(--fw-line-soft); }
+.fw-site-catlist__num { padding-top: 4px; font: var(--fw-weight-regular) 30px/1 var(--fw-font-display); color: var(--acc-ink, var(--fw-accent-ink)); font-variant-numeric: lining-nums; }
+.fw-site-catlist__title { font: var(--fw-weight-regular) calc(var(--fw-fs-heading) * 1.3)/var(--fw-lh-heading) var(--fw-font-display); color: var(--fw-ink-title); text-wrap: balance; overflow-wrap: anywhere; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-site-catlist__link { color: inherit; text-decoration: none; }
+/* the title's link covers the whole entry */
+.fw-site-catlist__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--fw-radius-small); }
+.fw-site-catlist__link:focus-visible { outline: none; }
+.fw-site-catlist__link:focus-visible::after { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+.fw-site-catlist__stand { margin-top: var(--fw-space-3); max-width: var(--fw-measure-read); font: var(--fw-weight-regular) var(--fw-fs-read)/var(--fw-lh-read) var(--fw-font-read); color: var(--fw-ink-read); text-wrap: pretty; }
+.fw-site-catlist__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--fw-space-2) var(--fw-space-3); margin-top: var(--fw-space-4); color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-catlist__item:hover .fw-site-catlist__title { color: var(--fw-accent-ink); }
+}
+@media (max-width: 600px) {
+  .fw-site-catlist__item { grid-template-columns: 36px minmax(0, 1fr); gap: var(--fw-space-3); }
+  .fw-site-catlist__num { font-size: 24px; }
+}
+.fw-site-empty { max-width: var(--fw-measure-read); font: italic var(--fw-weight-regular) var(--fw-fs-read)/var(--fw-lh-read) var(--fw-font-read); color: var(--fw-ink-soft); }
+
+/* ================================================================== the dictionary */
+.fw-site-letters { margin-bottom: var(--fw-block); padding-block: var(--fw-space-3); border-top: 1px solid var(--fw-line-soft); border-bottom: 1px solid var(--fw-line-soft); }
+.fw-site-letters__list { display: flex; flex-wrap: wrap; gap: 2px; }
+.fw-site-letters__link, .fw-site-letters__off { display: inline-grid; place-items: center; min-width: var(--fw-tap); min-height: var(--fw-tap); padding: 0 6px; border-radius: var(--fw-radius-small); font: var(--fw-weight-regular) 22px/1 var(--fw-font-display); }
+.fw-site-letters__link { color: var(--fw-ink-title); text-decoration: none; transition: background-color var(--fw-dur-hover) var(--fw-ease-hover), color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-site-letters__off { color: var(--fw-ink-quiet); opacity: .62; }
+@media (hover: hover) and (pointer: fine) {
+  .fw-site-letters__link:hover { color: var(--fw-accent-ink); background: color-mix(in srgb, var(--fw-accent-light) 7%, transparent); }
+}
+/* made to be scanned (Blocks.entries): the words grouped by letter, one row each, the word and its class beside the
+   definition with its level; the rest folds into "More about <word>", which opens on click and keyboard, when its
+   anchor is the target (site.js) and on paper (print, below) */
+.fw-site-letter + .fw-site-letter { margin-top: var(--fw-space-8); }
+.fw-site-letter__k { padding-bottom: var(--fw-space-3); font: var(--fw-weight-regular) calc(var(--fw-fs-heading) * 1.3)/1 var(--fw-font-display); color: var(--fw-accent-ink); }
+.fw-site-entry { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: var(--fw-space-2) var(--fw-space-6); padding-block: var(--fw-space-5) var(--fw-space-3); border-top: 1px solid var(--fw-line-soft); }
+.fw-site-letter > .fw-site-entry:last-child { border-bottom: 1px solid var(--fw-line-soft); }
+.fw-site-entry .fw-site-entry__word { font: var(--fw-weight-regular) var(--fw-fs-heading)/1.1 var(--fw-font-display); letter-spacing: 0; overflow-wrap: break-word; hyphens: auto; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-site-entry:target .fw-site-entry__word { color: var(--fw-accent-ink); }
+.fw-site-entry .fw-entry__class { margin-top: var(--fw-space-1); font-size: 18px; }
+.fw-site-entry__def { overflow-wrap: break-word; }
+.fw-site-entry__more { margin-top: var(--fw-space-1); }
+.fw-site-entry__body { display: flex; flex-direction: column; gap: var(--fw-space-5); padding: var(--fw-space-3) 0 var(--fw-space-4); }
+.fw-site-entry__body .fw-entry__k { margin: 0; }
+.fw-site-entry__body .fw-entry__example { margin-top: var(--fw-space-2); }
+.fw-site-entry__body .fw-entry__quote { font-size: var(--fw-fs-read); }
+.fw-site-entry__body .fw-entry__chips { margin-top: var(--fw-space-2); }
+@media (max-width: 760px) {
+  .fw-site-entry { grid-template-columns: minmax(0, 1fr); gap: var(--fw-space-2); }
+}
+
+/* ================================================================== the registry (the sources page) */
+.fw-site-registry > .fw-site-topic { margin-top: var(--fw-space-8); }
+.fw-site-pub { display: block; margin-top: var(--fw-space-1); font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.4 var(--fw-font-ui); color: var(--fw-ink-soft); }
+.fw-site-status { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border-radius: var(--fw-radius-pill); box-shadow: inset 0 0 0 1px var(--fw-line-strong); font: var(--fw-weight-strong) var(--fw-fs-meta)/1 var(--fw-font-ui); color: var(--fw-ink); }
+.fw-site-status[data-status="read"] { box-shadow: inset 0 0 0 1px var(--fw-safe-line); color: var(--fw-safe-ink); }
+.fw-site-cites { margin-top: var(--fw-space-3); }
+.fw-site-cites__k { margin-bottom: var(--fw-space-2); font-size: var(--fw-fs-ui-small); color: var(--fw-ink-soft); }
+
+/* ================================================================== the pack (every chapter, for the pack PDF) */
+.fw-site-pack { max-width: 880px; padding-block: var(--fw-space-9) var(--fw-section); }
+.fw-site-packcover .fw-read-lead { margin-top: var(--fw-space-5); }
+.fw-site-packcover__title { margin-top: var(--fw-space-4); }
+.fw-site-packtoc { margin-top: var(--fw-space-7); border-top: 1px solid var(--fw-line-soft); counter-reset: fw-site-toc; }
+.fw-site-packtoc > li { display: grid; grid-template-columns: minmax(0, 9em) minmax(0, 1fr); gap: var(--fw-space-4); padding-block: var(--fw-space-3); border-bottom: 1px solid var(--fw-line-soft); }
+.fw-site-packtoc__cat { color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); }
+.fw-site-packtoc a { color: var(--fw-ink-title); font: var(--fw-weight-regular) 20px/1.3 var(--fw-font-read); text-decoration: none; }
+.fw-site-packch { margin-top: var(--fw-section); padding-top: var(--fw-section); border-top: 1px solid var(--fw-line); }
+
+/* ================================================================== the 18+ gate
+   A veil over the page on the first visit; the page text stays in the HTML underneath. The head script adds
+   html.fw-gate-open before the first paint (never without JavaScript, never with ?gate=off or a stored choice).
+   Entrance: the words rise a little out of the night, once, a short stagger; the veil is there at once, so the page
+   never shows through. Exit: the gate fades in less time than it took to arrive. Under reduced motion and Pause
+   motion the base rules set every animation and transition to nothing: the gate appears and leaves at once. */
+.fw-gate { display: none; }
+html.fw-gate-open { overflow: hidden; }
+html.fw-gate-open .fw-gate { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: var(--fw-space-6) var(--fw-gutter); overflow-y: auto; }
+.fw-gate__veil { position: fixed; inset: 0; background: var(--fw-light-from-above) no-repeat, color-mix(in srgb, var(--fw-surface-deepest) 94%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.fw-gate__dialog { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--fw-space-5); width: 100%; max-width: 38rem; text-align: center; outline: none; }
+.fw-gate__age { width: 56px; height: 56px; font-size: var(--fw-fs-ui-small); }
+.fw-gate__title { font: var(--fw-weight-regular) var(--fw-fs-display-l)/1.02 var(--fw-font-display); letter-spacing: -.005em; color: var(--fw-ink-title); text-wrap: balance; }
+.fw-gate__text { max-width: 26em; color: var(--fw-ink-read); }
+.fw-gate__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--fw-space-3); margin-top: var(--fw-space-2); }
+@keyframes fw-gate-rise { from { opacity: 0; transform: translateY(8px); } }
+html.fw-gate-open .fw-gate__dialog > * { animation: fw-gate-rise var(--fw-dur-ui) var(--fw-ease-out) both; }
+html.fw-gate-open .fw-gate__dialog > :nth-child(2) { animation-delay: var(--fw-stagger); }
+html.fw-gate-open .fw-gate__dialog > :nth-child(3) { animation-delay: calc(var(--fw-stagger) * 2); }
+html.fw-gate-open .fw-gate__dialog > :nth-child(4) { animation-delay: calc(var(--fw-stagger) * 3); }
+html.fw-gate-open .fw-gate.is-leaving { opacity: 0; transition: opacity var(--fw-dur-tip) var(--fw-ease-out); }
+html.fw-gate-open .fw-gate.is-leaving .fw-gate__dialog { transform: scale(.98); transition: transform var(--fw-dur-tip) var(--fw-ease-out); }
+@media (max-width: 600px) {
+  .fw-gate__actions { flex-direction: column; align-self: stretch; }
+  .fw-gate__actions > .fw-btn { width: 100%; }
+}
+
+/* ================================================================== the search page */
+.fw-search-page { padding-block: var(--fw-space-9) var(--fw-section); }
+.fw-search-page__title { font: var(--fw-weight-regular) var(--fw-fs-display-l)/1.02 var(--fw-font-display); letter-spacing: -.005em; color: var(--fw-ink-title); }
+.fw-search-page__form { max-width: 46rem; margin-top: var(--fw-space-7); }
+.fw-search-page__label { display: block; margin-bottom: var(--fw-space-2); font: var(--fw-weight-label) var(--fw-fs-label)/var(--fw-lh-label) var(--fw-font-ui); color: var(--fw-ink-soft); }
+.fw-search-page__row { display: flex; gap: var(--fw-space-3); }
+.fw-search-page__input { flex: 1 1 auto; min-width: 0; height: 56px; padding: 0 22px; border-radius: var(--fw-radius-pill); border: 1px solid var(--fw-line-strong); background: var(--fw-surface-raised); color: var(--fw-ink); font: var(--fw-weight-regular) 20px/1 var(--fw-font-ui); transition: border-color var(--fw-dur-hover) var(--fw-ease-hover), background-color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-search-page__input:focus { outline: none; border-color: var(--fw-accent-ink); background: var(--fw-surface-selected); }
+.fw-search-page__input:focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 3px; }
+.fw-search-page__go { flex: none; min-height: 56px; }
+.fw-search-page__go .fw-ico { width: 18px; height: 18px; }
+.fw-search-page__status { margin-top: var(--fw-space-6); max-width: var(--fw-measure-read); font: italic var(--fw-weight-regular) var(--fw-fs-read)/1.45 var(--fw-font-read); color: var(--fw-ink-soft); }
+.fw-search-page__list { max-width: 52rem; margin-top: var(--fw-space-5); }
+.fw-search-page__list:not(:empty) { border-bottom: 1px solid var(--fw-line-soft); }
+.fw-search-page__item { position: relative; padding-block: var(--fw-space-5); border-top: 1px solid var(--fw-line-soft); }
+.fw-search-page__kind { font: var(--fw-weight-label) var(--fw-fs-meta)/1.3 var(--fw-font-ui); color: var(--fw-ink-quiet); }
+.fw-search-page__name { margin-top: var(--fw-space-1); font: var(--fw-weight-regular) var(--fw-fs-heading)/var(--fw-lh-heading) var(--fw-font-display); color: var(--fw-ink-title); overflow-wrap: anywhere; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-search-page__link { color: inherit; text-decoration: none; }
+.fw-search-page__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--fw-radius-small); }
+.fw-search-page__link:focus-visible { outline: none; }
+.fw-search-page__link:focus-visible::after { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+.fw-search-page__snip { margin-top: var(--fw-space-2); max-width: var(--fw-measure-read); font: var(--fw-weight-regular) 19px/1.5 var(--fw-font-read); color: var(--fw-ink-read); }
+.fw-search-page mark { padding: 0 .08em; border-radius: var(--fw-radius-mark); background: color-mix(in srgb, var(--fw-accent) 55%, transparent); color: var(--fw-ink-title); }
+@media (hover: hover) and (pointer: fine) {
+  .fw-search-page__input:hover { border-color: color-mix(in srgb, var(--fw-accent-light) 60%, transparent); }
+  .fw-search-page__item:hover .fw-search-page__name { color: var(--fw-accent-ink); }
+}
+@media (max-width: 600px) {
+  .fw-search-page { padding-top: var(--fw-space-7); }
+  .fw-search-page__go { padding-inline: 16px; }
+}
+
+/* ================================================================== print
+   For the PDFs (tools/pdf.py) and for anyone who prints a page: the header keeps only the brand, the gate, the
+   rail, the controls and the navigation at the end of a chapter go; a scene leaves a still drawn picture; every
+   answer, every code file and every flashcard is open; an outside link prints its address. The page keeps its night
+   colours (print colour exact), as on screen. */
+@media print {
+  /* the sheet's margins print in the page ground too (without it Chrome fills them with its own dark grey), and the
+     light from above, stretched over the whole chapter, gives way to the flat ground, so no lighter box stands
+     inside the margins on any sheet */
+  @page { size: A4; margin: 14mm 13mm; background: var(--fw-surface); }
+  html, body { background: var(--fw-surface); }
+  .fw-lit { background: var(--fw-surface); }
+  html.fw-gate-open { overflow: visible; }
+  :root { --fw-section: var(--fw-space-7); --fw-block: var(--fw-space-6); --fw-head-gap: var(--fw-space-4); }
+  .fw-page { min-height: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fw-page *, .fw-page *::before, .fw-page *::after { animation: none !important; transition: none !important; }
+  .fw-skip, .fw-search, .fw-motion, .fw-nav, .fw-gate, .fw-rail__nav, .fw-site-end:not(.fw-site-end--help),
+  .fw-quiz__foot, .fw-quiz__note, .fw-chat__bar, .fw-chat__fb, .fw-chat__cue, .fw-choice__out, .fw-choice__tag,
+  .fw-flash__deck, .fw-flash__dots, .fw-flash__count, .fw-flash__known, .fw-tut__check, .fw-tut__note, .fw-tut__side,
+  .fw-tut__done, .fw-code__side, .fw-code__bar, .fw-code__status, .fw-descent__stage, .fw-descent__marks-layer,
+  .fw-descent__start, .fw-exitbar, .fw-tip { display: none !important; }
+  .fw-site-print { display: block; }
+  .fw-site-answer { margin-top: var(--fw-space-3); font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.45 var(--fw-font-ui); color: var(--fw-ink); text-align: left; }
+  .fw-choice__opt > .fw-site-answer { grid-column: 2; margin-top: 0; }
+  .fw-quiz__score { display: none !important; }
+  .fw-site-cards { margin-top: var(--fw-space-4); }
+  .fw-site-cards > div { padding-block: var(--fw-space-2); border-top: 1px solid var(--fw-line-soft); }
+  .fw-site-cards dt { font: var(--fw-weight-regular) 20px/1.2 var(--fw-font-display); color: var(--fw-ink-title); }
+  .fw-site-cards dd { margin: var(--fw-space-1) 0 0; font: var(--fw-weight-regular) 18px/1.45 var(--fw-font-read); color: var(--fw-ink-read); }
+  .fw-site-fname { margin: var(--fw-space-3) 0 var(--fw-space-1); padding-inline: var(--fw-space-4); font: var(--fw-weight-strong) var(--fw-fs-mono)/1.3 var(--fw-font-mono); color: var(--fw-ink-soft); }
+  /* the layout: one column */
+  .fw-rail { display: block; }
+  .fw-site-chapter { padding-block: var(--fw-space-5) 0; }
+  .fw-site-headrow { grid-template-columns: minmax(0, 1fr) 120px; }
+  .fw-site-emblem { order: 0; width: 120px; height: 104px; margin: 0; }
+  /* a scene leaves its still drawn picture */
+  [data-fw-emblem] > .fw-emblem__cv { display: none !important; }
+  [data-fw-emblem] > .fw-emblem__fb { display: grid !important; }
+  .fw-descent__open, .fw-descent__step { min-height: 0 !important; padding: var(--fw-space-5) 0 !important; }
+  /* every file of a code example, and no line cut at the edge of the paper */
+  .fw-code { display: block; }
+  .fw-code__panel[hidden] { display: block !important; }
+  .fw-code__scroll { overflow: visible; }
+  .fw-code__pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  /* a comparison fits the paper instead of scrolling */
+  .fw-compare__box { overflow: visible; }
+  .fw-compare__grid { min-width: 0 !important; }
+  .fw-compare__grid :is(th, td) { position: static !important; }
+  .fw-compare__cue { display: none !important; }
+  /* every fold prints open, a dictionary word or a long Check it (site.js also opens them before printing, for
+     browsers without this) */
+  .fw-site-toggle { display: none !important; }
+  .fw-site-fold::details-content { content-visibility: visible; }
+  /* an outside link prints its address */
+  .fw-main a[href^="http"]::after { content: " (" attr(href) ")"; font: var(--fw-weight-regular) var(--fw-fs-meta)/1.3 var(--fw-font-ui); color: var(--fw-ink-soft); overflow-wrap: anywhere; word-break: break-all; }
+  /* pages */
+  h2, h3, h4 { break-after: avoid-page; }
+  .fw-site-block, .fw-sources__item, .fw-quiz__q, .fw-myth__item, .fw-stat__item, .fw-steps__item, .fw-remember__item,
+  .fw-explain__item, .fw-tut__step, .fw-chat__row, .fw-table__row, .fw-entry, .fw-site-catlist__item { break-inside: avoid-page; }
+  .fw-site-packch { break-before: page; margin-top: 0; padding-top: 0; border-top: 0; }
+  .fw-site-packcover { break-after: page; }
+  .fw-foot { padding-block: var(--fw-space-5); }
+}

@@ -1,0 +1,196 @@
+/* Findom Wiki: design tokens.
+   Frozen on 2026-11-02 from round 4 of the direction work: version C "Deep rose", with spiral C "The descent",
+   the reading face, pearl white for the way out, labels in sentence case (_essais/direction-4/).
+   This is the only place where a colour, a size, a duration or a curve is written. Everything else reads these
+   variables. Colours are named by role, never by hue. Fonts load from ./fonts/ (all under the SIL Open Font
+   License, licence files beside them). */
+
+@font-face { font-family: "fw-display"; src: url("fonts/abril-fatface-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Bold.ttf") format("truetype"); font-weight: 600 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  /* ============================================================ surfaces (grounds, deepest first) */
+  --fw-surface-deepest: #0B0307;   /* code blocks, the bottom of the descent */
+  --fw-surface: #12060B;           /* the page ground: a black-cherry night */
+  --fw-surface-band: #170810;      /* an alternate band on the page */
+  --fw-surface-raised: #1E0A13;    /* something a person acts on: door, message, answer, card */
+  --fw-surface-hover: #2A0F1E;     /* the same, under the pointer */
+  --fw-surface-selected: #2E1020;  /* selected, pressed, a plinth */
+  --fw-surface-selected-2: #3A1428;
+  --fw-light-from-above: radial-gradient(64% 110% at 26% -30%, rgba(179, 36, 90, .46), rgba(92, 22, 51, .18) 48%, rgba(18, 6, 11, 0) 78%);
+                                   /* the pink light falling on the top of a page */
+
+  /* the descent: the ground of each step of a staged explainer (the spiral's five turns), lighter to deeper */
+  --fw-depth-1: #2E1020;
+  --fw-depth-2: #24101A;
+  --fw-depth-3: #1A0A12;
+  --fw-depth-4: #12060B;
+  --fw-depth-5: #0B0307;
+
+  /* ============================================================ ink */
+  --fw-ink-title: #FFF5F8;         /* titles, numerals on dark */
+  --fw-ink: #FCEFF4;               /* interface text */
+  --fw-ink-read: #EFDDE5;          /* long reading text (15:1 on the page ground) */
+  --fw-ink-soft: #D7B3C3;          /* secondary text, captions */
+  --fw-ink-quiet: #BE95A8;         /* meta, counters, line numbers (7:1 on the page ground) */
+  --fw-ink-on-accent: #FFF5F8;     /* text on an accent fill (5.9:1) */
+  --fw-ink-on-pearl: #2A0A18;      /* text on a pearl fill */
+
+  /* ============================================================ accent: the rose */
+  --fw-accent: #B3245A;            /* the primary action fill, the current step */
+  --fw-accent-pressed: #8A1C46;
+  --fw-accent-ink: #F4A2C1;        /* accent text on dark: kickers, numerals, links in UI */
+  --fw-accent-light: #F07AA8;      /* marks and lines that carry meaning (3:1 or more) */
+  --fw-accent-soft: #F8C6D9;       /* italic lead-ins, the focus ring */
+  --fw-accent-deep: #5C1633;       /* wine: the alert ground, the deepest rose */
+  --fw-focus: #F8C6D9;
+
+  /* lines and rims */
+  --fw-line: rgba(240, 122, 168, .22);
+  --fw-line-soft: rgba(240, 122, 168, .12);   /* hairlines between blocks */
+  --fw-line-strong: rgba(240, 122, 168, .55);
+
+  /* ============================================================ the way out: pearl white light, never green */
+  /* help line, Safety, right answers, done states, exits */
+  --fw-safe: #F3E3EA;
+  --fw-safe-ink: #FFF5F8;
+  --fw-safe-surface: #2A1620;
+  --fw-safe-line: rgba(255, 245, 248, .62);
+  --fw-safe-hair: rgba(255, 245, 248, .26);
+  --fw-safe-wash: rgba(255, 245, 248, .10);
+
+  /* ============================================================ danger and caution */
+  --fw-danger: #E0315F;            /* a red flag, a scam */
+  --fw-danger-ink: #FF8A9E;
+  --fw-danger-surface: #3B0A19;
+  --fw-caution: #E8875F;           /* only for a wrong answer and a common mistake */
+  --fw-caution-ink: #F7B58F;
+  --fw-caution-surface: #351810;
+
+  /* ============================================================ category marks (small marks only, never a ground) */
+  --fw-cat-basics: #F3E2EA;
+  --fw-cat-variants: #FF9C86;
+  --fw-cat-kinks: #F07AA8;
+  --fw-cat-dom: #FF5F82;
+  --fw-cat-subs: #F7B3CD;
+  --fw-cat-safety: #FFF8FB;
+  --fw-cat-scams: #9B1F48;         /* a fill; its text-safe ink is the next token */
+  --fw-cat-scams-ink: #FFA3B3;
+  --fw-cat-code: #A9C7D6;          /* the one cool tone */
+  --fw-cat-dictionary: #F5C29F;
+  --fw-cat-sources: #D4B4C2;
+
+  /* ============================================================ type */
+  --fw-font-display: "fw-display", "Abril Fatface", Georgia, serif;   /* titles and numerals only */
+  --fw-font-read: "fw-read", "Crimson Pro", Georgia, serif;           /* every paragraph a person reads */
+  --fw-font-ui: "fw-ui", "Instrument Sans", system-ui, sans-serif;    /* navigation, buttons, chips, counters, captions */
+  --fw-font-mono: "fw-mono", "IBM Plex Mono", ui-monospace, monospace; /* code and the guard log only */
+
+  --fw-fs-display-xl: clamp(58px, 9.4vw, 152px);
+  --fw-fs-display-l: clamp(38px, 4.6vw, 72px);
+  --fw-fs-numeral: clamp(104px, 11vw, 168px);
+  --fw-fs-heading: clamp(25px, 2vw, 30px);
+  --fw-fs-read-lead: clamp(23px, 2vw, 28px);
+  --fw-fs-read: clamp(20px, 1.5vw, 22px);
+  --fw-fs-ui: 17px;
+  --fw-fs-ui-small: 15px;
+  --fw-fs-label: 15px;             /* sentence case, weight 600, no letter spacing */
+  --fw-fs-meta: 14px;              /* the smallest text allowed */
+  --fw-fs-mono: 14px;
+  --fw-fs-code: 14.5px;
+
+  --fw-weight-regular: 400;
+  --fw-weight-label: 600;
+  --fw-weight-strong: 700;
+
+  --fw-lh-display: .96;
+  --fw-lh-heading: 1.12;
+  --fw-lh-read-lead: 1.42;
+  --fw-lh-read: 1.55;
+  --fw-lh-ui: 1.62;
+  --fw-lh-label: 1.25;
+  --fw-lh-code: 1.75;
+
+  --fw-measure-read: 34em;         /* about 66 characters of reading text */
+  --fw-measure-lead: 30em;
+
+  /* ============================================================ space */
+  --fw-space-1: 4px;
+  --fw-space-2: 8px;
+  --fw-space-3: 12px;
+  --fw-space-4: 16px;
+  --fw-space-5: 24px;
+  --fw-space-6: 32px;
+  --fw-space-7: 48px;
+  --fw-space-8: 64px;
+  --fw-space-9: 96px;
+  --fw-space-10: 128px;
+  --fw-gutter: clamp(16px, 4vw, 48px);          /* side margin; 16 px on a phone */
+  --fw-wrap: 1312px;                            /* widest content box */
+  --fw-section: clamp(72px, 8vw, 128px);        /* between sections of a page */
+  --fw-block: clamp(88px, 9vw, 136px);          /* between blocks of a lesson */
+  --fw-head-gap: clamp(26px, 2.8vw, 36px);      /* a block heading to its content */
+  --fw-tap: 44px;                               /* smallest tap target */
+
+  /* ============================================================ radius */
+  --fw-radius-pill: 999px;         /* buttons, chips, badges */
+  --fw-radius-card: 18px;          /* things a person acts on */
+  --fw-radius-panel: 22px;         /* the help line, a sandbox */
+  --fw-radius-small: 10px;
+  --fw-radius-mark: 2px;           /* progress bars, hairline marks */
+
+  /* ============================================================ motion */
+  /* Curves. Entering, feedback and anything the person caused: out. Something moving or turning on screen:
+     in-out. The descent and anything that follows the scroll: sink. Hover and colour: plain ease. Never ease-in. */
+  --fw-ease-out: cubic-bezier(.23, 1, .32, 1);
+  --fw-ease-in-out: cubic-bezier(.77, 0, .175, 1);
+  --fw-ease-sink: cubic-bezier(.45, 0, .15, 1);
+  --fw-ease-hover: ease;
+
+  /* Durations. Interface motion stays under 300 ms; only explanations may be longer. */
+  --fw-dur-press: 160ms;           /* scale .97 on :active */
+  --fw-dur-hover: 200ms;           /* colour and background on hover, behind (hover: hover) and (pointer: fine) */
+  --fw-dur-tip: 160ms;             /* a tooltip opens; later tips open at once */
+  --fw-dur-ui: 240ms;              /* a mark appears, an answer settles, a step is done */
+  --fw-dur-turn: 500ms;            /* a flashcard turns, a light steps up */
+  --fw-dur-explain: 1150ms;        /* the tribute note turns; a figure moves to the next turn */
+  --fw-dur-settle: 1600ms;         /* a light settles back after a step (exit-light) */
+  --fw-dur-draw: 1400ms;           /* a line draws once, the first time it is seen */
+  --fw-stagger: 50ms;              /* between items that enter together; never blocks a click */
+  --fw-press-scale: .97;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --fw-fs-read: 19px;
+    --fw-fs-read-lead: 21px;
+    --fw-fs-ui: 16px;
+    --fw-fs-ui-small: 16px;
+    --fw-fs-code: 13.5px;
+  }
+}
+
+/* Reduced motion: nothing moves. No transform or position change, no scroll-driven motion, no loop; each scene
+   shows one telling still frame. A state change (an answer, a done step) is shown at once. The page's "Pause
+   motion" control does the same for everyone, until "Play motion". */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fw-dur-press: 0ms;
+    --fw-dur-hover: 0ms;
+    --fw-dur-tip: 0ms;
+    --fw-dur-ui: 0ms;
+    --fw-dur-turn: 0ms;
+    --fw-dur-explain: 0ms;
+    --fw-dur-settle: 0ms;
+    --fw-dur-draw: 0ms;
+    --fw-stagger: 0ms;
+    --fw-press-scale: 1;
+  }
+}
