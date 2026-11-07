@@ -1,7 +1,10 @@
-/* Findom Wiki kit: the base every page loads after ../tokens.css.
-   Reset, layout, type classes, buttons and links, the site chrome (header, categories, Pause motion, footer),
-   kicker, evidence badges and their tips, dictionary terms in text, the help line.
-   Every colour comes from a token; an alpha variant is a color-mix of a token. The page root is .fw-page. */
+/* Findom Wiki kit: the base every page loads after ../tokens.css. "Satin plumage" look (2026-11-06).
+   Reset, layout, type classes, buttons and links, chips, glass and lacquer panels, the site chrome (sticky header,
+   categories, Pause motion, footer), the 18+ gate's look, kicker, evidence badges and their tips, dictionary terms
+   in text, the help line.
+   Every colour comes from a token; an alpha variant is a color-mix of a token. The page root is .fw-page; it is
+   transparent, so the ground, the ambient light and the ribbon of the socle (site.css) show through. Dark "Noir" is
+   the default theme, html[data-theme="light"] the option: nothing here names a theme, the tokens change. */
 
 /* ============================================================ reset and page */
 /* :where() keeps the reset at zero specificity, so any component class wins over it */
@@ -13,23 +16,30 @@
 .fw-page {
   position: relative;
   min-height: 100vh;
-  background: var(--fw-surface);
+  background: transparent;
   color: var(--fw-ink);
   font: var(--fw-weight-regular) var(--fw-fs-ui)/var(--fw-lh-ui) var(--fw-font-ui);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
 }
+/* focus: one red ring, a little away from the thing, the same on every control */
 .fw-page :focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 3px; }
 /* Zero priority: a pill or a card keeps its own shape under the ring; only square things get rounded. */
 :where(.fw-page :focus-visible) { border-radius: 6px; }
 .fw-page ::selection { background: var(--fw-accent); color: var(--fw-ink-on-accent); }
 .fw-wrap { width: 100%; max-width: var(--fw-wrap); margin-inline: auto; padding-inline: var(--fw-gutter); }
-.fw-visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.fw-visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .fw-ico { width: 20px; height: 20px; flex: none; }
-.fw-skip { position: absolute; left: var(--fw-space-4); top: -60px; z-index: 50; padding: var(--fw-space-3) var(--fw-space-4); border-radius: var(--fw-radius-small); background: var(--fw-ink-title); color: var(--fw-ink-on-pearl); font-weight: var(--fw-weight-strong); text-decoration: none; }
+/* skip link: a red pill that drops in at the top left on the first Tab */
+.fw-skip {
+  position: absolute; left: var(--fw-gutter); top: -80px; z-index: 60; display: inline-flex; align-items: center; min-height: var(--fw-tap);
+  padding: 0 var(--fw-space-5); border-radius: var(--fw-radius-pill); background: var(--fw-accent-fill); box-shadow: var(--fw-accent-glow);
+  color: var(--fw-ink-on-accent); font: var(--fw-weight-strong) var(--fw-fs-label)/1 var(--fw-font-ui); letter-spacing: .02em; text-decoration: none;
+}
 .fw-skip:focus { top: var(--fw-space-3); }
-/* the light falling on the top of a page */
-.fw-lit { background: var(--fw-light-from-above) no-repeat, var(--fw-surface); }
+/* the light falling on the top of a page: a glow over the socle's ground, never a ground of its own */
+.fw-lit { background: var(--fw-light-from-above) center top / 100% 1100px no-repeat; }
 
 /* Pause motion: the page stops every transition and animation until "Play motion" */
 .fw-page[data-motion="paused"] *, .fw-page[data-motion="paused"] *::before, .fw-page[data-motion="paused"] *::after { transition-duration: 0s !important; animation: none !important; }
@@ -37,7 +47,7 @@
   .fw-page *, .fw-page *::before, .fw-page *::after { transition-duration: 0s !important; animation: none !important; scroll-behavior: auto !important; }
 }
 
-/* categories: one accent per family, read through --acc and --acc-ink */
+/* categories: one accent per family, read through --acc and --acc-ink (small marks only) */
 .fw-page [data-cat="basics"] { --acc: var(--fw-cat-basics); --acc-ink: var(--fw-cat-basics); }
 .fw-page [data-cat="variants"] { --acc: var(--fw-cat-variants); --acc-ink: var(--fw-cat-variants); }
 .fw-page [data-cat="kinks"] { --acc: var(--fw-cat-kinks); --acc-ink: var(--fw-cat-kinks); }
@@ -53,7 +63,13 @@
 .fw-t-display-xl { font: var(--fw-weight-regular) var(--fw-fs-display-xl)/var(--fw-lh-display) var(--fw-font-display); letter-spacing: -.012em; color: var(--fw-ink-title); text-wrap: balance; }
 .fw-t-display-l { font: var(--fw-weight-regular) var(--fw-fs-display-l)/1.02 var(--fw-font-display); letter-spacing: -.005em; color: var(--fw-ink-title); text-wrap: balance; }
 .fw-t-heading { font: var(--fw-weight-regular) var(--fw-fs-heading)/var(--fw-lh-heading) var(--fw-font-display); color: var(--fw-ink-title); text-wrap: balance; }
-.fw-t-numeral { font: var(--fw-weight-regular) var(--fw-fs-numeral)/.9 var(--fw-font-display); letter-spacing: -.02em; color: var(--fw-accent-ink); }
+/* numerals wear the red mark, clipped to the figures */
+.fw-t-numeral {
+  font: var(--fw-weight-regular) var(--fw-fs-numeral)/.9 var(--fw-font-display); letter-spacing: -.02em; color: var(--fw-accent-ink);
+  background: var(--fw-mark-fill); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+/* the small upper-case label above a title or a panel */
+.fw-t-eyebrow { font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1.3 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; color: var(--fw-accent-ink); }
 .fw-t-ui { font: var(--fw-weight-regular) var(--fw-fs-ui)/var(--fw-lh-ui) var(--fw-font-ui); }
 .fw-t-small { font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.55 var(--fw-font-ui); color: var(--fw-ink-soft); }
 .fw-t-label { font: var(--fw-weight-label) var(--fw-fs-label)/var(--fw-lh-label) var(--fw-font-ui); letter-spacing: 0; }
@@ -63,116 +79,209 @@
 /* reading: every paragraph a person reads; lead-ins instead of small capital labels */
 .fw-read { font: var(--fw-weight-regular) var(--fw-fs-read)/var(--fw-lh-read) var(--fw-font-read); color: var(--fw-ink-read); max-width: var(--fw-measure-read); font-variant-numeric: lining-nums; text-wrap: pretty; hanging-punctuation: first; }
 .fw-read > * + * { margin-top: .75em; }
-.fw-read-lead { font: var(--fw-weight-regular) var(--fw-fs-read-lead)/var(--fw-lh-read-lead) var(--fw-font-read); color: var(--fw-ink-title); max-width: var(--fw-measure-lead); font-variant-numeric: lining-nums; text-wrap: pretty; }
+.fw-read-lead { font: var(--fw-weight-regular) var(--fw-fs-read-lead)/var(--fw-lh-read-lead) var(--fw-font-read); color: var(--fw-ink-read); max-width: var(--fw-measure-lead); font-variant-numeric: lining-nums; text-wrap: pretty; }
+.fw-read-lead :is(b, strong) { font-weight: var(--fw-weight-regular); color: var(--fw-ink-title); }
+.fw-read :is(b, strong) { color: var(--fw-ink-title); }
+/* a plain link inside reading text: the words keep their ink, a fine red line under them that thickens on hover */
+:where(.fw-read, .fw-read-lead) a:where(:not([class])) { color: var(--fw-ink-title); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--fw-accent-light); transition: text-decoration-thickness var(--fw-dur-hover) var(--fw-ease-hover); }
 .fw-leadin { font-style: italic; color: var(--fw-accent-soft); }
 .fw-leadin--out { color: var(--fw-safe-ink); }
+@media (hover: hover) and (pointer: fine) {
+  :where(.fw-read, .fw-read-lead) a:where(:not([class])):hover { text-decoration-thickness: 2px; }
+}
 
-/* kicker: the category voice */
-.fw-kicker { display: inline-flex; align-items: center; gap: 10px; color: var(--acc-ink, var(--fw-accent-ink)); font: var(--fw-weight-label) var(--fw-fs-label)/var(--fw-lh-label) var(--fw-font-ui); }
-.fw-kicker__ico { width: 22px; height: 22px; padding: 4px; box-sizing: content-box; border-radius: 50%; color: var(--acc-ink, var(--fw-accent-light)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc-ink, var(--fw-accent-light)) 45%, transparent); }
+/* kicker: the eyebrow above a title, a short red line before the words */
+.fw-kicker { display: inline-flex; align-items: center; gap: 12px; color: var(--fw-accent-ink); font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1.3 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; }
+.fw-kicker::before { content: ""; flex: none; width: 34px; height: 1px; background: linear-gradient(90deg, var(--fw-accent-ink), transparent); }
+.fw-kicker > span { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+.fw-kicker__ico { display: none; }
 .fw-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .7; vertical-align: middle; }
+
+/* ============================================================ panels: glass and lacquer */
+/* glass: a pane of frosted glass with a red hairline on its top edge; the light under the pointer follows
+   --fw-mx / --fw-my (set by motion.js) */
+.fw-glass {
+  position: relative; isolation: isolate; border-radius: var(--fw-radius-panel); background: var(--fw-glass);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%); backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%);
+  box-shadow: inset 0 1px 0 var(--fw-glass-edge), inset 0 0 0 1px var(--fw-glass-edge), var(--fw-shadow-panel);
+}
+.fw-glass::before { content: ""; position: absolute; left: var(--fw-space-7); right: var(--fw-space-7); top: 0; height: 1px; pointer-events: none; background: linear-gradient(90deg, transparent, var(--fw-accent) 30%, var(--fw-accent-light) 50%, var(--fw-accent) 70%, transparent); }
+.fw-glass::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background: radial-gradient(500px circle at var(--fw-mx, 50%) var(--fw-my, -20%), var(--fw-sheen), transparent 45%); }
+/* lacquer: notes, alerts and help */
+.fw-lacquer { position: relative; border-radius: var(--fw-radius-panel); background: var(--fw-lacquer); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fw-accent-soft) 14%, transparent), inset 0 0 0 1px var(--fw-lacquer-edge); }
 
 /* ============================================================ buttons and links */
 .fw-btn {
-  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 48px; padding: 0 22px; border-radius: var(--fw-radius-pill); border: 1px solid transparent;
-  font: var(--fw-weight-strong) 16px/1 var(--fw-font-ui); text-decoration: none; cursor: pointer;
-  transition: transform var(--fw-dur-press) var(--fw-ease-out), background-color var(--fw-dur-hover) var(--fw-ease-hover), border-color var(--fw-dur-hover) var(--fw-ease-hover), color var(--fw-dur-hover) var(--fw-ease-hover);
+  position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 24px; border-radius: var(--fw-radius-pill); border: 0;
+  font: var(--fw-weight-strong) var(--fw-fs-label)/1 var(--fw-font-ui); letter-spacing: .02em; text-decoration: none; cursor: pointer; scale: 1;
+  transition: scale var(--fw-dur-press) var(--fw-ease-out), background-color var(--fw-dur-hover) var(--fw-ease-hover), box-shadow var(--fw-dur-hover) var(--fw-ease-hover), color var(--fw-dur-hover) var(--fw-ease-hover);
 }
-.fw-btn:active { transform: scale(var(--fw-press-scale)); }
-.fw-btn--primary { background: var(--fw-accent); color: var(--fw-ink-on-accent); }
-.fw-btn--ghost { background: color-mix(in srgb, var(--fw-surface) 55%, transparent); color: var(--fw-ink); border-color: color-mix(in srgb, var(--fw-accent-soft) 38%, transparent); }
-.fw-btn--quiet { min-height: var(--fw-tap); padding: 0 var(--fw-space-4); background: transparent; color: var(--fw-ink-soft); border-color: var(--fw-line); font-size: var(--fw-fs-ui-small); }
-.fw-btn[disabled] { cursor: not-allowed; background: transparent; color: var(--fw-ink-soft); border-color: color-mix(in srgb, var(--fw-ink-soft) 45%, transparent); }
-.fw-btn[disabled]:active { transform: none; }
-.fw-btn .fw-ico { transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
-.fw-link { display: inline-flex; align-items: center; gap: 10px; min-height: var(--fw-tap); color: var(--acc-ink, var(--fw-accent-ink)); font-weight: var(--fw-weight-strong); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
-.fw-link .fw-ico { transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-btn:active { scale: var(--fw-press-scale); }
+/* primary: the red pill, lit from above, with its glow */
+.fw-btn--primary {
+  background: var(--fw-accent-fill); color: var(--fw-ink-on-accent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fw-ink-on-accent) 30%, transparent), var(--fw-accent-glow);
+  text-shadow: 0 1px 1px color-mix(in srgb, var(--fw-accent-pressed) 70%, transparent);
+}
+/* the satin glint that crosses it under the pointer */
+.fw-btn--primary::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(110deg, transparent 35%, color-mix(in srgb, var(--fw-ink-on-accent) 40%, transparent) 50%, transparent 65%); transform: translateX(-120%); transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+/* ghost: a clear pill with a fine rim */
+.fw-btn--ghost { background: var(--fw-glass); color: var(--fw-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-ink) 18%, transparent); }
+/* quiet: a small control inside a block */
+.fw-btn--quiet { min-height: var(--fw-tap); padding: 0 var(--fw-space-4); background: transparent; color: var(--fw-ink-soft); box-shadow: inset 0 0 0 1px var(--fw-line); font-size: var(--fw-fs-ui-small); font-weight: var(--fw-weight-label); letter-spacing: 0; }
+.fw-btn[disabled], .fw-btn[aria-disabled="true"] { cursor: not-allowed; background: transparent; color: var(--fw-ink-quiet); box-shadow: inset 0 0 0 1px var(--fw-line); text-shadow: none; }
+.fw-btn[disabled]::after, .fw-btn[aria-disabled="true"]::after { display: none; }
+.fw-btn[disabled]:active, .fw-btn[aria-disabled="true"]:active { scale: 1; }
+.fw-btn .fw-ico { width: 18px; height: 18px; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-link { display: inline-flex; align-items: center; gap: 10px; min-height: var(--fw-tap); color: var(--acc-ink, var(--fw-accent-ink)); font-weight: var(--fw-weight-strong); font-size: var(--fw-fs-label); letter-spacing: .02em; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-link .fw-ico { width: 18px; height: 18px; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
 @media (hover: hover) and (pointer: fine) {
-  .fw-btn--primary:hover { background: color-mix(in srgb, var(--fw-accent) 86%, var(--fw-accent-light)); }
-  .fw-btn--primary:hover .fw-ico { transform: translateX(3px); }
-  .fw-btn--ghost:hover { background: color-mix(in srgb, var(--fw-accent-soft) 8%, transparent); border-color: color-mix(in srgb, var(--fw-accent-soft) 70%, transparent); }
-  .fw-btn--quiet:hover { color: var(--fw-ink-title); border-color: var(--fw-line-strong); }
+  .fw-btn--primary:hover::after { transform: translateX(120%); }
+  .fw-btn--primary:hover .fw-ico, .fw-btn--ghost:hover .fw-ico { transform: translateX(3px); }
+  .fw-btn--ghost:hover { box-shadow: inset 0 0 0 1px var(--fw-line-strong); color: var(--fw-ink-title); }
+  .fw-btn--quiet:hover { color: var(--fw-ink-title); box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+  .fw-btn[disabled]:hover, .fw-btn[aria-disabled="true"]:hover { color: var(--fw-ink-quiet); box-shadow: inset 0 0 0 1px var(--fw-line); }
   .fw-link:hover { text-decoration-color: currentColor; }
   .fw-link:hover .fw-ico { transform: translateX(4px); }
 }
 
-/* ============================================================ header and categories */
-.fw-top { position: relative; z-index: 6; background: var(--fw-surface); border-bottom: 1px solid var(--fw-line-soft); }
-.fw-top__row { display: flex; align-items: center; gap: 14px; min-height: 76px; }
-.fw-brand { display: inline-flex; align-items: center; gap: 12px; min-height: var(--fw-tap); margin-right: auto; text-decoration: none; }
-.fw-brand__mark { display: inline-grid; place-items: center; width: 38px; height: 38px; padding-top: 2px; border-radius: 50%; background: radial-gradient(circle at 50% 30%, var(--fw-accent-pressed), var(--fw-accent-deep)); box-shadow: inset 0 0 0 1px var(--fw-line-strong); font: var(--fw-weight-regular) 21px/1 var(--fw-font-display); color: var(--fw-ink-title); }
-.fw-brand__name { font: var(--fw-weight-regular) 25px/1 var(--fw-font-display); color: var(--fw-ink-title); letter-spacing: .005em; }
-.fw-brand__by { margin-left: -4px; font: italic var(--fw-weight-regular) 15px/1 var(--fw-font-ui); color: var(--fw-ink-soft); }
-.fw-search { position: relative; flex: 0 1 340px; }
-.fw-search__ico { position: absolute; left: 15px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--fw-accent-ink); pointer-events: none; }
-.fw-search__input { width: 100%; height: 46px; padding: 0 18px 0 44px; border-radius: var(--fw-radius-pill); border: 1px solid var(--fw-line); background: var(--fw-surface-raised); color: var(--fw-ink); font-size: 16px; transition: border-color var(--fw-dur-hover) var(--fw-ease-hover), background-color var(--fw-dur-hover) var(--fw-ease-hover); }
-.fw-search__input::placeholder { color: var(--fw-ink-soft); opacity: 1; }
-.fw-search__input:focus { outline: none; border-color: var(--fw-accent-ink); background: var(--fw-surface-selected); }
+/* chips: a small pill that names something (a level, a tag, a fact) */
+.fw-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 14px; border-radius: var(--fw-radius-pill); background: var(--fw-glass); box-shadow: inset 0 0 0 1px var(--fw-line); color: var(--fw-ink-soft); font: var(--fw-weight-regular) var(--fw-fs-meta)/1.2 var(--fw-font-ui); white-space: nowrap; }
+.fw-chip .fw-ico { width: 14px; height: 14px; color: var(--fw-accent-ink); }
+.fw-chip--mark::before { content: ""; flex: none; width: 7px; height: 7px; transform: rotate(45deg); background: var(--fw-accent-light); }
+
+/* ============================================================ header and categories
+   Sticky: clear over the top of the page, glass once the page has scrolled (.is-stuck), out of the way while the
+   person reads down and back as soon as they scroll up or tab into it (.is-away, set by fw-base.js). While it shows,
+   fw-base.js keeps its height in --fw-top-offset on <html> (0px while it is away), for anything else that sticks. */
+.fw-top { position: sticky; top: 0; z-index: 30; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-top::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0;
+  background: color-mix(in srgb, var(--fw-surface) 74%, transparent);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%); backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%);
+  box-shadow: 0 1px 0 var(--fw-line-soft), 0 18px 40px -28px color-mix(in srgb, var(--fw-surface-deepest) 90%, transparent);
+  transition: opacity var(--fw-dur-ui) var(--fw-ease-hover);
+}
+.fw-top.is-stuck::before { opacity: 1; }
+.fw-top.is-away { transform: translateY(calc(-100% - 2px)); }
+.fw-top.is-away:has(:focus-visible) { transform: none; }
+.fw-top__row { position: relative; display: flex; align-items: center; gap: 12px; min-height: 72px; padding-block: 14px 8px; }
+/* the brand: the crystal plume, the name in the display face, "by Vivian" in red italic */
+.fw-brand { display: inline-flex; align-items: center; gap: 12px; min-height: var(--fw-tap); margin-right: auto; color: var(--fw-ink-title); text-decoration: none; }
+.fw-brand__name { font: var(--fw-weight-regular) 24px/1 var(--fw-font-display); color: var(--fw-ink-title); letter-spacing: .005em; white-space: nowrap; }
+.fw-brand__by { font: italic var(--fw-weight-regular) 17px/1 var(--fw-font-read); color: var(--fw-accent-ink); white-space: nowrap; }
+/* the older round "V" mark, kept for pages built before the crystal logo */
+.fw-brand__mark { display: inline-grid; place-items: center; width: 34px; height: 34px; padding-top: 2px; border-radius: 50%; background: var(--fw-mark-fill); box-shadow: inset 0 0 0 1px var(--fw-line-strong); font: var(--fw-weight-regular) 19px/1 var(--fw-font-display); color: var(--fw-ink-on-accent); }
+/* search: a glass pill; "/" anywhere on the page puts the cursor in it */
+.fw-search { position: relative; flex: 0 1 300px; min-width: 0; }
+.fw-search__ico { position: absolute; left: 15px; top: 50%; width: 16px; height: 16px; translate: 0 -50%; color: var(--fw-ink-quiet); pointer-events: none; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-search__input {
+  width: 100%; height: 40px; padding: 0 40px 0 40px; border: 0; border-radius: var(--fw-radius-pill); background: var(--fw-glass);
+  box-shadow: inset 0 0 0 1px var(--fw-line); color: var(--fw-ink); font: var(--fw-weight-regular) var(--fw-fs-meta)/1 var(--fw-font-ui);
+  -webkit-appearance: none; appearance: none;
+  transition: box-shadow var(--fw-dur-hover) var(--fw-ease-hover), background-color var(--fw-dur-hover) var(--fw-ease-hover);
+}
+.fw-search__input::placeholder { color: var(--fw-ink-quiet); opacity: 1; }
+.fw-search__input::-webkit-search-decoration { -webkit-appearance: none; }
+.fw-search__input:focus { outline: none; background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
 .fw-search__input:focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 3px; }
-.fw-age { display: inline-grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--fw-accent-light); color: var(--fw-accent-soft); font: var(--fw-weight-strong) var(--fw-fs-meta)/1 var(--fw-font-ui); }
-.fw-motion { display: inline-flex; align-items: center; justify-content: center; gap: 10px; flex: none; min-width: 164px; min-height: 46px; padding: 0 18px 0 14px; border-radius: var(--fw-radius-pill); border: 1px solid var(--fw-line); background: transparent; color: var(--fw-ink); font-weight: var(--fw-weight-strong); font-size: var(--fw-fs-ui-small); cursor: pointer; transition: border-color var(--fw-dur-hover) var(--fw-ease-hover), background-color var(--fw-dur-hover) var(--fw-ease-hover), transform var(--fw-dur-press) var(--fw-ease-out); }
-.fw-motion:active { transform: scale(var(--fw-press-scale)); }
-.fw-motion__icons { position: relative; width: 20px; height: 20px; color: var(--fw-accent-ink); }
-.fw-motion__icons .fw-ico { position: absolute; inset: 0; transition: opacity var(--fw-dur-tip) var(--fw-ease-hover), transform var(--fw-dur-hover) var(--fw-ease-out); }
+.fw-search:focus-within .fw-search__ico { color: var(--fw-accent-ink); }
+.fw-search__key { position: absolute; right: 12px; top: 50%; translate: 0 -50%; display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 5px; box-shadow: inset 0 0 0 1px var(--fw-line); color: var(--fw-ink-quiet); font: var(--fw-weight-regular) 11px/1 var(--fw-font-ui); pointer-events: none; transition: opacity var(--fw-dur-tip) var(--fw-ease-hover); }
+.fw-search__input:focus ~ .fw-search__key, .fw-search__input:not(:placeholder-shown) ~ .fw-search__key { opacity: 0; }
+/* the 18+ ring */
+.fw-age { display: inline-grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-accent-light) 55%, transparent); color: var(--fw-accent-ink); font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1 var(--fw-font-ui); letter-spacing: .02em; }
+/* Pause motion: a quiet glass pill */
+.fw-motion {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none; min-width: 136px; height: 40px; padding: 0 16px 0 12px;
+  border: 0; border-radius: var(--fw-radius-pill); background: var(--fw-glass); box-shadow: inset 0 0 0 1px var(--fw-line);
+  color: var(--fw-ink-soft); font: var(--fw-weight-regular) var(--fw-fs-meta)/1 var(--fw-font-ui); white-space: nowrap; cursor: pointer; scale: 1;
+  transition: box-shadow var(--fw-dur-hover) var(--fw-ease-hover), color var(--fw-dur-hover) var(--fw-ease-hover), scale var(--fw-dur-press) var(--fw-ease-out);
+}
+.fw-motion:active { scale: var(--fw-press-scale); }
+.fw-motion__icons { position: relative; flex: none; width: 16px; height: 16px; color: var(--fw-accent-ink); }
+.fw-motion__icons .fw-ico { position: absolute; inset: 0; width: 16px; height: 16px; transition: opacity var(--fw-dur-tip) var(--fw-ease-hover), transform var(--fw-dur-hover) var(--fw-ease-out); }
 .fw-motion__play { opacity: 0; transform: scale(.8); }
 .fw-page[data-motion="paused"] .fw-motion__pause { opacity: 0; transform: scale(.8); }
 .fw-page[data-motion="paused"] .fw-motion__play { opacity: 1; transform: none; }
-.fw-page[data-motion="paused"] .fw-motion { border-color: var(--fw-accent-light); }
-.fw-nav { border-top: 1px solid var(--fw-line-soft); }
-.fw-nav__list { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-block: 6px; }
-.fw-nav__list::-webkit-scrollbar { display: none; }
-.fw-nav__link { position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: var(--fw-tap); padding: 0 12px; border-radius: var(--fw-radius-small); color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); white-space: nowrap; text-decoration: none; transition: color var(--fw-dur-hover) var(--fw-ease-hover), background-color var(--fw-dur-hover) var(--fw-ease-hover); }
-.fw-nav__link[aria-current="page"] { color: var(--fw-ink-title); font-weight: var(--fw-weight-strong); }
-.fw-nav__ico { width: 18px; height: 18px; color: var(--acc-ink); opacity: .9; }
-.fw-nav__link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 5px; height: 1.5px; border-radius: var(--fw-radius-mark); background: var(--acc-ink); transform: scaleX(0); transform-origin: left; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
-.fw-nav__link[aria-current="page"]::after, .fw-nav__link:focus-visible::after { transform: scaleX(1); }
-@media (hover: hover) and (pointer: fine) {
-  .fw-search__input:hover { border-color: color-mix(in srgb, var(--fw-accent-light) 40%, transparent); }
-  .fw-motion:hover { border-color: var(--fw-line-strong); background: color-mix(in srgb, var(--fw-accent-light) 6%, transparent); }
-  .fw-nav__link:hover { color: var(--fw-ink-title); background: color-mix(in srgb, var(--fw-accent-light) 5%, transparent); }
-  .fw-nav__link:hover::after { transform: scaleX(1); }
+.fw-page[data-motion="paused"] .fw-motion { color: var(--fw-ink); box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+/* categories: words only, a hairline under them that starts red; a red line grows under the one you point at
+   and stays under the one you are in */
+.fw-nav { position: relative; }
+.fw-nav__list {
+  display: flex; gap: 30px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--fw-accent-light) 60%, transparent) 14%, var(--fw-line) 60%) var(--fw-gutter) 100% / calc(100% - 2 * var(--fw-gutter)) 1px no-repeat;
 }
-@media (max-width: 1240px) {
-  .fw-nav { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.fw-nav__list::-webkit-scrollbar { display: none; }
+.fw-nav__list > li { flex: none; }
+.fw-nav__link { position: relative; display: inline-flex; align-items: center; min-height: var(--fw-tap); margin-inline: -6px; padding: 10px 6px 12px; color: var(--fw-ink-quiet); font: var(--fw-weight-regular) var(--fw-fs-meta)/1.2 var(--fw-font-ui); white-space: nowrap; text-decoration: none; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-nav__link[aria-current="page"] { color: var(--fw-ink-title); }
+.fw-nav__link::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: 0; height: 2px; border-radius: var(--fw-radius-mark); background: var(--fw-accent-light); transform: scaleX(0); transform-origin: left; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-nav__link[aria-current="page"]::after { transform: scaleX(1); box-shadow: 0 0 10px color-mix(in srgb, var(--fw-accent-light) 55%, transparent); }
+.fw-nav__link:focus-visible { outline-offset: -2px; }
+.fw-nav__link:focus-visible::after { transform: scaleX(1); }
+.fw-nav__ico { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .fw-brand:hover .fw-brand__name { color: var(--fw-ink-title); }
+  .fw-search__input:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-ink) 18%, transparent); }
+  .fw-search__input:focus:hover { box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+  .fw-motion:hover { color: var(--fw-ink); box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+  .fw-nav__link:hover { color: var(--fw-ink); }
+  .fw-nav__link:hover::after { transform: scaleX(.35); }
+  .fw-nav__link[aria-current="page"]:hover::after { transform: scaleX(1); }
+}
+/* when the categories do not fit, they scroll sideways under a fade */
+@media (max-width: 1080px) {
+  .fw-nav { -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent); mask-image: linear-gradient(90deg, #000 86%, transparent); }
+  .fw-nav__list { padding-right: calc(var(--fw-gutter) + 32px); }
 }
 
-/* ============================================================ the help line: the way out, pearl white */
-.fw-help { display: flex; align-items: flex-start; gap: var(--fw-space-4); padding: 18px 22px; border-radius: var(--fw-radius-card); background: var(--fw-safe-surface); box-shadow: inset 0 0 0 1px var(--fw-safe-hair); }
-.fw-help__lamp { display: inline-grid; place-items: center; flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--fw-safe-wash); color: var(--fw-safe-ink); }
-.fw-help__text { color: var(--fw-ink); font-size: var(--fw-fs-ui); line-height: 1.5; }
+/* ============================================================ the help line: lacquer, the way out in pearl white */
+.fw-help { position: relative; display: flex; align-items: flex-start; gap: var(--fw-space-4); padding: 20px 24px; border-radius: var(--fw-radius-panel); background: var(--fw-lacquer); box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fw-accent-soft) 14%, transparent), inset 0 0 0 1px var(--fw-lacquer-edge); }
+.fw-help__lamp { display: inline-grid; place-items: center; flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--fw-safe-wash); box-shadow: inset 0 0 0 1px var(--fw-safe-hair); color: var(--fw-safe-ink); }
+.fw-help__lamp .fw-ico { width: 18px; height: 18px; }
+.fw-help__text { color: var(--fw-ink); font: var(--fw-weight-regular) var(--fw-fs-read)/1.45 var(--fw-font-read); }
 .fw-help__row { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--fw-space-4); margin-top: var(--fw-space-1); }
-.fw-help__link { display: inline-flex; align-items: center; gap: 8px; min-height: var(--fw-tap); color: var(--fw-safe-ink); font-weight: var(--fw-weight-strong); text-decoration: underline; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, var(--fw-safe-ink) 50%, transparent); }
-.fw-help__link .fw-ico { width: 16px; height: 16px; }
+/* the link to the helplines, when it is a plain link (a .fw-btn link keeps the button's look) */
+.fw-help__link:not(.fw-btn) { display: inline-flex; align-items: center; gap: 8px; min-height: var(--fw-tap); color: var(--fw-safe-ink); font: var(--fw-weight-strong) var(--fw-fs-label)/1.2 var(--fw-font-ui); letter-spacing: .02em; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: color-mix(in srgb, var(--fw-safe-ink) 45%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
+.fw-help__link:not(.fw-btn) .fw-ico { width: 16px; height: 16px; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
 .fw-help__note { font-size: var(--fw-fs-ui-small); color: var(--fw-ink-soft); }
-@media (hover: hover) and (pointer: fine) { .fw-help__link:hover { text-decoration-color: currentColor; } }
+@media (hover: hover) and (pointer: fine) {
+  .fw-help__link:not(.fw-btn):hover { text-decoration-color: currentColor; }
+  .fw-help__link:not(.fw-btn):hover .fw-ico { transform: translateX(3px); }
+}
 
 /* ============================================================ evidence badges, dictionary terms, tips */
 .fw-ev, .fw-term { position: relative; display: inline-flex; vertical-align: middle; }
-.fw-ev__btn { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px 0 9px; border-radius: var(--fw-radius-pill); background: color-mix(in srgb, var(--fw-surface) 35%, transparent); color: var(--ev-ink); border: 1px solid var(--ev-line); font: var(--fw-weight-strong) var(--fw-fs-meta)/1 var(--fw-font-ui); white-space: nowrap; cursor: help; transition: background-color var(--fw-dur-hover) var(--fw-ease-hover), transform var(--fw-dur-press) var(--fw-ease-out); }
-/* the badge keeps its 30 px look but takes taps over 46 px */
+/* a badge is a chip: a small diamond in the level's ink, then the word */
+.fw-ev__btn { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px 0 9px; border: 0; border-radius: var(--fw-radius-pill); background: var(--fw-glass); color: var(--ev-ink); box-shadow: inset 0 0 0 1px var(--ev-line); font: var(--fw-weight-label) var(--fw-fs-meta)/1 var(--fw-font-ui); white-space: nowrap; cursor: help; scale: 1; transition: box-shadow var(--fw-dur-hover) var(--fw-ease-hover), scale var(--fw-dur-press) var(--fw-ease-out); }
+/* the badge keeps its 28 px look but takes taps over 44 px */
 button.fw-ev__btn::after { content: ""; position: absolute; inset: -8px -4px; }
-button.fw-ev__btn:active { transform: scale(var(--fw-press-scale)); }
+button.fw-ev__btn:active { scale: var(--fw-press-scale); }
 .fw-ev--static .fw-ev__btn { cursor: default; }
 .fw-ev__glyph { width: 14px; height: 14px; flex: none; }
 /* five levels: told apart by glyph and word first, ink second */
-.fw-ev[data-ev="verified"] { --ev-ink: var(--fw-safe-ink); --ev-line: var(--fw-safe-line); }
-.fw-ev[data-ev="reported"] { --ev-ink: var(--fw-accent-soft); --ev-line: color-mix(in srgb, var(--fw-accent-soft) 60%, transparent); }
-.fw-ev[data-ev="community"] { --ev-ink: var(--fw-accent-ink); --ev-line: color-mix(in srgb, var(--fw-accent-ink) 45%, transparent); }
-.fw-ev[data-ev="field"] { --ev-ink: var(--fw-accent-light); --ev-line: color-mix(in srgb, var(--fw-accent-light) 55%, transparent); }
-.fw-ev[data-ev="unverified"] { --ev-ink: var(--fw-ink-soft); --ev-line: color-mix(in srgb, var(--fw-ink-soft) 45%, transparent); }
-.fw-term__btn { position: relative; display: inline; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: help; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; text-decoration-color: color-mix(in srgb, var(--acc, var(--fw-accent-light)) 80%, transparent); }
+.fw-ev[data-ev="verified"] { --ev-ink: var(--fw-safe-ink); --ev-line: var(--fw-safe-hair); }
+.fw-ev[data-ev="reported"] { --ev-ink: var(--fw-accent-soft); --ev-line: color-mix(in srgb, var(--fw-accent-soft) 40%, transparent); }
+.fw-ev[data-ev="community"] { --ev-ink: var(--fw-accent-ink); --ev-line: color-mix(in srgb, var(--fw-accent-ink) 40%, transparent); }
+.fw-ev[data-ev="field"] { --ev-ink: var(--fw-accent-light); --ev-line: color-mix(in srgb, var(--fw-accent-light) 45%, transparent); }
+.fw-ev[data-ev="unverified"] { --ev-ink: var(--fw-ink-soft); --ev-line: var(--fw-line); }
+.fw-term__btn { position: relative; display: inline; padding: 0; border: 0; background: none; font: inherit; color: inherit; cursor: help; text-decoration: underline dotted; text-decoration-thickness: 1.5px; text-underline-offset: 5px; text-decoration-color: color-mix(in srgb, var(--fw-accent-light) 75%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
 .fw-term__btn::after { content: ""; position: absolute; inset: -8px -4px; }
+/* tips: a small dark glass card with a red hairline on top */
 .fw-tip {
   position: absolute; left: 0; bottom: calc(100% + 12px); z-index: 30; width: max-content; max-width: min(300px, calc(100vw - 32px));
-  padding: 13px 15px 14px; border-radius: 12px; background: var(--fw-surface-hover);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-accent-soft) 34%, transparent), 0 22px 44px -14px color-mix(in srgb, var(--fw-surface-deepest) 85%, transparent);
-  color: var(--fw-ink); font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.45 var(--fw-font-ui); text-align: left; white-space: normal;
+  padding: 13px 15px 14px; border-radius: var(--fw-radius-small);
+  background: color-mix(in srgb, var(--fw-surface-raised) 94%, transparent);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%); backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%);
+  box-shadow: inset 0 0 0 1px var(--fw-line), 0 22px 44px -14px color-mix(in srgb, var(--fw-surface-deepest) 85%, transparent);
+  color: var(--fw-ink); font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.45 var(--fw-font-ui); text-align: left; text-transform: none; letter-spacing: 0; white-space: normal;
   opacity: 0; visibility: hidden; transform: translate(var(--tip-x, 0px), 6px) scale(.97); transform-origin: var(--tip-origin, 18px) 100%;
   transition: opacity var(--fw-dur-tip) var(--fw-ease-out), transform var(--fw-dur-tip) var(--fw-ease-out), visibility 0s linear var(--fw-dur-tip); pointer-events: none;
 }
+.fw-tip::before { content: ""; position: absolute; left: 16px; right: 16px; top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--fw-accent-light) 50%, transparent); }
 .fw-tip::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 14px; }
-.fw-tip__k { display: block; margin-bottom: 5px; color: var(--fw-accent-ink); font: var(--fw-weight-label) var(--fw-fs-meta)/var(--fw-lh-label) var(--fw-font-ui); }
+.fw-tip__k { display: block; margin-bottom: 6px; color: var(--fw-accent-ink); font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1.3 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; }
 .fw-ev:hover > .fw-tip, .fw-ev:focus-within > .fw-tip, .fw-term:hover > .fw-tip, .fw-term:focus-within > .fw-tip { opacity: 1; visibility: visible; transform: translate(var(--tip-x, 0px), 0) scale(1); transition-delay: 0s; pointer-events: auto; }
 .fw-ev.is-dismissed > .fw-tip, .fw-term.is-dismissed > .fw-tip { opacity: 0; visibility: hidden; pointer-events: none; }
 .fw-tip.is-below { bottom: auto; top: calc(100% + 12px); transform-origin: var(--tip-origin, 18px) 0; }
@@ -181,30 +290,79 @@ button.fw-ev__btn:active { transform: scale(var(--fw-press-scale)); }
 .fw-tip.is-fixed { position: fixed; left: var(--tip-l, 0px); top: var(--tip-t, 0px); bottom: auto; z-index: 60; }
 /* after one tip has opened, the next ones open at once */
 .fw-page.is-tip-warm .fw-tip { transition-duration: 0s; }
+@media (hover: hover) and (pointer: fine) {
+  button.fw-ev__btn:hover { box-shadow: inset 0 0 0 1px var(--ev-ink); }
+  .fw-term__btn:hover { text-decoration-color: var(--fw-accent-light); }
+}
+
+/* ============================================================ the 18+ gate (its frame and motion: site.css)
+   The night with a red glow, the title in the display face, a red pill to come in and a ghost pill to leave.
+   Two classes deep, so these win over the site layer, which loads later. */
+.fw-page .fw-gate__veil {
+  background: radial-gradient(900px 700px at 50% 32%, color-mix(in srgb, var(--fw-accent) 24%, transparent), transparent 70%), var(--fw-surface-deepest);
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+.fw-page .fw-gate__dialog { max-width: 36rem; gap: 0; }
+.fw-gate .fw-gate__age { width: 74px; height: 74px; margin-bottom: var(--fw-space-5); font-size: var(--fw-fs-meta); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-accent-light) 60%, transparent), 0 0 40px color-mix(in srgb, var(--fw-accent) 35%, transparent); }
+.fw-page .fw-gate__title {
+  margin-bottom: var(--fw-space-4); font: var(--fw-weight-regular) clamp(42px, 6vw, 70px)/.95 var(--fw-font-display); letter-spacing: -.005em; color: var(--fw-ink-title);
+  background: var(--fw-title-fill); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.fw-page .fw-gate__text { max-width: 26em; margin-bottom: var(--fw-space-6); font-size: var(--fw-fs-read); line-height: 1.5; color: var(--fw-ink-read); }
+.fw-page .fw-gate__actions { margin-top: 0; gap: var(--fw-space-3); }
 
 /* ============================================================ footer */
-.fw-foot { padding: 40px 0 var(--fw-space-9); background: var(--fw-surface); border-top: 1px solid var(--fw-line-soft); }
-.fw-foot__row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); }
-.fw-foot__brand { display: inline-flex; align-items: center; gap: 12px; color: var(--fw-ink); font-size: 16px; }
-.fw-foot__brand .fw-brand__mark { width: 32px; height: 32px; font-size: 17px; }
-.fw-foot__age { padding: 4px 10px; border-radius: var(--fw-radius-pill); box-shadow: inset 0 0 0 1px var(--fw-accent-light); color: var(--fw-accent-soft); font-weight: var(--fw-weight-strong); font-size: var(--fw-fs-meta); }
-.fw-foot__legal { margin-left: auto; }
+.fw-foot { position: relative; padding: 40px 0 60px; }
+.fw-foot::before { content: ""; position: absolute; left: var(--fw-gutter); right: var(--fw-gutter); top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--fw-line) 18%, var(--fw-line) 82%, transparent); }
+.fw-foot__row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; color: var(--fw-ink-quiet); font: var(--fw-weight-regular) var(--fw-fs-meta)/1.5 var(--fw-font-ui); }
+.fw-foot__brand { display: inline-flex; align-items: center; gap: 10px; color: var(--fw-ink); }
+.fw-foot__brand .fw-brand__logo { width: 24px; height: 28px; transition: none; }
+.fw-foot__brand .fw-brand__name { font-size: 20px; }
+.fw-foot__brand .fw-brand__by { font-size: 16px; }
+.fw-foot__brand .fw-brand__mark { width: 30px; height: 30px; font-size: 16px; }
+.fw-foot__age { display: inline-grid; place-items: center; height: 26px; padding: 0 10px; border-radius: var(--fw-radius-pill); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-accent-light) 55%, transparent); color: var(--fw-accent-ink); font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1 var(--fw-font-ui); letter-spacing: .02em; }
+.fw-foot__legal { margin-left: auto; text-align: right; }
 
 /* ============================================================ phone */
 @media (max-width: 760px) {
-  .fw-top__row { flex-wrap: wrap; gap: 10px; min-height: 0; padding-block: 12px 8px; }
-  .fw-brand { flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; }
-  .fw-brand__mark { display: none; }
-  .fw-brand__name { font-size: 22px; }
-  .fw-brand__by { margin-left: 0; font-size: var(--fw-fs-meta); }
-  .fw-search { order: 5; flex: 1 1 100%; }
-  .fw-age { width: 44px; height: 44px; }
-  .fw-motion { min-width: 0; min-height: 44px; padding: 0 14px 0 12px; font-size: var(--fw-fs-meta); }
-  .fw-nav__list { padding-right: 32px; }
-  .fw-help { padding: 14px 16px; gap: 12px; }
-  .fw-help__lamp { width: 34px; height: 34px; }
-  .fw-foot__legal { margin-left: 0; }
+  .fw-top__row { gap: 8px; min-height: 0; padding-block: 12px 6px; }
+  .fw-brand { gap: 9px; }
+  .fw-brand__name { font-size: 20px; }
+  .fw-brand__by { display: none; }
+  .fw-top .fw-brand__logo { width: 26px; height: 30px; }
+  /* search folds to a round button; touched, it opens over the whole row */
+  .fw-search { flex: none; width: 40px; }
+  .fw-search__ico { left: 12px; }
+  .fw-search__input { padding: 0 0 0 40px; font-size: 16px; }
+  .fw-search__input::placeholder { color: transparent; }
+  .fw-search__key { display: none; }
+  .fw-search:focus-within { position: absolute; left: var(--fw-gutter); right: var(--fw-gutter); top: 12px; z-index: 3; width: auto; }
+  .fw-search:focus-within .fw-search__input { padding-right: 16px; box-shadow: inset 0 0 0 1px var(--fw-line-strong), var(--fw-shadow-panel); }
+  .fw-search:focus-within .fw-search__input::placeholder { color: var(--fw-ink-quiet); }
+  /* Pause motion keeps its words for screen readers and shows its icon only */
+  .fw-motion { min-width: 0; width: 40px; padding: 0; gap: 0; }
+  .fw-motion__label { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+  .fw-nav__list { gap: 24px; }
+  .fw-nav__link { font-size: var(--fw-fs-ui-small); }
+  .fw-help { padding: 16px 18px; gap: 12px; }
+  .fw-help__lamp { width: 36px; height: 36px; }
+  .fw-foot { padding-bottom: var(--fw-space-7); }
+  .fw-foot__legal { margin-left: 0; text-align: left; flex-basis: 100%; }
 }
-@media (max-width: 600px) {
-  .fw-nav__link { font-size: 16px; }
+@media (max-width: 360px) {
+  .fw-brand__name { font-size: 18px; }
+  .fw-top__row { gap: 6px; }
+}
+
+/* ============================================================ contrast and print */
+/* a forced palette (Windows high contrast) has no clipped fills: the words come back in plain ink */
+@media (forced-colors: active) {
+  .fw-t-numeral, .fw-page .fw-gate__title { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; }
+  .fw-top::before { background: Canvas; }
+}
+@media print {
+  /* pages.css overrides everything to a white ground for printing */
+  .fw-page { background: var(--fw-surface); }
+  .fw-top { position: static; transform: none !important; }
+  .fw-top::before, .fw-glass::after, .fw-btn--primary::after { display: none; }
 }

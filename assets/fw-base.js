@@ -10,8 +10,9 @@
                             and motion is allowed; o.fps caps the rate; returns { stop(), once() }
      FW.icon(name)          an inline SVG from the kit's icon set (one stroke weight)
      FW.say(el, text, tone) writes feedback with an icon and words into an aria-live element (right, wrong, flag, none)
-   It also wires the header: Pause motion, the search form (nothing is sent), badge and term tips (hover, focus,
-   Escape, kept on screen, later tips open at once). */
+   It also wires the header: Pause motion, the search form (nothing is sent; "/" focuses it), the sticky header
+   (glass once scrolled, away while reading down, its height in --fw-top-offset on <html>), badge and term tips
+   (hover, focus, Escape, kept on screen, later tips open at once). */
 (function () {
   "use strict";
   var root = document.querySelector(".fw-page");
@@ -120,6 +121,65 @@
   /* ------------------------------------------------------------ search: nothing is sent */
   var searchForm = root.querySelector("[data-fw-search]");
   if (searchForm) searchForm.addEventListener("submit", function (e) { e.preventDefault(); });
+  var searchInput = searchForm && searchForm.querySelector("input");
+  if (searchInput) {
+    // "/" anywhere outside a field puts the cursor in the header search (the hint shows in the pill)
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      if (docEl.classList.contains("fw-gate-open")) return;
+      e.preventDefault();
+      searchInput.focus();
+    });
+    // Escape in an empty search leaves it (on a phone the opened search folds back to its round button)
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !searchInput.value) searchInput.blur();
+    });
+  }
+
+  /* ------------------------------------------------------------ categories: the current one in view */
+  // On a narrow screen the categories scroll sideways; the one you are in is brought into view, at once.
+  var curCat = root.querySelector('.fw-nav__link[aria-current="page"]');
+  var catList = curCat && curCat.closest(".fw-nav__list");
+  function showCurrentCat() {
+    if (!catList || catList.scrollWidth <= catList.clientWidth + 1) return;
+    var lr = catList.getBoundingClientRect(), cr = curCat.getBoundingClientRect();
+    if (cr.left >= lr.left && cr.right <= lr.right - 48) return;
+    catList.scrollLeft += (cr.left + cr.width / 2) - (lr.left + lr.width / 2);
+  }
+  if (catList) {
+    showCurrentCat();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(showCurrentCat);
+  }
+
+  /* ------------------------------------------------------------ the header: sticky, glass once scrolled */
+  // It sticks to the top. Once the page has scrolled it turns to glass (.is-stuck). While the person reads down it
+  // slides out of the way (.is-away), so what sticks inside a chapter keeps the top of the screen; it comes back at
+  // the first scroll up, near the top of the page, and whenever the focus enters it. Its height while it shows is
+  // kept in --fw-top-offset on <html> (0px while it is away), for anything else that sticks below it.
+  var head = root.querySelector(".fw-top");
+  if (head) {
+    var lastY = Math.max(0, window.scrollY || 0), away = false, stuck = null, offset = -1, queued = false;
+    function headFrame() {
+      queued = false;
+      var y = Math.max(0, window.scrollY || 0), h = head.offsetHeight, dy = y - lastY;
+      if (y <= h) { away = false; lastY = y; }
+      else if (Math.abs(dy) >= 8) { away = dy > 0 && !keyFocusIn(head); lastY = y; }
+      var s = y > 8;
+      if (s !== stuck) { stuck = s; head.classList.toggle("is-stuck", s); }
+      head.classList.toggle("is-away", away);
+      var off = away ? 0 : h;
+      if (off !== offset) { offset = off; docEl.style.setProperty("--fw-top-offset", off + "px"); }
+    }
+    // a control reached by the keyboard (or the search field, where the caret is) keeps the header on screen
+    function keyFocusIn(el) { try { return !!el.querySelector(":focus-visible"); } catch (e) { return el.contains(document.activeElement); } }
+    function queue() { if (!queued) { queued = true; requestAnimationFrame(headFrame); } }
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    head.addEventListener("focusin", function () { away = false; queue(); });
+    headFrame();
+  }
 
   /* ------------------------------------------------------------ badge and term tips */
   function placeTip(host) {

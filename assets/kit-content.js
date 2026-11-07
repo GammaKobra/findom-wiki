@@ -233,7 +233,75 @@
     });
   }
 
-  FW.onMotion(function (ok) { if (!ok) plays.forEach(function (p) { p.finish(); }); });
+  /* ================================================================ the "Satin plumage" touches
+     Words are never changed: a title keeps its text, only its last mark is wrapped; a dot added after a word is
+     drawn by CSS and kept out of its accessible name. */
+
+  // a display title that ends on ? . or ! ends on the red mark
+  var TITLES = ".fw-prose > h2, .fw-prose > h3, .fw-alert__title, .fw-compare__title, .fw-table__caption:not(.fw-visually-hidden), " +
+    ".fw-steps__title, .fw-explain__title, .fw-timeline__title, .fw-tells__title, .fw-code__title, .fw-site-block > .fw-site-blocktitle";
+  each(TITLES, function (h) {
+    if (h.querySelector(".fw-prose__mark, .fw-redmark")) return;
+    var walk = document.createTreeWalker(h, NodeFilter.SHOW_TEXT, null), last = null, n;
+    while ((n = walk.nextNode())) if (/\S/.test(n.nodeValue)) last = n;
+    if (!last) return;
+    var inside = last.parentNode.closest("a, button, .fw-term, .fw-ev");
+    if (inside && h.contains(inside)) return;
+    var v = last.nodeValue.replace(/\s+$/, ""), ch = v.slice(-1);
+    if ("?.!".indexOf(ch) < 0 || /\.\.\.$/.test(v)) return;
+    var mark = document.createElement("span");
+    mark.className = "fw-prose__mark";
+    mark.textContent = ch;
+    last.nodeValue = v.slice(0, -1);
+    last.parentNode.insertBefore(mark, last.nextSibling);
+  });
+
+  // a word or a rule name without a final stop gets the red dot (CSS, data-fwc-dot)
+  each(".fw-dict__word, .fw-entry__word, .fw-explain__name", function (w) {
+    if (!/[.?!:;]$/.test(w.textContent.trim())) w.setAttribute("data-fwc-dot", "");
+  });
+
+  // honest numbers: every numeral of a list takes the size its longest value allows, so a row stays even
+  each(".fw-stat", function (list) {
+    var longest = 0;
+    each(".fw-stat__n", function (n) { longest = Math.max(longest, n.textContent.trim().length); }, list);
+    if (longest > 16) list.setAttribute("data-fwc-len", "long");
+    else if (longest > 6) list.setAttribute("data-fwc-len", "mid");
+  });
+
+  // glass-light: a soft light follows the pointer over a glass panel (fine pointer and motion allowed only)
+  var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var lit = [];
+  if (fine) each(".fw-summary, .fw-stat__item, .fw-explain__item", function (el) {
+    lit.push(el);
+    el.addEventListener("pointermove", function (e) {
+      if (!FW.motionOK()) return;
+      var r = el.getBoundingClientRect();
+      el.setAttribute("data-fwc-light", "");
+      el.style.setProperty("--fwc-mx", Math.round(e.clientX - r.left) + "px");
+      el.style.setProperty("--fwc-my", Math.round(e.clientY - r.top) + "px");
+    }, { passive: true });
+    el.addEventListener("pointerleave", function () { el.removeAttribute("data-fwc-light"); });
+  });
+
+  // block-rise: in a chapter, the blocks of this module are handed to the site's reveal (build_motion.js reads
+  // [data-fw-reveal] after every kit script). Never the head, never a quote (it has quote-rise), never twice.
+  var RISE = ".fw-summary, .fw-site-opening, .fw-prose > *, .fw-note, .fw-alert, .fw-table, .fw-compare, .fw-myth__item, " +
+    ".fw-stat__item, .fw-steps__item, .fw-explain__item, .fw-remember, .fw-timeline__step, .fw-code, .fw-sources__k, .fw-sources__text, .fw-legend";
+  each(".fw-site-flow", function (flow) {
+    each(RISE, function (el) {
+      if (el.hasAttribute("data-fw-reveal") || el.closest(".fw-band, .fw-head, .fw-quote, [data-fw-reveal]")) return;
+      if (el.querySelector("[data-fw-reveal], [data-fw-quote-rise], [data-fw-descent]")) return;
+      el.setAttribute("data-fw-reveal", "");
+    }, flow);
+  });
+
+  FW.onMotion(function (ok) {
+    if (!ok) {
+      plays.forEach(function (p) { p.finish(); });
+      lit.forEach(function (el) { el.removeAttribute("data-fwc-light"); });
+    }
+  });
   // a printed page shows every line and every drawing, whatever was seen on screen
   window.addEventListener("beforeprint", function () { plays.forEach(function (p) { p.finish(); }); });
   var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();

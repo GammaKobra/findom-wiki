@@ -1,0 +1,161 @@
+/* ==================================================================================================================
+   Prototype alignment (2026-11-06). Loaded last, as assets/proto.css. It brings every page back to the approved
+   prototype in _essais/prototype/ where the kit still shows an older shape: the home sections (mosaic of pictures,
+   four paths, the method on a thread, three dictionary words, the help band), the evidence marks as small diamonds,
+   the quiet header. Tokens only, except the evidence colours of the light theme, taken from the prototype.
+   ================================================================================================================== */
+
+/* ---------- evidence: a small diamond, its word kept for screen readers ---------- */
+.fw-ev { --c: var(--fw-ink-quiet); }
+.fw-ev[data-ev="verified"], .fw-h-legend [data-ev="verified"], .fw-h-word__lv[data-ev="verified"] { --c: var(--fw-ink-title); }
+.fw-ev[data-ev="reported"], .fw-h-legend [data-ev="reported"], .fw-h-word__lv[data-ev="reported"] { --c: var(--fw-ink-quiet); }
+.fw-ev[data-ev="community"], .fw-h-word__lv[data-ev="community"] { --c: #a8a3a5; }
+.fw-ev[data-ev="field"], .fw-h-legend [data-ev="field"], .fw-h-word__lv[data-ev="field"] { --c: var(--fw-accent-ink); }
+.fw-ev[data-ev="unverified"], .fw-h-legend [data-ev="unverified"], .fw-h-word__lv[data-ev="unverified"] { --c: #5f5a5c; }
+html[data-theme="light"] .fw-ev[data-ev="verified"], html[data-theme="light"] .fw-h-legend [data-ev="verified"], html[data-theme="light"] .fw-h-word__lv[data-ev="verified"] { --c: #c9973f; }
+html[data-theme="light"] .fw-ev[data-ev="reported"], html[data-theme="light"] .fw-h-legend [data-ev="reported"], html[data-theme="light"] .fw-h-word__lv[data-ev="reported"] { --c: #3d5f9e; }
+html[data-theme="light"] .fw-ev[data-ev="unverified"], html[data-theme="light"] .fw-h-legend [data-ev="unverified"], html[data-theme="light"] .fw-h-word__lv[data-ev="unverified"] { --c: #a7a5b7; }
+
+.fw-ev .fw-ev__btn.fw-ev__btn { display: inline-grid; grid-auto-flow: column; align-items: center; gap: 8px; min-height: 0; height: auto; margin: 0 2px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; color: inherit; font: inherit; cursor: help; vertical-align: 1px; }
+.fw-ev .fw-ev__btn .fw-ev__glyph { display: none; }
+.fw-ev .fw-ev__btn::before { content: ""; width: 7px; height: 7px; margin: 0 5px; transform: rotate(45deg); background: var(--c); transition: transform .3s var(--fw-ease-out); }
+.fw-ev .fw-ev__btn:hover::before, .fw-ev .fw-ev__btn:focus-visible::before { transform: rotate(45deg) scale(1.5); }
+/* inside the text the diamond stands alone; its word stays readable aloud */
+.fw-ev .fw-ev__btn > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* in the chapter head the diamonds keep their words, on one line between hairlines */
+.fw-head__badges .fw-ev .fw-ev__btn > span { position: static; width: auto; height: auto; overflow: visible; clip: auto; clip-path: none; font-family: var(--fw-font-ui); font-size: 13px; color: var(--fw-ink-soft); }
+.fw-head__badges .fw-ev .fw-ev__btn::before { margin: 0; }
+.fw-head__badges.fw-head__badges { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+
+/* ---------- header: Pause motion as a quiet round button, like the theme switch ---------- */
+.fw-motion.fw-motion { width: 40px; height: 40px; min-width: 0; padding: 0; gap: 0; justify-content: center; border-radius: 50%; }
+.fw-motion.fw-motion .fw-motion__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- chapter: the band across the page, the contents rail under it ---------- */
+.fw-site-chapter > .fw-band--chapter { margin-bottom: var(--fw-space-6); border-bottom: 1px solid var(--fw-line-soft); }
+
+/* ---------- home: the hero legend and the scroll cue ---------- */
+.fw-h-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin: 34px 0 0; padding: 14px 0; list-style: none; max-width: 640px; border-top: 1px solid var(--fw-line); border-bottom: 1px solid var(--fw-line); font-family: var(--fw-font-ui); font-size: 13px; color: var(--fw-ink-soft); }
+.fw-h-legend li { display: inline-flex; align-items: center; gap: 8px; }
+.fw-h-legend li[data-ev]::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg); background: var(--c); }
+.fw-h-legend__k { font-size: 10.5px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--fw-ink-quiet); margin-right: 4px; }
+.fw-hero__meta { display: none; }
+.fw-h-cue { position: absolute; left: 50%; bottom: 26px; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: var(--fw-font-ui); font-size: 10.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--fw-ink-quiet); }
+.fw-h-cue i { width: 1px; height: 40px; background: linear-gradient(var(--fw-accent-ink), transparent); animation: fw-h-cue 2.4s var(--fw-ease-in-out) infinite; transform-origin: top; }
+@keyframes fw-h-cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+html[data-motion="paused"] .fw-h-cue i { animation: none; }
+
+/* ---------- home sections ---------- */
+.fw-h { position: relative; z-index: 2; max-width: 1260px; margin: 0 auto; padding: 0 var(--fw-gutter) 40px; }
+.fw-h-section { padding: 110px 0 0; }
+.fw-h-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
+.fw-h-kicker { display: block; margin: 0 0 12px; font-family: var(--fw-font-ui); font-size: 11px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--fw-accent-ink); }
+.fw-h-kicker b { font-family: var(--fw-font-display); font-weight: 400; letter-spacing: 0; font-size: 14px; margin-right: 10px; color: var(--fw-ink); }
+.fw-h-sec { margin: 0; font-family: var(--fw-font-display); font-weight: 400; font-size: clamp(32px, 3.6vw, 48px); line-height: 1.02; color: var(--fw-ink-title); }
+.fw-h-side { max-width: 40ch; margin: 0; font-family: var(--fw-font-read); font-size: 20px; color: var(--fw-ink-soft); }
+
+/* 01 the mosaic */
+.fw-h-cats { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.fw-h-cat { --mx: 50%; --my: 50%; position: relative; grid-column: span 4; min-height: 300px; border-radius: 22px; overflow: hidden; text-decoration: none; isolation: isolate; color: #fff; background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-glass-edge), var(--fw-shadow-panel); }
+.fw-h-cat--wide { grid-column: span 6; min-height: 360px; }
+.fw-h-cat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform: scale(1.04); transition: transform 1.2s var(--fw-ease-out); }
+.fw-h-cat:hover img { transform: scale(1.1); }
+.fw-h-cat::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(8, 8, 10, .05) 30%, rgba(8, 8, 10, .88) 100%); }
+.fw-h-cat--plain { color: var(--fw-ink); background: var(--fw-glass); }
+.fw-h-cat--plain::before { background: radial-gradient(400px 260px at 100% 0%, rgba(212, 14, 24, .14), transparent 70%); }
+html[data-theme="light"] .fw-h-cat--plain::before { background: radial-gradient(400px 260px at 100% 0%, rgba(253, 210, 203, .6), transparent 70%); }
+.fw-h-cat::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 255, 255, .12), transparent 45%); opacity: 0; transition: opacity .4s ease; }
+.fw-h-cat:hover::after { opacity: 1; }
+.fw-h-cat__in { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 26px 24px; display: block; }
+.fw-h-cat__n { display: block; font-family: var(--fw-font-ui); font-size: 10.5px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #ff6b73; }
+.fw-h-cat__name { display: block; margin: 8px 0 6px; font-family: var(--fw-font-display); font-weight: 400; font-size: 32px; line-height: 1; color: #fff; }
+.fw-h-cat__p { display: block; max-width: 34ch; font-family: var(--fw-font-read); font-size: 18px; line-height: 1.4; color: rgba(255, 255, 255, .78); }
+.fw-h-cat--plain .fw-h-cat__name { color: var(--fw-ink-title); font-size: 26px; }
+.fw-h-cat--plain .fw-h-cat__p { color: var(--fw-ink-soft); font-size: 17px; }
+.fw-h-cat--plain .fw-h-cat__n { color: var(--fw-accent-ink); }
+.fw-h-cat__go { position: absolute; right: 22px; top: 22px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; color: #fff; background: rgba(255, 255, 255, .08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transform: translate(6px, -6px) scale(.9); opacity: 0; transition: transform .5s var(--fw-ease-out), opacity .4s ease; }
+.fw-h-cat:hover .fw-h-cat__go, .fw-h-cat:focus-visible .fw-h-cat__go { transform: none; opacity: 1; }
+.fw-h-cat__go .fw-ico { width: 16px; height: 16px; }
+
+/* 02 the paths */
+.fw-h-paths { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.fw-h-path { position: relative; padding: 30px 28px 28px; border-radius: 22px; background: var(--fw-glass); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), inset 0 0 0 1px var(--fw-glass-edge); overflow: hidden; }
+.fw-h-path::before { content: ""; position: absolute; left: 28px; right: 28px; top: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--fw-accent) 30%, var(--fw-accent-ink) 50%, var(--fw-accent) 70%, transparent); transform: scaleX(0); transition: transform .8s var(--fw-ease-out); }
+.fw-h-path:hover::before { transform: scaleX(1); }
+.fw-h-path__t { margin: 0 0 8px; font-family: var(--fw-font-display); font-weight: 400; font-size: 27px; line-height: 1.05; color: var(--fw-ink-title); }
+.fw-h-path__p { margin: 0 0 20px; font-family: var(--fw-font-read); font-size: 18px; color: var(--fw-ink-soft); }
+.fw-h-path ol { margin: 0; padding: 0; list-style: none; counter-reset: fwp; }
+.fw-h-path li { counter-increment: fwp; display: flex; gap: 12px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--fw-line); font-family: var(--fw-font-ui); font-size: 14px; }
+.fw-h-path li::before { content: counter(fwp, decimal-leading-zero); font-family: var(--fw-font-display); font-size: 13px; color: var(--fw-accent-ink); }
+.fw-h-path li a { text-decoration: none; color: var(--fw-ink-soft); transition: color .2s; }
+.fw-h-path li a:hover { color: var(--fw-ink-title); }
+.fw-h-path--help { background: var(--fw-lacquer); box-shadow: inset 0 0 0 1px var(--fw-lacquer-edge); }
+
+/* 03 the method */
+.fw-h-steps { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; padding-top: 60px; }
+.fw-h-thread { position: absolute; left: 0; top: 0; width: 100%; height: 80px; overflow: visible; }
+.fw-h-step { position: relative; }
+.fw-h-step__dot { width: 46px; height: 46px; display: grid; place-items: center; margin-bottom: 18px; border-radius: 50%; font-family: var(--fw-font-display); font-size: 16px; color: #fff; background: radial-gradient(circle at 35% 30%, #ff6b73, #d40e18 55%, #7a0910); box-shadow: 0 0 0 6px color-mix(in srgb, var(--fw-surface) 80%, transparent), 0 10px 30px -6px rgba(212, 14, 24, .7); }
+.fw-h-step__t { margin: 0 0 6px; font-family: var(--fw-font-display); font-weight: 400; font-size: 24px; color: var(--fw-ink-title); }
+.fw-h-step__t a { color: inherit; text-decoration: none; }
+.fw-h-step__t a:hover { text-decoration: underline; text-decoration-color: var(--fw-accent); text-underline-offset: 4px; }
+.fw-h-step__p { margin: 0; font-family: var(--fw-font-read); font-size: 18px; color: var(--fw-ink-soft); }
+
+/* 04 the words */
+.fw-h-dict { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 0; }
+.fw-h-word { padding: 26px 26px 24px; border-radius: 22px; background: var(--fw-glass); box-shadow: inset 0 0 0 1px var(--fw-glass-edge); }
+.fw-h-word dt { font-family: var(--fw-font-display); font-size: 30px; color: var(--fw-ink-title); }
+.fw-h-word dt a { color: inherit; text-decoration: none; }
+.fw-h-word dt::after { content: "."; color: var(--fw-accent-ink); }
+.fw-h-word dd { margin: 8px 0 14px; font-family: var(--fw-font-read); font-size: 19px; line-height: 1.45; color: var(--fw-ink-soft); }
+.fw-h-word__lv { display: inline-flex; align-items: center; gap: 8px; font-family: var(--fw-font-ui); font-size: 12px; color: var(--fw-ink-quiet); }
+.fw-h-word__lv::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg); background: var(--c); }
+
+/* the help band */
+.fw-h-help { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 110px; padding: 36px 40px; border-radius: 26px; background: var(--fw-lacquer); box-shadow: inset 0 1px 0 rgba(255, 140, 140, .12), inset 0 0 0 1px var(--fw-lacquer-edge); overflow: hidden; }
+.fw-h-help__t { margin: 0 0 6px; font-family: var(--fw-font-display); font-weight: 400; font-size: 34px; color: var(--fw-ink-title); }
+.fw-h-help__p { margin: 0; font-family: var(--fw-font-read); font-size: 19px; color: var(--fw-ink-soft); }
+.fw-h-help .fw-btn { flex: none; }
+
+@media (max-width: 1080px) {
+  .fw-h-cat, .fw-h-cat--wide { grid-column: span 6; }
+  .fw-h-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fw-h-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
+}
+@media (max-width: 900px) {
+  .fw-h-section { padding-top: 80px; }
+  .fw-h-head { flex-direction: column; align-items: start; }
+  .fw-h-cats { grid-template-columns: minmax(0, 1fr); }
+  .fw-h-cat, .fw-h-cat--wide { grid-column: auto; min-height: 260px; }
+  .fw-h-paths, .fw-h-dict { grid-template-columns: minmax(0, 1fr); }
+  .fw-h-steps { grid-template-columns: minmax(0, 1fr); }
+  .fw-h-thread { display: none; }
+  .fw-h-help { flex-direction: column; align-items: start; padding: 28px 24px; }
+  .fw-h-cue { display: none; }
+  .fw-eyebrow { flex-wrap: wrap; }
+  .fw-eyebrow > span { white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fw-h-cue i { animation: none; }
+  .fw-h-cat img, .fw-h-cat__go, .fw-h-path::before { transition: none; }
+}
+@media print {
+  .fw-h-cue, .fw-h-thread { display: none !important; }
+}
+
+/* ---------- second pass after the side-by-side captures ---------- */
+/* the prototype keeps its scroll cue hidden */
+.fw-h-cue { display: none; }
+/* the hero standfirst: 30 characters wide, the last sentence brighter, not bolder */
+.fw-hero.fw-band .fw-hero__lead { max-width: 30ch; }
+.fw-hero__lead b { font-weight: 400; color: var(--fw-ink-title); }
+/* a long single word ("Dictionary") stays inside its column */
+.fw-band .fw-head__title { font-size: clamp(52px, 6.4vw, 104px); overflow-wrap: normal; }
+@media (max-width: 900px) { .fw-band .fw-head__title { font-size: 54px; } }
+
+/* a jump to a section (contents rail, method links) lands below the sticky header, not under it */
+html { scroll-padding-top: calc(var(--fw-top-offset, 0px) + 24px); }
+
+/* before the entrance starts: the header and the band wait unseen, so they appear once (motion.js removes fw-pre;
+   the head script removes it after 6 s whatever happens) */
+html.fw-pre .fw-top__row > *, html.fw-pre .fw-nav__link, html.fw-pre .fw-band__copy > *, html.fw-pre .fw-band__frame { opacity: 0; }

@@ -1,9 +1,9 @@
 /* Findom Wiki: design tokens.
-   Frozen on 2026-11-02 from round 4 of the direction work: version C "Deep rose", with spiral C "The descent",
-   the reading face, pearl white for the way out, labels in sentence case (_essais/direction-4/).
-   This is the only place where a colour, a size, a duration or a curve is written. Everything else reads these
-   variables. Colours are named by role, never by hue. Fonts load from ./fonts/ (all under the SIL Open Font
-   License, licence files beside them). */
+   Re-frozen on 2026-11-06 from the "Satin plumage" direction (_essais/direction-9/, prototype in _essais/prototype/):
+   dark "Noir" is the default theme and red is its only colour; the light theme (pearl, blush, navy ink) is the
+   option, set by html[data-theme="light"]. This is the only place where a colour, a size, a duration or a curve is
+   written. Everything else reads these variables. Colours are named by role, never by hue. Fonts load from ./fonts/
+   (all under the SIL Open Font License, licence files beside them). Previous tokens: _essais/avant-plumage-2026-11-06/. */
 
 @font-face { font-family: "fw-display"; src: url("fonts/abril-fatface-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
@@ -15,77 +15,88 @@
 @font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
 
-:root {
-  /* ============================================================ surfaces (grounds, deepest first) */
-  --fw-surface-deepest: #0B0307;   /* code blocks, the bottom of the descent */
-  --fw-surface: #12060B;           /* the page ground: a black-cherry night */
-  --fw-surface-band: #170810;      /* an alternate band on the page */
-  --fw-surface-raised: #1E0A13;    /* something a person acts on: door, message, answer, card */
-  --fw-surface-hover: #2A0F1E;     /* the same, under the pointer */
-  --fw-surface-selected: #2E1020;  /* selected, pressed, a plinth */
-  --fw-surface-selected-2: #3A1428;
-  --fw-light-from-above: radial-gradient(64% 110% at 26% -30%, rgba(179, 36, 90, .46), rgba(92, 22, 51, .18) 48%, rgba(18, 6, 11, 0) 78%);
-                                   /* the pink light falling on the top of a page */
+:root, html[data-theme="dark"] {
+  color-scheme: dark;
+  /* ============================================================ surfaces (grounds, deepest first): neutral black */
+  --fw-surface-deepest: #050506;   /* code blocks, the bottom of the descent */
+  --fw-surface: #0a0a0b;           /* the page ground */
+  --fw-surface-band: #0e0d0f;      /* an alternate band on the page */
+  --fw-surface-raised: #141315;    /* something a person acts on: door, message, answer, card */
+  --fw-surface-hover: #1b191c;     /* the same, under the pointer */
+  --fw-surface-selected: #221f23;  /* selected, pressed, a plinth */
+  --fw-surface-selected-2: #2a262b;
+  --fw-light-from-above: radial-gradient(64% 110% at 80% -30%, rgba(212, 14, 24, .26), rgba(122, 9, 16, .10) 48%, rgba(10, 10, 11, 0) 78%);
+                                   /* the red light falling on the top of a page */
+  --fw-glass: rgba(255, 255, 255, .035);          /* glass panels */
+  --fw-glass-edge: rgba(255, 255, 255, .07);
+  --fw-glass-blur: 22px;
+  --fw-shadow-panel: 0 40px 80px -24px rgba(0, 0, 0, .7);
+  --fw-lacquer: linear-gradient(140deg, rgba(150, 10, 18, .42), rgba(60, 6, 10, .4) 60%, rgba(20, 8, 10, .5));  /* notes, help */
+  --fw-lacquer-edge: rgba(255, 59, 70, .22);
+  --fw-title-fill: linear-gradient(180deg, #ffffff 0%, #f3f0f0 55%, #c9c3c5 100%);   /* big titles, clipped to text */
+  --fw-mark-fill: linear-gradient(170deg, #ff7a82 0%, #ff3b46 35%, #d40e18 70%, #7a0910 100%);  /* the red mark: ? . numerals */
+  --fw-sheen: rgba(255, 255, 255, .045);         /* the satin light that crosses the page */
 
-  /* the descent: the ground of each step of a staged explainer (the spiral's five turns), lighter to deeper */
-  --fw-depth-1: #2E1020;
-  --fw-depth-2: #24101A;
-  --fw-depth-3: #1A0A12;
-  --fw-depth-4: #12060B;
-  --fw-depth-5: #0B0307;
+  /* the descent: the ground of each step of a staged explainer, lighter to deeper */
+  --fw-depth-1: #221f23;
+  --fw-depth-2: #1a181b;
+  --fw-depth-3: #121113;
+  --fw-depth-4: #0a0a0b;
+  --fw-depth-5: #050506;
 
   /* ============================================================ ink */
-  --fw-ink-title: #FFF5F8;         /* titles, numerals on dark */
-  --fw-ink: #FCEFF4;               /* interface text */
-  --fw-ink-read: #EFDDE5;          /* long reading text (15:1 on the page ground) */
-  --fw-ink-soft: #D7B3C3;          /* secondary text, captions */
-  --fw-ink-quiet: #BE95A8;         /* meta, counters, line numbers (7:1 on the page ground) */
-  --fw-ink-on-accent: #FFF5F8;     /* text on an accent fill (5.9:1) */
-  --fw-ink-on-pearl: #2A0A18;      /* text on a pearl fill */
+  --fw-ink-title: #ffffff;         /* titles, numerals on dark */
+  --fw-ink: #f3f0f0;               /* interface text */
+  --fw-ink-read: #e2dddf;          /* long reading text */
+  --fw-ink-soft: #bdb7b9;          /* secondary text, captions */
+  --fw-ink-quiet: #908b8d;         /* meta, counters, line numbers (5.9:1 on the page ground) */
+  --fw-ink-on-accent: #ffffff;     /* text on an accent fill */
+  --fw-ink-on-pearl: #1c2340;      /* text on a pearl fill */
 
-  /* ============================================================ accent: the rose */
-  --fw-accent: #B3245A;            /* the primary action fill, the current step */
-  --fw-accent-pressed: #8A1C46;
-  --fw-accent-ink: #F4A2C1;        /* accent text on dark: kickers, numerals, links in UI */
-  --fw-accent-light: #F07AA8;      /* marks and lines that carry meaning (3:1 or more) */
-  --fw-accent-soft: #F8C6D9;       /* italic lead-ins, the focus ring */
-  --fw-accent-deep: #5C1633;       /* wine: the alert ground, the deepest rose */
-  --fw-focus: #F8C6D9;
+  /* ============================================================ accent: the red */
+  --fw-accent: #d40e18;            /* the primary action fill, the current step */
+  --fw-accent-pressed: #a50b13;
+  --fw-accent-ink: #ff4d57;        /* accent text on dark: labels, numerals, links in UI */
+  --fw-accent-light: #ff3b46;      /* marks and lines that carry meaning */
+  --fw-accent-soft: #ffb3b8;       /* italic lead-ins */
+  --fw-accent-deep: #3a0509;       /* wine: the alert ground, the deepest red */
+  --fw-focus: #ff6b73;
+  --fw-accent-fill: linear-gradient(180deg, #ff4a54, #d40e18 60%, #a50b13);   /* primary buttons */
+  --fw-accent-glow: 0 10px 30px -8px rgba(212, 14, 24, .7);
 
   /* lines and rims */
-  --fw-line: rgba(240, 122, 168, .22);
-  --fw-line-soft: rgba(240, 122, 168, .12);   /* hairlines between blocks */
-  --fw-line-strong: rgba(240, 122, 168, .55);
+  --fw-line: rgba(255, 255, 255, .10);
+  --fw-line-soft: rgba(255, 255, 255, .06);    /* hairlines between blocks */
+  --fw-line-strong: rgba(255, 59, 70, .55);
 
-  /* ============================================================ the way out: pearl white light, never green */
-  /* help line, Safety, right answers, done states, exits */
-  --fw-safe: #F3E3EA;
-  --fw-safe-ink: #FFF5F8;
-  --fw-safe-surface: #2A1620;
-  --fw-safe-line: rgba(255, 245, 248, .62);
-  --fw-safe-hair: rgba(255, 245, 248, .26);
-  --fw-safe-wash: rgba(255, 245, 248, .10);
+  /* ============================================================ the way out: pearl white light */
+  --fw-safe: #f3eeee;
+  --fw-safe-ink: #ffffff;
+  --fw-safe-surface: #1b191c;
+  --fw-safe-line: rgba(255, 255, 255, .62);
+  --fw-safe-hair: rgba(255, 255, 255, .24);
+  --fw-safe-wash: rgba(255, 255, 255, .07);
 
   /* ============================================================ danger and caution */
-  --fw-danger: #E0315F;            /* a red flag, a scam */
-  --fw-danger-ink: #FF8A9E;
-  --fw-danger-surface: #3B0A19;
-  --fw-caution: #E8875F;           /* only for a wrong answer and a common mistake */
-  --fw-caution-ink: #F7B58F;
-  --fw-caution-surface: #351810;
+  --fw-danger: #ff3b46;            /* a red flag, a scam */
+  --fw-danger-ink: #ff8a90;
+  --fw-danger-surface: #2a0709;
+  --fw-caution: #e8875f;           /* only for a wrong answer and a common mistake */
+  --fw-caution-ink: #f7b58f;
+  --fw-caution-surface: #2b160e;
 
   /* ============================================================ category marks (small marks only, never a ground) */
-  --fw-cat-basics: #F3E2EA;
-  --fw-cat-variants: #FF9C86;
-  --fw-cat-kinks: #F07AA8;
-  --fw-cat-dom: #FF5F82;
-  --fw-cat-subs: #F7B3CD;
-  --fw-cat-safety: #FFF8FB;
-  --fw-cat-scams: #9B1F48;         /* a fill; its text-safe ink is the next token */
-  --fw-cat-scams-ink: #FFA3B3;
-  --fw-cat-code: #A9C7D6;          /* the one cool tone */
-  --fw-cat-dictionary: #F5C29F;
-  --fw-cat-sources: #D4B4C2;
+  --fw-cat-basics: #f3f0f0;
+  --fw-cat-variants: #ff8a90;
+  --fw-cat-kinks: #ff5a63;
+  --fw-cat-dom: #ff3b46;
+  --fw-cat-subs: #ffc2c6;
+  --fw-cat-safety: #ffffff;
+  --fw-cat-scams: #a50b13;         /* a fill; its text-safe ink is the next token */
+  --fw-cat-scams-ink: #ff8a90;
+  --fw-cat-code: #c9c3c5;
+  --fw-cat-dictionary: #e6dfe1;
+  --fw-cat-sources: #bdb7b9;
 
   /* ============================================================ type */
   --fw-font-display: "fw-display", "Abril Fatface", Georgia, serif;   /* titles and numerals only */
@@ -93,16 +104,19 @@
   --fw-font-ui: "fw-ui", "Instrument Sans", system-ui, sans-serif;    /* navigation, buttons, chips, counters, captions */
   --fw-font-mono: "fw-mono", "IBM Plex Mono", ui-monospace, monospace; /* code and the guard log only */
 
-  --fw-fs-display-xl: clamp(58px, 9.4vw, 152px);
+  --fw-fs-display-xl: clamp(64px, 9vw, 150px);
   --fw-fs-display-l: clamp(38px, 4.6vw, 72px);
   --fw-fs-numeral: clamp(104px, 11vw, 168px);
   --fw-fs-heading: clamp(25px, 2vw, 30px);
+  --fw-fs-section: clamp(32px, 3.6vw, 48px);    /* a section title in a chapter (h2) */
   --fw-fs-read-lead: clamp(23px, 2vw, 28px);
   --fw-fs-read: clamp(20px, 1.5vw, 22px);
   --fw-fs-ui: 17px;
   --fw-fs-ui-small: 15px;
-  --fw-fs-label: 15px;             /* sentence case, weight 600, no letter spacing */
-  --fw-fs-meta: 14px;              /* the smallest text allowed */
+  --fw-fs-label: 15px;             /* sentence-case labels inside controls */
+  --fw-fs-eyebrow: 11px;           /* small upper-case tracked labels above titles and panels */
+  --fw-track-eyebrow: .24em;
+  --fw-fs-meta: 14px;              /* the smallest reading text allowed */
   --fw-fs-mono: 14px;
   --fw-fs-code: 14.5px;
 
@@ -110,10 +124,10 @@
   --fw-weight-label: 600;
   --fw-weight-strong: 700;
 
-  --fw-lh-display: .96;
-  --fw-lh-heading: 1.12;
+  --fw-lh-display: .9;
+  --fw-lh-heading: 1.08;
   --fw-lh-read-lead: 1.42;
-  --fw-lh-read: 1.55;
+  --fw-lh-read: 1.6;
   --fw-lh-ui: 1.62;
   --fw-lh-label: 1.25;
   --fw-lh-code: 1.75;
@@ -132,18 +146,18 @@
   --fw-space-8: 64px;
   --fw-space-9: 96px;
   --fw-space-10: 128px;
-  --fw-gutter: clamp(16px, 4vw, 48px);          /* side margin; 16 px on a phone */
+  --fw-gutter: clamp(16px, 5vw, 64px);          /* side margin; 16 px on a phone */
   --fw-wrap: 1312px;                            /* widest content box */
   --fw-section: clamp(72px, 8vw, 128px);        /* between sections of a page */
-  --fw-block: clamp(88px, 9vw, 136px);          /* between blocks of a lesson */
+  --fw-block: clamp(80px, 8vw, 120px);          /* between blocks of a lesson */
   --fw-head-gap: clamp(26px, 2.8vw, 36px);      /* a block heading to its content */
   --fw-tap: 44px;                               /* smallest tap target */
 
   /* ============================================================ radius */
   --fw-radius-pill: 999px;         /* buttons, chips, badges */
-  --fw-radius-card: 18px;          /* things a person acts on */
-  --fw-radius-panel: 22px;         /* the help line, a sandbox */
-  --fw-radius-small: 10px;
+  --fw-radius-card: 22px;          /* things a person acts on */
+  --fw-radius-panel: 22px;         /* glass panels, the help line, a sandbox */
+  --fw-radius-small: 12px;
   --fw-radius-mark: 2px;           /* progress bars, hairline marks */
 
   /* ============================================================ motion */
@@ -154,17 +168,90 @@
   --fw-ease-sink: cubic-bezier(.45, 0, .15, 1);
   --fw-ease-hover: ease;
 
-  /* Durations. Interface motion stays under 300 ms; only explanations may be longer. */
-  --fw-dur-press: 160ms;           /* scale .97 on :active */
-  --fw-dur-hover: 200ms;           /* colour and background on hover, behind (hover: hover) and (pointer: fine) */
-  --fw-dur-tip: 160ms;             /* a tooltip opens; later tips open at once */
-  --fw-dur-ui: 240ms;              /* a mark appears, an answer settles, a step is done */
-  --fw-dur-turn: 500ms;            /* a flashcard turns, a light steps up */
-  --fw-dur-explain: 1150ms;        /* the tribute note turns; a figure moves to the next turn */
-  --fw-dur-settle: 1600ms;         /* a light settles back after a step (exit-light) */
-  --fw-dur-draw: 1400ms;           /* a line draws once, the first time it is seen */
-  --fw-stagger: 50ms;              /* between items that enter together; never blocks a click */
+  /* Durations. Interface motion stays under 300 ms; only explanations and page entrances may be longer. */
+  --fw-dur-press: 160ms;
+  --fw-dur-hover: 200ms;
+  --fw-dur-tip: 160ms;
+  --fw-dur-ui: 240ms;
+  --fw-dur-turn: 500ms;
+  --fw-dur-explain: 1150ms;
+  --fw-dur-settle: 1600ms;
+  --fw-dur-draw: 1400ms;
+  --fw-stagger: 50ms;
   --fw-press-scale: .97;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --fw-surface-deepest: #f1eef4;
+  --fw-surface: #fbf9fb;
+  --fw-surface-band: #f6f2f5;
+  --fw-surface-raised: #ffffff;
+  --fw-surface-hover: #fdf3f2;
+  --fw-surface-selected: #fde3de;
+  --fw-surface-selected-2: #f8d2cb;
+  --fw-light-from-above: radial-gradient(64% 110% at 90% -30%, rgba(253, 227, 222, .95), rgba(253, 227, 222, .35) 48%, rgba(251, 249, 251, 0) 78%);
+  --fw-glass: rgba(255, 255, 255, .82);
+  --fw-glass-edge: rgba(28, 35, 64, .06);
+  --fw-shadow-panel: 0 40px 80px -24px rgba(214, 140, 140, .35);
+  --fw-lacquer: linear-gradient(140deg, #fde3de, #fff3ef 70%);
+  --fw-lacquer-edge: rgba(212, 14, 24, .14);
+  --fw-title-fill: linear-gradient(180deg, #2d3a6c 0%, #1c2340 55%, #141a33 100%);
+  --fw-mark-fill: linear-gradient(170deg, #ff6b73 0%, #ff4d57 25%, #d40e18 60%, #8e0f16 100%);
+  --fw-sheen: rgba(255, 255, 255, .6);
+
+  --fw-depth-1: #ffffff;
+  --fw-depth-2: #fdf3f2;
+  --fw-depth-3: #fbe9e6;
+  --fw-depth-4: #f8dcd7;
+  --fw-depth-5: #f3cfc9;
+
+  --fw-ink-title: #141a33;
+  --fw-ink: #1c2340;
+  --fw-ink-read: #2a2d40;
+  --fw-ink-soft: #4a4d63;
+  --fw-ink-quiet: #64627a;
+  --fw-ink-on-accent: #ffffff;
+  --fw-ink-on-pearl: #1c2340;
+
+  --fw-accent: #d40e18;
+  --fw-accent-pressed: #b00c15;
+  --fw-accent-ink: #b00c15;
+  --fw-accent-light: #d40e18;
+  --fw-accent-soft: #c43a43;
+  --fw-accent-deep: #fde3de;
+  --fw-focus: #d40e18;
+  --fw-accent-glow: 0 10px 30px -10px rgba(212, 14, 24, .55);
+
+  --fw-line: rgba(28, 35, 64, .12);
+  --fw-line-soft: rgba(28, 35, 64, .07);
+  --fw-line-strong: rgba(212, 14, 24, .5);
+
+  --fw-safe: #1c2340;
+  --fw-safe-ink: #141a33;
+  --fw-safe-surface: #eef0f6;
+  --fw-safe-line: rgba(28, 35, 64, .5);
+  --fw-safe-hair: rgba(28, 35, 64, .2);
+  --fw-safe-wash: rgba(28, 35, 64, .05);
+
+  --fw-danger: #d40e18;
+  --fw-danger-ink: #b00c15;
+  --fw-danger-surface: #fde3de;
+  --fw-caution: #b5532d;
+  --fw-caution-ink: #9a4422;
+  --fw-caution-surface: #fbe7dc;
+
+  --fw-cat-basics: #1c2340;
+  --fw-cat-variants: #c43a43;
+  --fw-cat-kinks: #d40e18;
+  --fw-cat-dom: #b00c15;
+  --fw-cat-subs: #8e0f16;
+  --fw-cat-safety: #1c2340;
+  --fw-cat-scams: #d40e18;
+  --fw-cat-scams-ink: #b00c15;
+  --fw-cat-code: #4a4d63;
+  --fw-cat-dictionary: #2d3a6c;
+  --fw-cat-sources: #4a4d63;
 }
 
 @media (max-width: 600px) {

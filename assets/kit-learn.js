@@ -3,7 +3,11 @@
    read from the markup. Exercises report their progress with a bubbling "fw:progress" event; the chapter rail and
    "Remember it" listen for it. Nothing is stored or sent: every state lives in memory for this visit.
    Named motions here: log-append, cap-hold, flag-mark, answer-settle, answer-shake (once), thread-fill (CSS),
-   card-turn (CSS), bar-fill (CSS), step-done, done-arrive, thread-draw (case timeline), door-light (CSS only).
+   card-turn (CSS), bar-fill (CSS), step-done, done-arrive, thread-draw (case timeline), door-light (CSS only),
+   explanation-open (CSS), score-fill (CSS), reading-line (the rail's progress line).
+   "Satin plumage": the panels a person works in are marked .fw-glass (the socle's pointer light) and rise in once
+   ([data-fw-reveal], the socle's motion.js). A quiz answer clicked or tapped is checked at once, as in the
+   prototype; from the keyboard "Check answer" checks it, so moving through the answers never answers.
    Pause motion and reduced motion: tweens are skipped, and any running tween jumps to its end. */
 (function () {
   "use strict";
@@ -170,6 +174,12 @@
     var trackEl = $(".fw-rail__track", nav), fill = $("[data-fw-rail-fill]", nav);
     var nowEl = $("[data-fw-rail-now]", nav), nameEl = $("[data-fw-rail-name]", nav);
     var current = 0, ticking = false, tops = [], centers = [], trackShown = false, railTop = 0, railBottom = 0;
+    // reading-line: a hairline under the list (the strip's bottom edge on a phone) fills with the reading
+    var meter = document.createElement("span"), meterFill = document.createElement("span");
+    meter.className = "fw-rail__meter"; meter.setAttribute("aria-hidden", "true");
+    meterFill.className = "fw-rail__meterfill";
+    meter.appendChild(meterFill);
+    nav.appendChild(meter);
     function layout() {
       trackShown = getComputedStyle(trackEl).display !== "none";
       var nr0 = nav.getBoundingClientRect();
@@ -204,6 +214,13 @@
       // the end of the lesson is on screen: the last step is current
       if (window.scrollY + window.innerHeight >= railBottom - 4 && window.scrollY + window.innerHeight * 0.42 > railTop) step = total;
       if (step !== current) { current = step; apply(step); }
+      // the reading line follows the scroll; under Pause or reduced motion it moves only from step to step
+      var frac = total > 1 ? (step - 1) / (total - 1) : 1;
+      if (FW.motionOK()) {
+        var span = Math.max(1, railBottom - railTop - window.innerHeight * 0.5);
+        frac = Math.max(0, Math.min(1, (window.scrollY + window.innerHeight * 0.42 - railTop) / span));
+      }
+      meterFill.style.transform = "scaleX(" + frac.toFixed(4) + ")";
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(measure); } }
     var queued = false;
@@ -218,6 +235,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
     layout();
     measure();
+    FW.onMotion(function () { measure(); });
     // a jump from the rail moves focus to the block's heading, so keyboard reading continues there
     $$(".fw-rail__link, .fw-rail__sublink", nav).forEach(function (a) {
       a.addEventListener("click", function () {
@@ -351,8 +369,7 @@
         if (right) best = "right"; else if (!best) best = "tried";
         report(sec, { kind: "choice", value: best === "right" ? "Done" : "Tried", done: best === "right", frac: best === "right" ? 1 : 0.5,
           touched: true, summary: best === "right" ? "scenario right" : "scenario tried" });
-        if (right) settle(c); else shake(c);
-        arrive(fb, 6);
+        if (right) settle(c); else shake(c);   // the feedback opens by itself (CSS, explanation-open)
       });
     });
     again.addEventListener("click", function () {
@@ -369,23 +386,42 @@
   function initQuiz(sec) {
     var qs = $$(".fw-quiz__q", sec), score = $("[data-fw-score]", sec), total = qs.length, touched = false;
     qs.forEach(function (q, i) { var n = $("[data-fw-qn]", q); if (n) n.textContent = "Question " + (i + 1) + " of " + total; });
+    // score-fill: a meter beside the score fills with the right answers (CSS transition)
+    var meterFill = null;
+    if (score && score.parentNode) {
+      var meter = document.createElement("span");
+      meter.className = "fw-quiz__meter"; meter.setAttribute("aria-hidden", "true");
+      meterFill = document.createElement("span"); meterFill.className = "fw-quiz__meterfill";
+      meter.appendChild(meterFill);
+      score.parentNode.insertBefore(meter, score.nextSibling);
+    }
     function update() {
       var r = qs.filter(function (q) { return q.getAttribute("data-state") === "right"; }).length;
-      score.textContent = r + " of " + total + " right";
+      score.innerHTML = '<span class="fw-quiz__scoren">' + r + "</span> of " + total + " right";
+      if (meterFill) meterFill.style.transform = "scaleX(" + (total ? r / total : 0) + ")";
       report(sec, { kind: "quiz", value: r + " of " + total, done: r === total, frac: total ? r / total : 0, touched: touched,
         summary: r + " of " + total + " questions right" });
     }
     qs.forEach(function (q) {
-      var fb = $("[data-fw-fb]", q), why = q.getAttribute("data-why");
+      var fb = $("[data-fw-fb]", q), why = q.getAttribute("data-why"), checkBtn = $("[data-fw-check]", q);
+      var pointerAt = -1e9;
       function clear() {
         q.removeAttribute("data-state");
         $$(".fw-quiz__opt", q).forEach(function (o) { o.removeAttribute("data-tone"); });
         $$("[data-fw-tag]", q).forEach(function (t) { t.innerHTML = ""; });
       }
-      $$(".fw-quiz__input", q).forEach(function (inp) {
-        inp.addEventListener("change", function () { clear(); clearSay(fb); update(); });
+      // a pointer (mouse, finger or pen) on an answer: the change that follows is checked at once
+      $$(".fw-quiz__opt", q).forEach(function (o) {
+        o.addEventListener("pointerdown", function () { pointerAt = Date.now(); });
       });
-      $("[data-fw-check]", q).addEventListener("click", function () {
+      $$(".fw-quiz__input", q).forEach(function (inp) {
+        inp.addEventListener("change", function () {
+          clear(); clearSay(fb); update();
+          // a real click on the button, so site.js gives the explanation back its links and badges
+          if (Date.now() - pointerAt < 1500) { pointerAt = -1e9; checkBtn.click(); }
+        });
+      });
+      checkBtn.addEventListener("click", function () {
         var chosen = $(".fw-quiz__input:checked", q);
         clear();
         if (!chosen) { say(fb, "Choose an answer first.", "none", "fw-quiz__fbico"); update(); return; }
@@ -447,11 +483,13 @@
         d.classList.toggle("fw-flash__dot--again", marks[k] === "again");
       });
     }
+    var stage = $(".fw-flash__stage", box) || card;
     function go(step) {
       setTurned(false, true);
       i = (i + step + n) % n;
       render();
-      if (motionOK()) track(gsap.fromTo(card, { x: step * 14, opacity: 0.4 }, { x: 0, opacity: 1, duration: dur("--fw-dur-ui"), ease: FW.ease.out, clearProps: "opacity,transform" }));
+      // next-card slide: the stage moves, so the tween never meets the card's own turn (a CSS transform)
+      if (motionOK()) track(gsap.fromTo(stage, { x: step * 14, opacity: 0.4 }, { x: 0, opacity: 1, duration: dur("--fw-dur-ui"), ease: FW.ease.out, clearProps: "opacity,transform" }));
     }
     function judgeAs(kind) {
       marks[i] = kind;
@@ -543,6 +581,21 @@
     }, { rootMargin: "0px 0px -20% 0px" });
     io.observe(box.querySelector(".fw-timeline__wrap"));
   }
+
+  /* ------------------------------------------------------------ "Satin plumage" hooks for the socle (motion.js)
+     The panels a person works in catch the pointer light (.fw-glass) and rise in once when they come into view
+     ([data-fw-reveal]); nothing is marked twice, and nothing inside an element that already rises in. Under Pause or
+     reduced motion motion.js shows them as they are. */
+  $$(".fw-quiz__q, .fw-choice, .fw-chat").forEach(function (el) { el.classList.add("fw-glass"); });
+  // the "Try it" eyebrow (CSS) stays off a title that already says it
+  $$(".fw-quiz__title, .fw-choice__title, .fw-chat__title").forEach(function (h) {
+    if (/^\s*try it\b/i.test(h.textContent)) h.setAttribute("data-fwl-said", "");
+  });
+  $$(".fw-quiz__q, .fw-choice, .fw-chat, .fw-flash__deck, .fw-tut__step").forEach(function (el) {
+    if (!el.closest("[data-fw-reveal]") && !el.querySelector("[data-fw-reveal]") && !el.closest("[data-fwl-specimen], [data-fwl-statelist]")) {
+      el.setAttribute("data-fw-reveal", "");
+    }
+  });
 
   /* ------------------------------------------------------------ start: listeners first, then the exercises report */
   $$("[data-fw-doors]").forEach(initDoors);

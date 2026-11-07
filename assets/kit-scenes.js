@@ -17,6 +17,10 @@
    visible and motion is allowed. Pause motion freezes everything where it is; reduced motion shows one telling still
    frame. Without WebGL each family shows a drawn picture. Pixel ratio is capped at 2.
    Colours: read from tokens (the --fw-* tokens and the module's --fws-* tokens in style.css), never written here.
+   Themes: dark "Noir" is the default, html[data-theme="light"] the option; every scene re-reads its colours when that
+   attribute changes (a MutationObserver), redraws its notes and paints one new frame, also under Pause.
+   The home hero of the site has no rain canvas: there this script leaves the hero's words alone (the socle,
+   tools/build_motion.js, brings them in), and only wires the search button.
    Measuring hook: window.fwScenes.renders counts the renders of each renderer ({ rain, descent, studio }); it costs
    nothing and only the kit's measuring scripts read it. */
 (function () {
@@ -67,6 +71,21 @@
     var t = new THREE.Color().setRGB(c.r, c.g, c.b, THREE.SRGBColorSpace);
     if (k !== undefined) t.multiplyScalar(k);
     return t;
+  }
+
+  /* ============================================================ the theme */
+  // dark "Noir" unless <html data-theme="light">; scenes that hold colours register a callback to re-read them
+  function isLight() { return docEl.getAttribute("data-theme") === "light"; }
+  var themeCbs = [], themeNow = docEl.getAttribute("data-theme");
+  function onTheme(cb) { themeCbs.push(cb); }
+  if ("MutationObserver" in window) {
+    new MutationObserver(function () {
+      var t = docEl.getAttribute("data-theme");
+      if (t === themeNow) return;
+      themeNow = t;
+      inkCache = {};
+      themeCbs.forEach(function (cb) { try { cb(isLight()); } catch (e) { /* one scene failing never stops the others */ } });
+    }).observe(docEl, { attributes: true, attributeFilter: ["data-theme"] });
   }
   var FONT_D = FW.token("--fw-font-display"), FONT_UI = FW.token("--fw-font-ui"), FONT_M = FW.token("--fw-font-mono");
 
@@ -152,8 +171,8 @@
     g.fillStyle = P.seal; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
     g.save();
     g.lineWidth = 7 * s;
-    g.strokeStyle = alpha("--fw-ink-title", 30, scope); g.beginPath(); g.arc(cx - 2 * s, cy - 2 * s, R + 3 * s, Math.PI * 0.85, Math.PI * 1.75); g.stroke();
-    g.strokeStyle = alpha("--fw-surface-deepest", 34, scope); g.beginPath(); g.arc(cx + 2 * s, cy + 2 * s, R + 3 * s, Math.PI * 1.85, Math.PI * 2.75); g.stroke();
+    g.strokeStyle = alpha("--fws-emboss", 30, scope); g.beginPath(); g.arc(cx - 2 * s, cy - 2 * s, R + 3 * s, Math.PI * 0.85, Math.PI * 1.75); g.stroke();
+    g.strokeStyle = alpha("--fws-contact", 34, scope); g.beginPath(); g.arc(cx + 2 * s, cy + 2 * s, R + 3 * s, Math.PI * 1.85, Math.PI * 2.75); g.stroke();
     g.restore();
     g.strokeStyle = P.ring;
     g.lineWidth = 3 * s; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.stroke();
@@ -255,7 +274,7 @@
     return c;
   }
 
-  /* ============================================================ one shader for paper and porcelain */
+  /* ============================================================ one shader for paper and crystal */
   // PAPER adds the curl and the flutter; INST reads a phase per note (the rain)
   var VS = [
     "uniform float uTime; uniform float uAmp; uniform float uCurl; uniform float uPhase;",
@@ -330,6 +349,12 @@
       uFogCol: { value: tc("--fws-fog", scope) }, uFogNear: { value: o.fogNear || 100 }, uFogFar: { value: o.fogFar || 200 }
     };
   }
+  // the same light, read again from the tokens (after a change of theme)
+  function relight(U, o, scope) {
+    U.uKeyCol.value.copy(tc("--fws-key", scope, o.key)); U.uSky.value.copy(tc("--fws-sky", scope, o.sky));
+    U.uGround.value.copy(tc("--fws-floor", scope, o.ground)); U.uRimCol.value.copy(tc("--fws-rim", scope));
+    U.uFogCol.value.copy(tc("--fws-fog", scope));
+  }
   // shared uniforms stay shared (same objects); per-material values are new objects
   function surface(U, o) {
     var u = {};
@@ -359,6 +384,15 @@
     var edge = surface(U, { solid: tc("--fws-paper-core", scope), paper: true, inst: inst });
     return [edge, edge, edge, edge, front, back];
   }
+  // the same note in the inks of the new theme: both faces drawn again, the old textures freed
+  function repaintNote(mats, P, renderer, W, scope) {
+    [[4, drawFront], [5, drawBack]].forEach(function (f) {
+      var u = mats[f[0]].uniforms.map, old = u.value;
+      u.value = texFrom(f[1](P, W, scope), renderer);
+      if (old) old.dispose();
+    });
+    mats[0].uniforms.uSolid.value.copy(tc("--fws-paper-core", scope));
+  }
 
   /* ============================================================ fw-hero, fw-rain: fall, flutter, rain-thin, emerge */
   function initHero(hero) {
@@ -370,6 +404,8 @@
       input.focus({ preventScroll: true });
       input.scrollIntoView({ block: "center", behavior: FW.motionOK() ? "smooth" : "auto" });
     });
+    // no rain canvas (the site's home band): the words are the socle's to bring in; never hide or move them here
+    if (!canvas) return;
     emerge(hero);
     // on phones the rain is full only above the kicker: its top, in pixels from the top of the hero, goes to the mask
     var kicker = $(".fw-hero__kicker", hero) || $(".fw-hero__title", hero);
@@ -378,14 +414,14 @@
     };
     wordsTop();
     if ("ResizeObserver" in window) new ResizeObserver(wordsTop).observe(hero);
-    var rain = canvas ? createRain(canvas, hero) : null;
-    if (!rain) { rainFallback(hero); return; }
+    var rain = createRain(canvas, hero);
+    if (!rain) rainFallback(hero);
   }
 
   // emerge: the title rises letter by letter out of the dark, once, the first time it is seen
   function emerge(hero) {
     var title = $(".fw-hero__title", hero);
-    if (!title || !hasGsap || !window.SplitText || !("IntersectionObserver" in window)) return;
+    if (!title || !$("[data-fw-rain]", hero) || !hasGsap || !window.SplitText || !("IntersectionObserver" in window)) return;
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return;
       io.disconnect();
@@ -410,8 +446,9 @@
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 80);
     camera.position.set(0, 0, 10);
-    // the fog fades far notes toward a dusky plum, not toward black, so a wine note at depth never reads as a slab
-    var U = lightUniforms({ amp: 0.8, key: 1.0, sky: 0.8, ground: 0.75, rim: 0.32, spec: 0.02, fogNear: 10, fogFar: 38 }, hero);
+    // the fog fades far notes toward the night (pearl in the light theme), so a far note never reads as a slab
+    var LIGHT = { amp: 0.8, key: 1.0, sky: 0.8, ground: 0.75, rim: 0.32, spec: 0.02, fogNear: 10, fogFar: 38 };
+    var U = lightUniforms(LIGHT, hero);
     var KEYS = ["rose", "blush", "wine"], PER = [22, 28, 22];
     var meshes = [], notes = [];
     var dummy = new THREE.Object3D();
@@ -510,6 +547,12 @@
       if (ok) { densityTarget = 1; return; }
       if (reduced()) still();   // reduced motion: the still frame; Pause: every note stops where it is
     });
+    // a new theme: the light and the three inks read again, one frame painted at once
+    onTheme(function () {
+      relight(U, LIGHT, hero);
+      meshes.forEach(function (mm, m) { repaintNote(mm.material, ink(KEYS[m], hero), renderer, 1024, hero); });
+      render();
+    });
     if ("ResizeObserver" in window) new ResizeObserver(function () {
       resize();
       if (reduced()) still(); else if (!FW.motionOK()) render();
@@ -531,14 +574,22 @@
     hero.setAttribute("data-fws-nogl", "");
     var fb = $("[data-fw-rain-fallback]", hero);
     if (!fb || fb.childElementCount) return;
+    // the lowest note shows its back in crimson (not black satin), so it never reads as a dark slab
+    var NOTES = [["rose", 1], ["blush", 2], ["rose", 3], ["blush", 4]], imgs = [];
+    function paintAll() {
+      imgs.forEach(function (img, i) {
+        var d = NOTES[i];
+        img.src = (i === 2 ? drawBack(ink(d[0], hero), 640, hero) : drawFront(ink(d[0], hero), 640, hero)).toDataURL("image/png");
+      });
+    }
     fontsReady().then(function () {
-      // the lowest note shows its back in deep rose (not wine), so it never reads as a dark slab
-      [["rose", 1], ["blush", 2], ["rose", 3], ["blush", 4]].forEach(function (d, i) {
+      NOTES.forEach(function (d) {
         var img = document.createElement("img");
         img.alt = ""; img.className = "fw-rain__note"; img.setAttribute("data-n", String(d[1]));
-        img.src = (i === 2 ? drawBack(ink(d[0], hero), 640, hero) : drawFront(ink(d[0], hero), 640, hero)).toDataURL("image/png");
-        fb.appendChild(img);
+        fb.appendChild(img); imgs.push(img);
       });
+      paintAll();
+      onTheme(paintAll);
     });
   }
 
@@ -750,12 +801,13 @@
 
     var fade = { value: new THREE.Vector2(1, 2) };
     // the picture recedes behind the text: within a soft edge of every line of text, the lip line fades out and the
-    // band's brightness is capped, so the words keep their contrast and no rectangle shows
+    // band's brightness is capped (dark theme) or the band thins away to the ground (light theme), so the words keep
+    // their contrast and no rectangle shows
     var MAXR = 40, rectList = [];
     for (var i0 = 0; i0 < MAXR; i0++) rectList.push(new THREE.Vector4(0, 0, 0, 0));
-    var mask = { uRects: { value: rectList }, uNR: { value: 0 }, uFeather: { value: 48 }, uCap: { value: 0.09 } };
+    var mask = { uRects: { value: rectList }, uNR: { value: 0 }, uFeather: { value: 48 }, uCap: { value: 0.09 }, uLight: { value: 0 } };
     var MASK_GLSL = [
-      "uniform vec4 uRects[" + MAXR + "]; uniform int uNR; uniform float uFeather; uniform float uCap;",
+      "uniform vec4 uRects[" + MAXR + "]; uniform int uNR; uniform float uFeather; uniform float uCap; uniform float uLight;",
       "float fwsUnder() {",
       "  float m = 0.0;",
       "  for (int i = 0; i < " + MAXR + "; i++) {",
@@ -767,20 +819,24 @@
       "  return m;",
       "}"
     ].join("\n");
+    // black satin with a crimson sheen (pearl satin with a blush sheen in the light theme, where the band also gives
+    // off a little light of its own, so its folds read as soft rose shadows and never as dark slabs)
     var mat = new THREE.MeshPhysicalMaterial({
-      color: tc("--fw-accent-deep", root), vertexColors: true, roughness: 0.88, metalness: 0,
-      sheen: 1, sheenRoughness: 0.55, sheenColor: tc("--fw-accent-pressed", root),
+      color: tc("--fws-satin", root), vertexColors: true, roughness: 0.72, metalness: 0,
+      sheen: 1, sheenRoughness: 0.38, sheenColor: tc("--fws-satin-sheen", root),
+      clearcoat: 0.5, clearcoatRoughness: 0.34,
+      emissive: tc("--fws-satin-glow", root), emissiveIntensity: 0,
       side: THREE.DoubleSide, transparent: true
     });
     mat.onBeforeCompile = function (sh) {
       sh.uniforms.uFade = fade;
-      sh.uniforms.uRects = mask.uRects; sh.uniforms.uNR = mask.uNR; sh.uniforms.uFeather = mask.uFeather; sh.uniforms.uCap = mask.uCap;
+      sh.uniforms.uRects = mask.uRects; sh.uniforms.uNR = mask.uNR; sh.uniforms.uFeather = mask.uFeather; sh.uniforms.uCap = mask.uCap; sh.uniforms.uLight = mask.uLight;
       sh.fragmentShader = "uniform vec2 uFade;\n" + MASK_GLSL + "\n" + sh.fragmentShader.replace(
         "#include <dithering_fragment>",
-        "#include <dithering_fragment>\n  float fwsVis = 1.0 - smoothstep(uFade.x, uFade.y, vViewPosition.z);\n  float fwsL = dot(gl_FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));\n  gl_FragColor.rgb *= mix(1.0, min(1.0, uCap / max(fwsL, 0.0001)), fwsUnder());\n  gl_FragColor = vec4(gl_FragColor.rgb, gl_FragColor.a * fwsVis);"
+        "#include <dithering_fragment>\n  float fwsVis = 1.0 - smoothstep(uFade.x, uFade.y, vViewPosition.z);\n  float fwsU = fwsUnder();\n  float fwsL = dot(gl_FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));\n  gl_FragColor.rgb *= mix(1.0, min(1.0, uCap / max(fwsL, 0.0001)), fwsU * (1.0 - uLight));\n  gl_FragColor = vec4(gl_FragColor.rgb, gl_FragColor.a * fwsVis * (1.0 - 0.28 * fwsU * uLight));"
       );
     };
-    // the lip: one fine, continuous rose line along the edge of every step, at a constant width on screen; the
+    // the lip: one fine, continuous crimson line along the edge of every step, at a constant width on screen; the
     // stretch of the current chapter is the brightest, those passed are softer, those ahead fainter
     function lipPoint(s) {
       var ro = R(s), g = Math.max(0.04, grow(s)), ri = ro - (ro - R(s + 1) * 1.002) * g, th = s * Math.PI * 2;
@@ -809,8 +865,8 @@
     var lipMat = new THREE.ShaderMaterial({
       uniforms: {
         uRes: { value: new THREE.Vector2(1, 1) }, uWidth: { value: 2.4 }, uFade: fade, uDepth: { value: 0 },
-        uColor: { value: tc("--fw-accent-ink", root) }, uOpacity: { value: 0.6 },
-        uRects: mask.uRects, uNR: mask.uNR, uFeather: mask.uFeather
+        uColor: { value: tc("--fws-lip", root) }, uOpacity: { value: 0.6 },
+        uRects: mask.uRects, uNR: mask.uNR, uFeather: mask.uFeather, uCap: mask.uCap, uLight: mask.uLight
       },
       vertexShader: [
         "uniform vec2 uRes; uniform float uWidth; uniform vec2 uFade;",
@@ -851,8 +907,22 @@
     var KEY = 1.25, HEMI = 0.16;
     var key = new THREE.DirectionalLight(tc("--fws-key", root), KEY);
     key.position.set(-0.7, 1, 0.5);
-    var hemi = new THREE.HemisphereLight(tc("--fw-accent-light", root), tc("--fw-surface", root), HEMI);
+    var hemi = new THREE.HemisphereLight(tc("--fws-sky", root), tc("--fws-floor", root), HEMI);
     sceneObj.add(key, hemi);
+    // the colours of the theme: band, sheen, own light, lip and room, read from the tokens
+    var glowK = 0;
+    function dress() {
+      var light = isLight();
+      mat.color.copy(tc("--fws-satin", root));
+      mat.sheenColor.copy(tc("--fws-satin-sheen", root));
+      mat.emissive.copy(tc("--fws-satin-glow", root));
+      glowK = light ? 0.92 : 0;
+      lipMat.uniforms.uColor.value.copy(tc("--fws-lip", root));
+      key.color.copy(tc("--fws-key", root));
+      hemi.color.copy(tc("--fws-sky", root)); hemi.groundColor.copy(tc("--fws-floor", root));
+      mask.uLight.value = light ? 1 : 0;
+    }
+    dress();
     var camera = new THREE.PerspectiveCamera(46, 1, 0.05, 500);
     camera.up.set(0, 0, -1);
 
@@ -914,7 +984,8 @@
       return arr[i] + (arr[i + 1] - arr[i]) * f;
     }
     // light in the room and the brightest the picture may be under the words, by depth (0 is the opening, then
-    // spread over the N chapters): the rose numerals keep 4.5:1 or more, reading text far above 7:1
+    // spread over the N chapters): the crimson numerals keep 4.5:1 or more, reading text far above 7:1 (dark theme;
+    // in the light theme the band thins away under the words instead)
     var ROOM = [1.3, 1.15, 1, 0.8, 0.55, 0.3];
     var GROUND_LUMA = [0.12, 0.12, 0.11, 0.07, 0.06, 0.05];
     function scaled(arr, d) { return lerp(arr, d <= 1 ? d : 1 + (d - 1) * 4 / Math.max(1, N - 1)); }
@@ -940,6 +1011,7 @@
       var lit = scaled(ROOM, d);
       key.intensity = KEY * lit;
       hemi.intensity = HEMI * lit;
+      mat.emissiveIntensity = glowK * (0.82 + 0.18 * lit);   // light theme: the pearl band deepens a little with the room
       lipMat.uniforms.uDepth.value = d;
       lipMat.uniforms.uOpacity.value = 0.18 + 0.45 * lit;   // deepen: the line dims with the room
       mask.uCap.value = scaled(GROUND_LUMA, d);
@@ -957,6 +1029,8 @@
       var moving = Math.abs(depth - drawn.depth) > 0.0005, turned = Math.abs(spin - drawn.spin) > 0.002;
       if ((moving && t - lastDraw > 21) || (turned && t - lastDraw > 80)) { draw(); lastDraw = t; }
     }
+    // a new theme: the new colours, and one frame at once (also under Pause and reduced motion)
+    onTheme(function () { dress(); draw(); });
     return {
       draw: draw,
       tick: tick,
@@ -1050,9 +1124,9 @@
     return g;
   }
   function mesh(geo, m, x, y, z) { var o = new THREE.Mesh(geo, m); o.position.set(x || 0, y || 0, z || 0); return o; }
-  // Pm the porcelain body, Am the category accent (ONE small detail per object), Dm the shade of a recess, Rm the deeper glaze
+  // Pm the crystal body, Am the off-white trim (ONE small detail per object), Dm the shade of a recess, Rm the deeper glaze
   var BUILD = {
-    basics: function (Pm, Am, Dm, Rm) { // an open book: rose covers, stepped leaves, a ribbon bookmark
+    basics: function (Pm, Am, Dm, Rm) { // an open book: deep crimson covers, stepped leaves, a ribbon bookmark
       var g = new THREE.Group();
       function half(sign, w, th, lift, m, y0, depth) {
         var geo = new THREE.BoxGeometry(w, th, depth, 28, 1, 1), p = geo.attributes.position;
@@ -1122,7 +1196,7 @@
       g.rotation.x = 0.16;
       return g;
     },
-    subs: function (Pm, Am, Dm, Rm) { // a wallet: body with a stitched seam, a rose flap, a round clasp
+    subs: function (Pm, Am, Dm, Rm) { // a wallet: body with a stitched seam, a deep crimson flap, a round clasp
       var g = new THREE.Group();
       g.add(mesh(extrude(roundRect(1.0, 0.68, 0.1), 0.14, 0.035), Pm));
       var f = new THREE.Shape();
@@ -1137,7 +1211,7 @@
       g.rotation.x = -0.08;
       return g;
     },
-    safety: function (Pm, Am, Dm, Rm) { // a lifebuoy: eight bands in two rose tones, a thin rope around it
+    safety: function (Pm, Am, Dm, Rm) { // a lifebuoy: eight bands in two crimson tones, a thin rope around it
       var g = new THREE.Group();
       for (var k = 0; k < 8; k++) {
         var t = mesh(new THREE.TorusGeometry(0.5, 0.17, 24, 24, Math.PI / 4), k % 2 ? Rm : Pm);
@@ -1157,7 +1231,7 @@
       g.add(mesh(new THREE.TorusGeometry(0.13, 0.052, 18, 56), Am, 0.2, 1.2, 0));
       return g;
     },
-    code: function (Pm, Am, Dm) { // a padlock: porcelain body and shackle, a dark keyhole in an accent ring
+    code: function (Pm, Am, Dm) { // a padlock: crystal body and shackle, a dark keyhole in a trim ring
       var g = new THREE.Group();
       g.add(mesh(extrude(roundRect(0.8, 0.62, 0.11), 0.24, 0.04), Pm, 0, 0, 0));
       var arch = curve([[-0.24, 0.24], [-0.24, 0.52], [-0.17, 0.7], [0, 0.76], [0.17, 0.7], [0.24, 0.52], [0.24, 0.36]]);
@@ -1170,7 +1244,7 @@
       g.add(mesh(new THREE.TorusGeometry(0.125, 0.014, 10, 64), Am, 0, 0.05, 0.164));
       return g;
     },
-    dictionary: function (Pm, Am, Dm, Rm) { // a letter tile: the "A" inlaid in deep rose, a short accent rule under it
+    dictionary: function (Pm, Am, Dm, Rm) { // a letter tile: the "A" inlaid in deep crimson, a short trim rule under it
       var g = new THREE.Group();
       g.add(mesh(extrude(roundRect(0.9, 0.9, 0.13), 0.16, 0.04), Pm));
       var a = new THREE.Shape();
@@ -1184,7 +1258,7 @@
       g.rotation.x = -0.1;
       return g;
     },
-    sources: function (Pm, Am, Dm, Rm) { // a document with a folded corner: rose lines, the heading line in the accent
+    sources: function (Pm, Am, Dm, Rm) { // a document with a folded corner: deep crimson lines, the heading line in the trim
       var g = new THREE.Group();
       var s = new THREE.Shape();
       s.moveTo(-0.36, -0.48); s.lineTo(0.36, -0.48); s.lineTo(0.36, 0.28); s.lineTo(0.16, 0.48); s.lineTo(-0.36, 0.48); s.closePath();
@@ -1246,7 +1320,8 @@
     var DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     /* the note: one mesh per ink and texture size, made when first needed */
-    var NU = lightUniforms({ amp: 0.32, curl: 0.09, key: 1.15, sky: 0.95, ground: 0.8, rim: 0.42, spec: 0.03 }, scope);
+    var NOTE_LIGHT = { amp: 0.32, curl: 0.09, key: 1.15, sky: 0.95, ground: 0.8, rim: 0.42, spec: 0.03 };
+    var NU = lightUniforms(NOTE_LIGHT, scope);
     var noteScene = new THREE.Scene(), noteCam = new THREE.PerspectiveCamera(30, 1.4, 0.1, 50);
     var notePivot = new THREE.Group(); noteScene.add(notePivot);
     var noteMeshes = {};
@@ -1260,31 +1335,37 @@
       return noteMeshes[k];
     }
 
-    /* the emblems on their shared plinth: a lower key light than the note's, so the porcelain sits in the night */
-    var EU = lightUniforms({ key: 0.8, sky: 0.46, ground: 0.5, rim: 0.26, spec: 0.0, edge: 0.34, glaze: 0.16 }, scope);
+    /* the emblems on their shared plinth: crimson crystal on black satin (pearl in the light theme), one off-white
+       trim per object and a fine crimson ring on the plinth; a lower key light than the note's, so they sit in the night */
+    var EM_LIGHT = { key: 0.8, sky: 0.42, ground: 0.5, rim: 0.3, spec: 0.05, edge: 0.34, glaze: 0.42 };
+    var EU = lightUniforms(EM_LIGHT, scope);
     var emScene = new THREE.Scene(), emCam = new THREE.PerspectiveCamera(25, 1, 0.1, 50);
     emCam.position.set(0, 1.2, 4.9); emCam.lookAt(0, 0.52, 0);
-    var plinthMat = surface(EU, { solid: tc("--fws-plinth", scope, 0.62), spec: 0, rim: 0.03, edge: 0, glaze: 0.05, double: true });
+    var plinthMat = surface(EU, { solid: tc("--fws-plinth", scope), spec: 0, rim: 0.03, edge: 0, glaze: 0.12, double: true });
     var prof = [[0, 0], [0.8, 0], [0.85, 0.015], [0.87, 0.05], [0.87, 0.12], [0.85, 0.155], [0.8, 0.168], [0, 0.168]].map(function (q) { return new THREE.Vector2(q[0], q[1]); });
     var plinth = mesh(new THREE.LatheGeometry(prof, 96), plinthMat, 0, -0.168, 0);
-    var ringMat = surface(EU, { solid: tc("--fw-accent-light", scope), rim: 0.2, edge: 0, glaze: 0 });
+    var ringMat = surface(EU, { solid: tc("--fws-lip", scope), rim: 0.2, edge: 0, glaze: 0 });
     var ring = mesh(new THREE.TorusGeometry(0.83, 0.009, 8, 160), ringMat); ring.rotation.x = Math.PI / 2;
     // a soft contact shadow on the plinth's top
     var sc = document.createElement("canvas"); sc.width = sc.height = 128;
-    var sg = sc.getContext("2d"), grd = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grd.addColorStop(0, alpha("--fws-contact", 75, scope)); grd.addColorStop(0.5, alpha("--fws-contact", 35, scope)); grd.addColorStop(1, alpha("--fws-contact", 0, scope));
-    sg.fillStyle = grd; sg.fillRect(0, 0, 128, 128);
-    var shadow = new THREE.Mesh(new THREE.CircleGeometry(0.66, 48), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
+    var sg = sc.getContext("2d"), shadowTex = new THREE.CanvasTexture(sc);
+    function contact() {
+      var grd = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
+      grd.addColorStop(0, alpha("--fws-contact", 75, scope)); grd.addColorStop(0.5, alpha("--fws-contact", 35, scope)); grd.addColorStop(1, alpha("--fws-contact", 0, scope));
+      sg.clearRect(0, 0, 128, 128); sg.fillStyle = grd; sg.fillRect(0, 0, 128, 128);
+      shadowTex.needsUpdate = true;
+    }
+    contact();
+    var shadow = new THREE.Mesh(new THREE.CircleGeometry(0.66, 48), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.003;
     emScene.add(plinth, ring, shadow);
     var Pm = surface(EU, { solid: tc("--fws-porcelain", scope), ao: 0.34, double: true });
     var Rm = surface(EU, { solid: tc("--fws-porcelain-deep", scope), ao: 0.3, double: true });
     var Dm = surface(EU, { solid: tc("--fws-shade", scope), ao: 0, spec: 0, rim: 0.1, edge: 0, glaze: 0 });
+    var Am = surface(EU, { solid: tc("--fws-trim", scope), ao: 0.3, double: true });
     var emblems = {};
     function emblem(key) {
       if (emblems[key]) return emblems[key];
-      var acc = tc("--fw-cat-" + key, scope);
-      var Am = surface(EU, { solid: acc, ao: 0.3, double: true });
       var obj = BUILD[key](Pm, Am, Dm, Rm);
       var holder = new THREE.Group(); holder.add(obj);
       var pivot = new THREE.Group(); pivot.add(holder);
@@ -1299,8 +1380,26 @@
       holder.position.set(-c.x, -box.min.y + 0.01, -c.z);
       pivot.visible = false;
       emScene.add(pivot);
-      emblems[key] = { pivot: pivot, accent: acc };
+      emblems[key] = { pivot: pivot };
       return emblems[key];
+    }
+    // a new theme: every light and material read again; the notes are made again in the new inks when next painted
+    function dress() {
+      relight(NU, NOTE_LIGHT, scope); relight(EU, EM_LIGHT, scope);
+      plinthMat.uniforms.uSolid.value.copy(tc("--fws-plinth", scope));
+      ringMat.uniforms.uSolid.value.copy(tc("--fws-lip", scope));
+      Pm.uniforms.uSolid.value.copy(tc("--fws-porcelain", scope));
+      Rm.uniforms.uSolid.value.copy(tc("--fws-porcelain-deep", scope));
+      Dm.uniforms.uSolid.value.copy(tc("--fws-shade", scope));
+      Am.uniforms.uSolid.value.copy(tc("--fws-trim", scope));
+      contact();
+      for (var k in noteMeshes) {
+        var m = noteMeshes[k];
+        notePivot.remove(m);
+        m.geometry.dispose();
+        m.material.forEach(function (mm, i) { if (i === 0 || i > 3) { if (mm.uniforms.map.value) mm.uniforms.map.value.dispose(); mm.dispose(); } });
+      }
+      noteMeshes = {};
     }
 
     /* slots: every 2D canvas this renderer paints */
@@ -1365,7 +1464,6 @@
         for (var k2 in emblems) emblems[k2].pivot.visible = false;
         e.pivot.visible = true;
         e.pivot.rotation.y = s.angle; e.pivot.position.y = s.lift;
-        ringMat.uniforms.uSolid.value.copy(e.accent);
         var half = Math.tan(THREE.MathUtils.degToRad(12.5));
         emCam.fov = aspect < 1 ? THREE.MathUtils.radToDeg(2 * Math.atan(half / aspect)) : 25;
         emCam.aspect = aspect; emCam.updateProjectionMatrix();
@@ -1433,6 +1531,7 @@
     measure();
     if (reduced()) stills(); else paintAll();
     FW.onMotion(function (ok) { if (!ok) { if (reduced()) stills(); else settle(); } });
+    onTheme(function () { dress(); paintAll(); });
     if ("ResizeObserver" in window) {
       var ro = new ResizeObserver(function () { measure(); if (!FW.motionOK()) paintAll(); });
       slots.forEach(function (s) { ro.observe(s.el); });
@@ -1474,11 +1573,15 @@
   }
   function noteFallback(host) {
     host.setAttribute("data-fws-nogl", "");
-    var P = ink(host.getAttribute("data-fw-ink") || "rose", host);
     var f = $("[data-fw-note-front]", host), b = $("[data-fw-note-back]", host);
     var big = !host.classList.contains("fw-notecard--compact");
-    if (f && !f.getAttribute("src")) f.src = drawFront(P, big ? 1280 : 640, host).toDataURL("image/png");
-    if (b && !b.getAttribute("src")) b.src = drawBack(P, big ? 1280 : 640, host).toDataURL("image/png");
+    function paintFaces(force) {
+      var P = ink(host.getAttribute("data-fw-ink") || "rose", host);
+      if (f && (force || !f.getAttribute("src"))) f.src = drawFront(P, big ? 1280 : 640, host).toDataURL("image/png");
+      if (b && (force || !b.getAttribute("src"))) b.src = drawBack(P, big ? 1280 : 640, host).toDataURL("image/png");
+    }
+    paintFaces(false);
+    onTheme(function () { paintFaces(true); });
   }
 
   /* ============================================================ start */
@@ -1495,8 +1598,9 @@
     noteHosts.forEach(function (h) { initNotecard(h, studio); });
   }
   // ScrollTrigger is loaded on every kit page and registers itself, which keeps an empty frame loop running. These
-  // families follow the scroll with plain passive listeners, so it is switched off here: nothing asks for a frame
-  // while the page is still.
-  if (window.ScrollTrigger && window.ScrollTrigger.disable) window.ScrollTrigger.disable();
+  // families follow the scroll with plain passive listeners, so on the kit's own catalogue page it is switched off:
+  // nothing asks for a frame while the page is still. Never on the site: there tools/build_motion.js (loaded after
+  // this script) draws the ribbon and the reveals with ScrollTrigger.
+  if (page.getAttribute("data-module") === "scenes" && window.ScrollTrigger && window.ScrollTrigger.disable) window.ScrollTrigger.disable();
   fontsReady().then(start);
 })();

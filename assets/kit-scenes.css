@@ -2,58 +2,100 @@
    Roots: fw-hero and fw-rain (the home hero and its rain), fw-descent and fw-exitbar (the staged explainer and the
    way out), fw-notecard (the tribute note), fw-emblem (the ten emblems), fw-motions (the table of named motions).
    Every colour is a --fw-* token or a color-mix of tokens; the 3D scenes read the --fws-* tokens below through the
-   page's computed style, so this file stays the one source of colour for them. Page-level layout of the catalogue
-   sits under .fw-page[data-module="scenes"] and its data-fws hooks. */
+   page's computed style, so this file stays the one source of colour for them. "Satin plumage" (2026-11-06): crimson
+   crystal, black satin and an off-white light in the dark "Noir" theme (the default); pearl, blush, navy and the same
+   crimson in the light theme (html[data-theme="light"], second block). The script re-reads every --fws-* token when
+   data-theme changes. Page-level layout of the catalogue sits under .fw-page[data-module="scenes"] and its data-fws
+   hooks. */
 
 /* ================================================================== module tokens (3D light and materials) */
 .fw-hero, .fw-descent, .fw-exitbar, .fw-notecard, .fw-emblem, [data-fw-emblem], .fw-motions {
-  /* the light of every scene */
-  --fws-key: color-mix(in srgb, var(--fw-ink-title) 70%, var(--fw-accent-soft));         /* pink-white light from above */
-  --fws-sky: color-mix(in srgb, var(--fw-accent) 70%, var(--fw-accent-light));           /* what the room bounces from above */
-  --fws-floor: color-mix(in srgb, var(--fw-accent-deep) 55%, var(--fw-surface));         /* what the floor bounces back */
+  /* the light of every scene: an off-white key from above, a crimson bounce, a black floor */
+  --fws-key: var(--fw-ink);
+  --fws-sky: color-mix(in srgb, var(--fw-accent-light) 50%, var(--fw-surface-selected-2));
+  --fws-floor: color-mix(in srgb, var(--fw-accent-deep) 30%, var(--fw-surface-deepest));
   --fws-rim: var(--fw-accent-light);
-  --fws-fog: color-mix(in srgb, var(--fw-surface) 80%, var(--fw-accent-deep));           /* far notes fade to a dusky plum */
-  /* the emblems: dusty rose porcelain, a deeper glaze, a deep plum plinth */
-  --fws-porcelain: color-mix(in srgb, var(--fw-ink-soft) 80%, var(--fw-accent-light));
-  --fws-porcelain-deep: color-mix(in srgb, var(--fw-accent-pressed) 65%, var(--fw-ink-quiet));
-  --fws-plinth: var(--fw-depth-1);
-  --fws-shade: var(--fw-depth-1);
+  --fws-fog: color-mix(in srgb, var(--fw-surface) 86%, var(--fw-accent-deep));           /* far things fade into the night */
+  /* the spiral: a black satin band with a crimson sheen, edged by one crimson crystal line */
+  --fws-satin: color-mix(in srgb, var(--fw-surface-selected-2) 62%, var(--fw-accent-deep));
+  --fws-satin-sheen: var(--fw-accent);
+  --fws-satin-glow: var(--fw-surface-deepest);   /* the light the band gives off on its own (none in the dark) */
+  --fws-lip: var(--fw-accent-light);
+  /* the emblems: crimson crystal on a black satin plinth, one off-white trim */
+  --fws-porcelain: color-mix(in srgb, var(--fw-accent) 78%, var(--fw-accent-light));
+  --fws-porcelain-deep: color-mix(in srgb, var(--fw-accent-pressed) 62%, var(--fw-accent-deep));
+  --fws-trim: var(--fw-ink);
+  --fws-plinth: color-mix(in srgb, var(--fw-surface-selected-2) 62%, var(--fw-surface-deepest));
+  --fws-shade: var(--fw-surface-deepest);
   --fws-contact: var(--fw-surface-deepest);
-  /* the tribute note: the cut edge of the paper and three inks */
-  --fws-paper-core: var(--fw-safe);
-  --fws-rose-ground: color-mix(in srgb, var(--fw-accent) 50%, var(--fw-accent-pressed));
-  --fws-rose-deep: color-mix(in srgb, var(--fw-accent-pressed) 50%, var(--fw-accent-deep));
-  --fws-rose-light: color-mix(in srgb, var(--fw-accent) 80%, var(--fw-accent-light));
-  --fws-rose-line: color-mix(in srgb, var(--fw-ink-title) 34%, transparent);
-  --fws-rose-soft: color-mix(in srgb, var(--fw-ink-title) 14%, transparent);
-  --fws-rose-ink: var(--fw-ink-title);
-  --fws-rose-ink-soft: color-mix(in srgb, var(--fw-ink-title) 84%, transparent);
-  --fws-rose-frame: color-mix(in srgb, var(--fw-ink-title) 74%, transparent);
-  --fws-rose-seal: color-mix(in srgb, var(--fw-accent-pressed) 60%, var(--fw-accent-deep));
-  --fws-rose-ring: color-mix(in srgb, var(--fw-ink-title) 86%, transparent);
-  --fws-blush-ground: var(--fw-accent-soft);
-  --fws-blush-deep: var(--fw-accent-ink);
-  --fws-blush-light: color-mix(in srgb, var(--fw-ink-title) 60%, var(--fw-accent-soft));
+  /* the tribute note: the cut edge of the paper and three inks. rose: crimson crystal; blush: pearl; wine: black satin */
+  --fws-paper-core: var(--fw-ink-on-accent);
+  --fws-emboss: var(--fw-ink-on-accent);
+  --fws-rose-ground: color-mix(in srgb, var(--fw-accent-pressed) 62%, var(--fw-accent));
+  --fws-rose-deep: color-mix(in srgb, var(--fw-accent-pressed) 55%, var(--fw-accent-deep));
+  --fws-rose-light: var(--fw-accent-light);
+  --fws-rose-line: color-mix(in srgb, var(--fw-ink-on-accent) 30%, transparent);
+  --fws-rose-soft: color-mix(in srgb, var(--fw-ink-on-accent) 12%, transparent);
+  --fws-rose-ink: var(--fw-ink-on-accent);
+  --fws-rose-ink-soft: color-mix(in srgb, var(--fw-ink-on-accent) 84%, transparent);
+  --fws-rose-frame: color-mix(in srgb, var(--fw-ink-on-accent) 72%, transparent);
+  --fws-rose-seal: color-mix(in srgb, var(--fw-accent-pressed) 55%, var(--fw-accent-deep));
+  --fws-rose-ring: color-mix(in srgb, var(--fw-ink-on-accent) 86%, transparent);
+  --fws-blush-ground: var(--fw-ink);
+  --fws-blush-deep: color-mix(in srgb, var(--fw-ink) 80%, var(--fw-accent-soft));
+  --fws-blush-light: var(--fw-ink-on-accent);
   --fws-blush-line: color-mix(in srgb, var(--fw-accent-pressed) 30%, transparent);
-  --fws-blush-soft: color-mix(in srgb, var(--fw-accent-pressed) 12%, transparent);
-  --fws-blush-ink: var(--fw-accent-deep);
-  --fws-blush-ink-soft: color-mix(in srgb, var(--fw-accent-deep) 84%, transparent);
-  --fws-blush-frame: color-mix(in srgb, var(--fw-accent-pressed) 70%, transparent);
-  --fws-blush-seal: var(--fw-accent-ink);
-  --fws-blush-ring: color-mix(in srgb, var(--fw-accent-deep) 82%, transparent);
-  --fws-wine-ground: var(--fw-accent-deep);
-  --fws-wine-deep: color-mix(in srgb, var(--fw-accent-deep) 60%, var(--fw-surface));
-  --fws-wine-light: color-mix(in srgb, var(--fw-accent-pressed) 75%, var(--fw-accent));
-  --fws-wine-line: color-mix(in srgb, var(--fw-accent-soft) 32%, transparent);
-  --fws-wine-soft: color-mix(in srgb, var(--fw-accent-soft) 13%, transparent);
-  --fws-wine-ink: var(--fw-accent-soft);
-  --fws-wine-ink-soft: color-mix(in srgb, var(--fw-accent-soft) 86%, transparent);
-  --fws-wine-frame: color-mix(in srgb, var(--fw-accent-ink) 78%, transparent);
-  --fws-wine-seal: color-mix(in srgb, var(--fw-accent-deep) 55%, var(--fw-surface));
-  --fws-wine-ring: color-mix(in srgb, var(--fw-accent-soft) 82%, transparent);
+  --fws-blush-soft: color-mix(in srgb, var(--fw-accent-pressed) 11%, transparent);
+  --fws-blush-ink: var(--fw-accent-pressed);
+  --fws-blush-ink-soft: color-mix(in srgb, var(--fw-accent-pressed) 84%, transparent);
+  --fws-blush-frame: color-mix(in srgb, var(--fw-accent-pressed) 66%, transparent);
+  --fws-blush-seal: color-mix(in srgb, var(--fw-ink) 72%, var(--fw-accent-soft));
+  --fws-blush-ring: color-mix(in srgb, var(--fw-accent-pressed) 82%, transparent);
+  --fws-wine-ground: color-mix(in srgb, var(--fw-surface-selected-2) 84%, var(--fw-accent-deep));
+  --fws-wine-deep: var(--fw-surface-deepest);
+  --fws-wine-light: color-mix(in srgb, var(--fw-surface-selected-2) 80%, var(--fw-ink-soft));
+  --fws-wine-line: color-mix(in srgb, var(--fw-accent-light) 32%, transparent);
+  --fws-wine-soft: color-mix(in srgb, var(--fw-accent-light) 12%, transparent);
+  --fws-wine-ink: var(--fw-ink);
+  --fws-wine-ink-soft: color-mix(in srgb, var(--fw-ink) 86%, transparent);
+  --fws-wine-frame: color-mix(in srgb, var(--fw-accent-light) 72%, transparent);
+  --fws-wine-seal: var(--fw-accent);
+  --fws-wine-ring: color-mix(in srgb, var(--fw-ink) 84%, transparent);
   /* scrims under reading text in front of a scene */
   --fws-scrim: color-mix(in srgb, var(--fw-surface) 72%, transparent);
   --fws-scrim-strong: color-mix(in srgb, var(--fw-surface) 76%, transparent);
+}
+/* the light theme: a pearl satin band in a blush room, a navy satin note, the same crimson */
+html[data-theme="light"] :is(.fw-hero, .fw-descent, .fw-exitbar, .fw-notecard, .fw-emblem, [data-fw-emblem], .fw-motions) {
+  --fws-key: color-mix(in srgb, var(--fw-surface-raised) 82%, var(--fw-ink-quiet));
+  --fws-sky: var(--fw-surface-selected);
+  --fws-floor: var(--fw-depth-5);
+  --fws-rim: var(--fw-accent);
+  --fws-fog: var(--fw-surface);
+  --fws-satin: var(--fw-depth-2);
+  --fws-satin-sheen: var(--fw-accent-soft);
+  --fws-satin-glow: var(--fw-depth-3);
+  --fws-lip: var(--fw-accent);
+  --fws-porcelain-deep: color-mix(in srgb, var(--fw-accent-pressed) 70%, var(--fw-ink-title));
+  --fws-trim: var(--fw-surface-raised);
+  --fws-plinth: var(--fw-surface-raised);
+  --fws-shade: var(--fw-ink-title);
+  --fws-contact: var(--fw-ink-on-pearl);
+  --fws-rose-deep: color-mix(in srgb, var(--fw-accent-pressed) 72%, var(--fw-ink-title));
+  --fws-rose-seal: color-mix(in srgb, var(--fw-accent-pressed) 72%, var(--fw-ink-title));
+  --fws-blush-ground: var(--fw-surface-selected-2);
+  --fws-blush-deep: var(--fw-depth-5);
+  --fws-blush-light: var(--fw-surface-selected);
+  --fws-blush-seal: var(--fw-surface-raised);
+  --fws-wine-ground: var(--fw-ink-on-pearl);
+  --fws-wine-deep: var(--fw-ink-title);
+  --fws-wine-light: color-mix(in srgb, var(--fw-ink-on-pearl) 78%, var(--fw-surface-raised));
+  --fws-wine-line: color-mix(in srgb, var(--fw-surface-raised) 26%, transparent);
+  --fws-wine-soft: color-mix(in srgb, var(--fw-surface-raised) 10%, transparent);
+  --fws-wine-ink: var(--fw-surface-raised);
+  --fws-wine-ink-soft: color-mix(in srgb, var(--fw-surface-raised) 86%, transparent);
+  --fws-wine-frame: color-mix(in srgb, var(--fw-surface-raised) 66%, transparent);
+  --fws-wine-ring: color-mix(in srgb, var(--fw-surface-raised) 84%, transparent);
 }
 
 /* ================================================================== page: the catalogue */
@@ -92,10 +134,14 @@
 }
 
 /* ================================================================== fw-hero, fw-rain: the home hero and the rain */
-.fw-hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; min-height: max(660px, min(calc(100vh - 128px), 900px)); padding-block: 120px clamp(64px, 11vh, 120px); overflow: hidden; background: var(--fw-surface); }
+/* The rain dresses only a hero that holds its canvas (.fw-rain). The site's home hero is the editorial band of the
+   socle (tools/build_site.css) with no rain: there these rules stay out of its way and only the words below apply. */
+.fw-hero { position: relative; }
+.fw-hero:has(> .fw-rain) { isolation: isolate; display: flex; align-items: flex-end; min-height: max(660px, min(calc(100vh - 128px), 900px)); padding-block: 120px clamp(64px, 11vh, 120px); overflow: hidden; background: var(--fw-surface); }
 .fw-hero__light { position: absolute; inset: 0; z-index: -3; background:
   radial-gradient(62% 58% at 54% -10%, color-mix(in srgb, var(--fw-accent) 62%, transparent), color-mix(in srgb, var(--fw-accent-deep) 28%, transparent) 48%, transparent 78%),
   linear-gradient(180deg, var(--fws-fog) 0%, var(--fw-surface) 74%); }
+html[data-theme="light"] .fw-hero__light { background: var(--fw-light-from-above), var(--fw-surface); }
 .fw-rain { position: absolute; inset: 0; z-index: -2; display: block; width: 100%; height: 100%;
   /* the rain keeps to the right of the words: behind the reading column it is only a trace, so no passing note ever
      lowers the contrast of the kicker, the title or the standfirst */
@@ -114,29 +160,33 @@
 .fw-hero__floor { position: absolute; left: 0; right: 0; bottom: 0; height: 42%; z-index: -1; pointer-events: none;
   background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--fw-surface) 50%, transparent) 62%, var(--fw-surface)); }
 .fw-hero__inner { position: relative; }
-/* scrims under the words: a passing note never lowers the contrast */
-.fw-hero__inner::before { content: ""; position: absolute; z-index: -1; left: -6%; top: -18%; width: min(1000px, 92%); height: 136%; pointer-events: none;
+/* scrims under the words: a passing note never lowers the contrast (only where there is rain) */
+.fw-hero:has(> .fw-rain) .fw-hero__inner::before { content: ""; position: absolute; z-index: -1; left: -6%; top: -18%; width: min(1000px, 92%); height: 136%; pointer-events: none;
   background: radial-gradient(closest-side, var(--fws-scrim), transparent); }
-.fw-hero__inner::after { content: ""; position: absolute; z-index: -1; left: -40px; top: 52%; bottom: -60px; width: min(780px, 72vw); pointer-events: none; background: var(--fws-scrim-strong);
+.fw-hero:has(> .fw-rain) .fw-hero__inner::after { content: ""; position: absolute; z-index: -1; left: -40px; top: 52%; bottom: -60px; width: min(780px, 72vw); pointer-events: none; background: var(--fws-scrim-strong);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 60px, #000 62%, transparent), linear-gradient(180deg, transparent, #000 110px, #000 calc(100% - 50px), transparent);
   mask-image: linear-gradient(90deg, transparent, #000 60px, #000 62%, transparent), linear-gradient(180deg, transparent, #000 110px, #000 calc(100% - 50px), transparent);
   -webkit-mask-composite: source-in; mask-composite: intersect; }
-.fw-hero__kicker { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 26px; color: var(--fw-accent-ink); }
-.fw-hero__title { max-width: 9.6ch; outline: none; }
-.fw-hero__lead { max-width: 22em; margin-top: 28px; color: var(--fw-ink-title); }
+/* the words: a small tracked eyebrow, the display title, the lead in the reading face, then a red hairline meta */
+/* on a phone the eyebrow wraps between its parts, never inside one */
+.fw-hero__kicker > span:not(.fw-dot) { white-space: nowrap; }
+.fw-hero__kicker { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-bottom: 26px; font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1.4 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; color: var(--fw-accent-ink); }
+.fw-hero__title { outline: none; }
+.fw-hero:has(> .fw-rain) .fw-hero__title { max-width: 9.6ch; }
+.fw-hero__lead { max-width: 22em; margin-top: 28px; color: var(--fw-ink-read); }
 .fw-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
-.fw-hero__meta { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); }
-.fw-hero__meta::before { content: ""; width: 26px; height: 1px; background: var(--fw-accent); }
+.fw-hero__meta { display: inline-flex; align-items: center; gap: 12px; margin-top: 28px; color: var(--fw-ink-soft); font-size: var(--fw-fs-ui-small); }
+.fw-hero__meta::before { content: ""; width: 34px; height: 1px; background: linear-gradient(90deg, var(--fw-accent-ink), transparent); }
 @media (max-width: 900px) {
-  .fw-hero__inner::before { left: 0; right: 0; top: -40px; bottom: -64px; width: auto; height: auto;
+  .fw-hero:has(> .fw-rain) .fw-hero__inner::before { left: 0; right: 0; top: -40px; bottom: -64px; width: auto; height: auto;
     background: linear-gradient(180deg, transparent, var(--fws-scrim) 60px, var(--fws-scrim) calc(100% - 64px), transparent); }
-  .fw-hero__inner::after { left: 0; width: 100%; top: 44%;
+  .fw-hero:has(> .fw-rain) .fw-hero__inner::after { left: 0; width: 100%; top: 44%;
     -webkit-mask-image: linear-gradient(180deg, transparent, #000 80px, #000 calc(100% - 50px), transparent); mask-image: linear-gradient(180deg, transparent, #000 80px, #000 calc(100% - 50px), transparent); }
 }
 @media (max-width: 760px) {
   /* a band of open rain above the words: the notes fall here at full strength */
-  .fw-hero { min-height: 640px; padding-top: 200px; }
-  .fw-hero__title { max-width: none; }
+  .fw-hero:has(> .fw-rain) { min-height: 640px; padding-top: 200px; }
+  .fw-hero:has(> .fw-rain) .fw-hero__title { max-width: none; }
   .fw-hero__actions > * { flex: 1 1 auto; }
   /* on a phone the words fill the width: the rain is full only above the kicker (its top is measured by the script
      into --fws-words-top) and is the same 14 percent trace as on wide screens from there down */
@@ -144,7 +194,7 @@
     -webkit-mask-image: linear-gradient(180deg, #000 0, #000 calc(var(--fws-words-top, 30%) - 72px), var(--fws-trace) calc(var(--fws-words-top, 30%) - 12px), var(--fws-trace) 100%);
     mask-image: linear-gradient(180deg, #000 0, #000 calc(var(--fws-words-top, 30%) - 72px), var(--fws-trace) calc(var(--fws-words-top, 30%) - 12px), var(--fws-trace) 100%); }
   /* and a firm scrim from just above the kicker to the foot of the words */
-  .fw-hero__inner::before { top: -56px; background: linear-gradient(180deg, transparent, var(--fws-scrim-strong) 40px, var(--fws-scrim) calc(100% - 64px), transparent); }
+  .fw-hero:has(> .fw-rain) .fw-hero__inner::before { top: -56px; background: linear-gradient(180deg, transparent, var(--fws-scrim-strong) 40px, var(--fws-scrim) calc(100% - 64px), transparent); }
   .fw-rain__note[data-n="1"] { width: 210px; right: -30px; top: 6%; }
   .fw-rain__note[data-n="2"], .fw-rain__note[data-n="4"] { display: none; }
 }
@@ -154,7 +204,7 @@
   --fws-col: 720px;                  /* the reading column, about 34em of the reading face */
   --fws-rail: 0px;                   /* room kept for the marks on narrower screens */
   --fws-bar-h: 72px;                 /* height of the exit bar, measured by the script */
-  position: relative; isolation: isolate; overflow: clip; background: var(--fw-depth-1);
+  position: relative; isolation: isolate; overflow: clip;   /* no ground of its own: the opening and the chapters carry theirs */
 }
 /* the picture and the marks ride along the descent in two sticky layers of one screen each */
 .fw-descent__stage { position: sticky; top: 0; z-index: 0; height: 100vh; height: 100svh; margin-bottom: -100vh; margin-bottom: -100svh; overflow: hidden; pointer-events: none; }
@@ -162,15 +212,16 @@
 .fw-descent__fb { display: none; position: absolute; left: 50%; top: 50%; width: min(118vmin, 1080px); height: min(118vmin, 1080px); transform: translate(-50%, -50%); opacity: var(--fws-fb-o, 1); transition: opacity var(--fw-dur-turn) var(--fw-ease-in-out); }
 .fw-descent[data-fws-drawn] .fw-descent__canvas { display: none; }
 .fw-descent[data-fws-drawn] .fw-descent__fb { display: block; }
-.fw-descent__fb [data-fws-arm] { fill: none; stroke: var(--fw-accent-pressed); stroke-linecap: round; stroke-linejoin: round; }
-.fw-descent__fb [data-fws-band] { fill: var(--fw-accent-deep); }
-.fw-descent__fb stop { stop-color: var(--fw-surface-deepest); }
+/* the drawn spiral: the same black satin band and crimson lip as the 3D one (pearl and crimson in the light theme) */
+.fw-descent__fb [data-fws-arm] { fill: none; stroke: var(--fws-lip); stroke-linecap: round; stroke-linejoin: round; }
+.fw-descent__fb [data-fws-band] { fill: var(--fws-satin); }
+.fw-descent__fb stop { stop-color: var(--fw-depth-5); }
 @media (min-width: 1100px) { .fw-descent__fb { left: 72%; } }
 .fw-descent__marks-layer { position: sticky; top: 0; z-index: 3; height: 100vh; height: 100svh; margin-bottom: -100vh; margin-bottom: -100svh; pointer-events: none; }
 .fw-descent__marks { position: absolute; left: clamp(8px, 2vw, 32px); top: 50%; transform: translateY(-50%); pointer-events: auto; }
 .fw-descent__list { position: relative; display: flex; flex-direction: column; gap: 6px; }
 .fw-descent__list::before { content: ""; position: absolute; left: 21.5px; top: 22px; bottom: 22px; width: 1px; background: var(--fw-line); }
-.fw-descent__fill { position: absolute; left: 21px; top: 22px; bottom: 22px; width: 2px; border-radius: var(--fw-radius-mark); background: var(--fw-accent-ink); transform: scaleY(0); transform-origin: top; transition: transform var(--fw-dur-turn) var(--fw-ease-out); pointer-events: none; }
+.fw-descent__fill { position: absolute; left: 21px; top: 22px; bottom: 22px; width: 2px; border-radius: var(--fw-radius-mark); background: linear-gradient(180deg, var(--fw-accent-ink), var(--fw-accent)); box-shadow: 0 0 10px color-mix(in srgb, var(--fw-accent) 45%, transparent); transform: scaleY(0); transform-origin: top; transition: transform var(--fw-dur-turn) var(--fw-ease-out); pointer-events: none; }
 .fw-descent__mark { position: relative; display: flex; align-items: center; gap: 4px; min-width: var(--fw-tap); min-height: var(--fw-tap); padding: 0 14px 0 0; border: 0; border-radius: 22px; background: none; color: var(--fw-ink-quiet); font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.2 var(--fw-font-ui); text-align: left; cursor: pointer; transition: color var(--fw-dur-hover) var(--fw-ease-hover); }
 .fw-descent__dot { position: relative; z-index: 1; display: grid; place-items: center; flex: none; width: 44px; height: 44px; }
 .fw-descent__dot::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--fw-surface); box-shadow: inset 0 0 0 1.5px var(--fw-accent-ink); transition: transform var(--fw-dur-ui) var(--fw-ease-out), background-color var(--fw-dur-ui) var(--fw-ease-hover); }
@@ -179,9 +230,12 @@
 .fw-descent__mark:active .fw-descent__dot::before { transform: scale(.85); }
 .fw-descent__mark:focus-visible { outline-offset: 0; }
 .fw-descent__mark[aria-current="step"] { color: var(--fw-ink-title); }
-.fw-descent__mark[aria-current="step"] .fw-descent__dot::before { background: var(--fw-accent-soft); box-shadow: none; transform: scale(1.35); }
+/* the current mark: a small crimson jewel with its own glow */
+.fw-descent__mark[aria-current="step"] .fw-descent__dot::before { background: var(--fw-mark-fill); box-shadow: 0 0 0 3px color-mix(in srgb, var(--fw-accent) 20%, transparent), 0 0 12px color-mix(in srgb, var(--fw-accent) 60%, transparent); transform: scale(1.35); }
+html[data-theme="light"] .fw-descent__mark { color: var(--fw-ink-soft); }
+html[data-theme="light"] .fw-descent__mark[aria-current="step"] { color: var(--fw-ink-title); }
 @media (hover: hover) and (pointer: fine) {
-  .fw-descent__mark:hover { color: var(--fw-ink-title); }
+  .fw-descent__mark:hover, html[data-theme="light"] .fw-descent__mark:hover { color: var(--fw-ink-title); }
   .fw-descent__mark:hover .fw-descent__dot::before { box-shadow: inset 0 0 0 1.5px var(--fw-ink-title); }
 }
 
@@ -189,7 +243,9 @@
    script and under reduced motion; the script spreads N chapters over the five depths) */
 .fw-descent__open, .fw-descent__step { position: relative; --fws-ground: var(--fw-depth-2); }
 .fw-descent__open::before, .fw-descent__step::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.fw-descent__open::before { background: radial-gradient(80% 60% at 50% 0%, color-mix(in srgb, var(--fw-accent) 30%, transparent), transparent 70%), var(--fw-depth-1); }
+/* the opening: the red light falling from above (blush in the light theme), the page's night coming in at the top */
+.fw-descent__open::before { background: var(--fw-light-from-above), linear-gradient(180deg, transparent, var(--fw-depth-1) 46%);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 240px); mask-image: linear-gradient(180deg, transparent, #000 240px); }
 .fw-descent__step::before { background: linear-gradient(180deg, var(--fws-prev, var(--fw-depth-1)), var(--fws-ground) 40%); }
 .fw-descent__step[data-fws-depth="1"] { --fws-ground: var(--fw-depth-1); }
 .fw-descent__step[data-fws-depth="2"] { --fws-ground: var(--fw-depth-2); }
@@ -205,7 +261,7 @@
 /* the opening */
 .fw-descent__open { display: grid; align-content: center; min-height: 92vh; min-height: 92svh; padding: clamp(64px, 10vh, 128px) 0 calc(var(--fws-bar-h) + clamp(56px, 9vh, 112px)); }
 .fw-descent__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
-.fw-descent__title { margin-top: 30px; font-size: clamp(60px, 8.6vw, 136px); }
+.fw-descent__title { margin-top: 30px; font-size: clamp(60px, 8.6vw, 136px); background: var(--fw-title-fill); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .fw-descent__stand { margin-top: 34px; }
 .fw-descent__line { margin-top: 18px; font-style: italic; color: var(--fw-safe-ink); }
 .fw-descent__start { display: inline-flex; align-items: center; gap: 10px; min-height: var(--fw-tap); margin-top: 40px; color: var(--fw-ink); font: var(--fw-weight-strong) 16px/1 var(--fw-font-ui); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 7px; text-decoration-color: color-mix(in srgb, var(--fw-ink) 40%, transparent); transition: text-decoration-color var(--fw-dur-hover) var(--fw-ease-hover); }
@@ -219,12 +275,15 @@
 /* the chapters */
 .fw-descent__step { display: grid; align-content: center; min-height: 100vh; min-height: 100svh; padding: clamp(96px, 15vh, 168px) 0 calc(var(--fws-bar-h) + clamp(54px, 9.5vh, 108px)); }
 .fw-descent__num { display: flex; align-items: baseline; gap: 16px; }
-.fw-descent__n { font: var(--fw-weight-regular) clamp(112px, 11.5vw, 180px)/.78 var(--fw-font-display); letter-spacing: -.02em; color: var(--fw-accent-ink); }
-.fw-descent__step[data-fws-depth="3"] .fw-descent__n, .fw-descent__step[data-fws-depth="4"] .fw-descent__n, .fw-descent__step[data-fws-depth="5"] .fw-descent__n { color: var(--fw-accent-light); }
-.fw-descent__of { font: var(--fw-weight-regular) 16px/1 var(--fw-font-ui); color: var(--fw-ink-soft); }
+/* the numeral in the red mark, clipped to its glyph; "of N" as a small tracked eyebrow */
+.fw-descent__n { padding-right: .04em; font: var(--fw-weight-regular) clamp(112px, 11.5vw, 180px)/.78 var(--fw-font-display); letter-spacing: -.02em; color: var(--fw-accent-ink);
+  background: var(--fw-mark-fill); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+/* a forced palette (Windows high contrast) has no clipped fills: the title and the numerals come back in plain ink */
+@media (forced-colors: active) { .fw-descent__title, .fw-descent__n { background: none; -webkit-text-fill-color: currentColor; color: CanvasText; } }
+.fw-descent__of { font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; color: var(--fw-accent-ink); }
 .fw-descent__name { width: fit-content; margin-top: 30px; font: var(--fw-weight-regular) clamp(42px, 4.6vw, 68px)/1.04 var(--fw-font-display); color: var(--fw-ink-title); text-wrap: balance; outline: none; }
 .fw-descent__name:focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 6px; }
-.fw-descent__rule { display: block; width: 56px; height: 1px; margin: 34px 0 32px; background: var(--fw-line-strong); }
+.fw-descent__rule { display: block; width: 72px; height: 1px; margin: 34px 0 32px; background: linear-gradient(90deg, var(--fw-accent-ink), transparent); }
 .fw-descent__what { max-width: 24em; }
 /* about 70 characters a line: what happens, the sign, then the way out read as a short story */
 .fw-descent__more { margin-top: 1.6em; max-width: 31em; }
@@ -239,7 +298,11 @@
 .fw-descent--compact .fw-descent__n { font-size: clamp(96px, 9vw, 144px); }
 
 /* ================================================================== fw-exitbar: the way out, a pearl line of light */
-.fw-exitbar { position: sticky; bottom: var(--fws-bar-off, 0px); z-index: 4; background: var(--fw-surface-deepest);
+/* a band of dark glass (pearl glass in the light theme): the picture blurs behind it, the words stay on a firm ground */
+.fw-exitbar { position: sticky; bottom: var(--fws-bar-off, 0px); z-index: 4;
+  background: linear-gradient(var(--fw-glass), var(--fw-glass)), color-mix(in srgb, var(--fw-surface-deepest) 88%, transparent);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%); backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%);
+  box-shadow: 0 -30px 60px -34px color-mix(in srgb, var(--fw-surface-deepest) 90%, transparent);
   transition: opacity var(--fw-dur-ui) var(--fw-ease-out), transform var(--fw-dur-ui) var(--fw-ease-out); }
 /* the script hides the bar until its descent fills most of the screen, so only one way out is pinned at a time; it
    still shows the moment its link takes the focus */
@@ -306,13 +369,14 @@
 .fw-notecard__copy { display: flex; flex-direction: column; align-items: flex-start; }
 .fw-notecard__text { max-width: 21em; color: var(--fw-ink-read); }
 /* the face switch: two real buttons, the pressed one is filled and marked */
-.fw-notecard__faces { display: inline-flex; gap: 4px; margin-top: 40px; padding: 4px; border-radius: var(--fw-radius-pill); box-shadow: inset 0 0 0 1px var(--fw-line); }
+.fw-notecard__faces { display: inline-flex; gap: 4px; margin-top: 40px; padding: 4px; border-radius: var(--fw-radius-pill); background: var(--fw-glass);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)); backdrop-filter: blur(var(--fw-glass-blur)); box-shadow: inset 0 0 0 1px var(--fw-glass-edge); }
 .fw-notecard__btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; min-width: 112px; padding: 0 20px 0 16px; border: 0; border-radius: var(--fw-radius-pill); background: transparent; color: var(--fw-ink-soft); font: var(--fw-weight-strong) 16px/1 var(--fw-font-ui); cursor: pointer;
   transition: background-color var(--fw-dur-hover) var(--fw-ease-hover), color var(--fw-dur-hover) var(--fw-ease-hover), transform var(--fw-dur-press) var(--fw-ease-out); }
 .fw-notecard__btn:active { transform: scale(var(--fw-press-scale)); }
 .fw-notecard__btn:focus-visible { outline-offset: 2px; border-radius: var(--fw-radius-pill); }
 .fw-notecard__mark { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; transition: background-color var(--fw-dur-hover) var(--fw-ease-hover); }
-.fw-notecard__btn[aria-pressed="true"] { background: var(--fw-accent); color: var(--fw-ink-on-accent); }
+.fw-notecard__btn[aria-pressed="true"] { background: var(--fw-accent-fill); color: var(--fw-ink-on-accent); box-shadow: var(--fw-accent-glow); }
 .fw-notecard__btn[aria-pressed="true"] .fw-notecard__mark { background: var(--fw-ink-on-accent); box-shadow: none; }
 @media (hover: hover) and (pointer: fine) {
   .fw-notecard__btn[aria-pressed="false"]:hover { color: var(--fw-ink-title); background: color-mix(in srgb, var(--fw-accent-light) 8%, transparent); }
@@ -323,14 +387,15 @@
 .fw-notecard__stage { position: relative; isolation: isolate; aspect-ratio: 17 / 10; }
 .fw-notecard__cv { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .fw-notecard__caption { position: absolute; left: 50%; top: calc(81% + 14px); display: inline-flex; align-items: center; gap: 14px; transform: translateX(-50%); font: italic var(--fw-weight-regular) 21px/1 var(--fw-font-read); color: var(--fw-accent-soft); white-space: nowrap; }
-.fw-notecard__caption::before, .fw-notecard__caption::after { content: ""; width: 28px; height: 1px; background: var(--fw-accent-light); }
+.fw-notecard__caption::before, .fw-notecard__caption::after { content: ""; width: 34px; height: 1px; background: linear-gradient(90deg, transparent, var(--fw-accent-ink)); }
+.fw-notecard__caption::after { background: linear-gradient(90deg, var(--fw-accent-ink), transparent); }
 /* without WebGL: the two faces as a flat card that turns in CSS */
 .fw-notecard__fallback { display: none; position: absolute; inset: 0; place-items: center; perspective: 1400px; }
 .fw-notecard[data-fws-nogl] .fw-notecard__fallback { display: grid; }
 .fw-notecard[data-fws-nogl] .fw-notecard__cv { display: none; }
 .fw-notecard__flip { position: relative; width: min(66%, 600px); aspect-ratio: 2 / 1; transform-style: preserve-3d; transform: rotateX(8deg) rotateY(-14deg); transition: transform var(--fw-dur-explain) var(--fw-ease-in-out); }
 .fw-notecard__flip[data-fws-back] { transform: rotateX(8deg) rotateY(166deg); }
-.fw-notecard__face { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 3px; backface-visibility: hidden; box-shadow: 0 0 0 1px color-mix(in srgb, var(--fw-safe) 50%, transparent), 0 40px 70px -36px var(--fw-surface-deepest); }
+.fw-notecard__face { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 3px; backface-visibility: hidden; box-shadow: 0 0 0 1px var(--fw-glass-edge), var(--fw-shadow-panel); }
 .fw-notecard__face--back { transform: rotateY(180deg); }
 /* the compact viewer: a smaller stage, the switch under it */
 .fw-notecard--compact { grid-template-columns: 1fr; gap: 8px; }
@@ -339,7 +404,7 @@
 .fw-notecard--compact .fw-notecard__btn { min-width: 96px; }
 .fw-notecard__set { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--fw-space-6) clamp(24px, 3vw, 48px); }
 .fw-notecard__set > li { display: flex; flex-direction: column; }
-.fw-notecard__ink { order: -1; margin-bottom: 4px; text-align: center; font: italic var(--fw-weight-regular) 20px/1.2 var(--fw-font-read); color: var(--fw-accent-soft); }
+.fw-notecard__ink { order: -1; margin-bottom: 8px; text-align: center; font: var(--fw-weight-strong) var(--fw-fs-eyebrow)/1.4 var(--fw-font-ui); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; color: var(--fw-accent-ink); }
 @media (max-width: 940px) {
   .fw-notecard { grid-template-columns: 1fr; }
   .fw-notecard__text { max-width: 30em; }
@@ -374,7 +439,7 @@
 .fw-emblem__entry { position: relative; display: flex; flex-direction: column; }
 /* number and hairline: the category accent is a short mark at the start, drawn across on hover and focus */
 .fw-emblem__meta { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-.fw-emblem__num { flex: none; font: var(--fw-weight-regular) 15px/1 var(--fw-font-display); color: var(--fw-ink-quiet); font-variant-numeric: lining-nums tabular-nums; }
+.fw-emblem__num { flex: none; font: var(--fw-weight-regular) 15px/1 var(--fw-font-display); color: var(--fw-accent-ink); font-variant-numeric: lining-nums tabular-nums; }
 .fw-emblem__rule { position: relative; flex: 1; height: 1px; background: var(--fw-line-soft); }
 .fw-emblem__rule::after { content: ""; position: absolute; left: 0; top: -.5px; width: 100%; height: 2px; background: var(--acc-ink); transform: scaleX(.14); transform-origin: left; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
 .fw-emblem__entry:focus-within .fw-emblem__rule::after { transform: scaleX(1); }
@@ -393,11 +458,16 @@
 
 /* in use: a tile-like frame (a link, so a box) */
 .fw-emblem__tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+/* a glass panel with a red hairline on its top edge; Safety in pearl glass, Scams in lacquer */
 .fw-emblem__tilelink { position: relative; display: flex; flex-direction: column; height: 100%; min-height: 300px; padding: 22px 22px 26px; border-radius: var(--fw-radius-card); overflow: hidden; text-decoration: none; color: var(--fw-ink);
-  background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-line);
+  background: var(--fw-glass); -webkit-backdrop-filter: blur(var(--fw-glass-blur)); backdrop-filter: blur(var(--fw-glass-blur));
+  box-shadow: inset 0 0 0 1px var(--fw-glass-edge), var(--fw-shadow-panel);
   transition: box-shadow var(--fw-dur-hover) var(--fw-ease-hover), transform var(--fw-dur-press) var(--fw-ease-out); }
-.fw-emblem__tile[data-cat="safety"] .fw-emblem__tilelink { background: linear-gradient(180deg, var(--fw-safe-wash), transparent 64%), var(--fw-safe-surface); box-shadow: inset 0 0 0 1px var(--fw-safe-hair); }
-.fw-emblem__tile[data-cat="scams"] .fw-emblem__tilelink { background: linear-gradient(180deg, color-mix(in srgb, var(--fw-accent) 30%, transparent), transparent 66%), var(--fw-accent-deep); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fw-cat-scams-ink) 40%, transparent); }
+.fw-emblem__tilelink::before { content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--fw-accent-ink) 30%, var(--fw-accent) 50%, var(--fw-accent-ink) 70%, transparent); }
+.fw-emblem__tile[data-cat="safety"] .fw-emblem__tilelink { background: linear-gradient(180deg, var(--fw-safe-wash), transparent 64%), var(--fw-safe-surface); box-shadow: inset 0 0 0 1px var(--fw-safe-hair), var(--fw-shadow-panel); }
+.fw-emblem__tile[data-cat="safety"] .fw-emblem__tilelink::before { background: linear-gradient(90deg, transparent, var(--fw-safe-line), transparent); }
+.fw-emblem__tile[data-cat="scams"] .fw-emblem__tilelink { background: var(--fw-lacquer), var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-lacquer-edge), var(--fw-shadow-panel); }
 .fw-emblem__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: auto; padding-bottom: 18px; }
 .fw-emblem__tile .fw-emblem__num { color: var(--fw-ink-soft); }
 .fw-emblem__tname { display: block; margin-bottom: 10px; font: var(--fw-weight-regular) var(--fw-fs-heading)/var(--fw-lh-heading) var(--fw-font-display); color: var(--fw-ink-title); }
@@ -408,7 +478,7 @@
 .fw-emblem__tilelink:focus-visible { outline-offset: 4px; border-radius: var(--fw-radius-card); }
 .fw-emblem__tilelink:focus-visible .fw-emblem__trule { transform: scaleX(1); }
 @media (hover: hover) and (pointer: fine) {
-  .fw-emblem__tilelink:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc-ink) 55%, transparent); }
+  .fw-emblem__tilelink:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc-ink, var(--fw-accent-ink)) 55%, transparent), var(--fw-shadow-panel); }
   .fw-emblem__tilelink:hover .fw-emblem__trule { transform: scaleX(1); }
 }
 
@@ -449,7 +519,7 @@
 .fw-motions { overflow-x: auto; }
 .fw-motions__table { width: 100%; border-collapse: collapse; font: var(--fw-weight-regular) var(--fw-fs-ui-small)/1.5 var(--fw-font-ui); color: var(--fw-ink-read); }
 .fw-motions__table th, .fw-motions__table td { padding: 14px 16px 14px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--fw-line-soft); }
-.fw-motions__table thead th { padding-top: 0; color: var(--fw-ink-soft); font-weight: var(--fw-weight-label); border-bottom-color: var(--fw-line); white-space: nowrap; }
+.fw-motions__table thead th { padding-top: 0; color: var(--fw-accent-ink); font-size: var(--fw-fs-eyebrow); font-weight: var(--fw-weight-strong); letter-spacing: var(--fw-track-eyebrow); text-transform: uppercase; border-bottom-color: var(--fw-line); white-space: nowrap; }
 .fw-motions__name { color: var(--fw-accent-ink); font-weight: var(--fw-weight-strong); white-space: nowrap; }
 .fw-motions__table td:nth-child(2) { color: var(--fw-ink-soft); white-space: nowrap; }
 .fw-motions__table td:nth-child(3) { min-width: 18em; }
