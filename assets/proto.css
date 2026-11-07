@@ -159,3 +159,147 @@ html { scroll-padding-top: calc(var(--fw-top-offset, 0px) + 24px); }
 /* before the entrance starts: the header and the band wait unseen, so they appear once (motion.js removes fw-pre;
    the head script removes it after 6 s whatever happens) */
 html.fw-pre .fw-top__row > *, html.fw-pre .fw-nav__link, html.fw-pre .fw-band__copy > *, html.fw-pre .fw-band__frame { opacity: 0; }
+
+/* ==================================================================================================================
+   Widgets that run in the page (2026-11-07): the safe autodrain simulator (.fw-sim, :::drainsim) and the AI budget
+   planner (.fw-plan, :::planner). Both sit on the glass panel of the exercises, with its red hairline on top. Tokens
+   only; the light theme comes from the tokens. Only transform and opacity move, and reduced motion or Pause stops it.
+   ================================================================================================================== */
+.fw-sim, .fw-plan {
+  position: relative; isolation: isolate; padding: clamp(20px, 3vw, 34px);
+  border-radius: var(--fw-radius-panel); background: var(--fw-glass);
+  -webkit-backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%); backdrop-filter: blur(var(--fw-glass-blur)) saturate(140%);
+  box-shadow: inset 0 1px 0 var(--fw-glass-edge), inset 0 0 0 1px var(--fw-glass-edge), var(--fw-shadow-panel);
+  font-family: var(--fw-font-ui); color: var(--fw-ink);
+}
+.fw-sim::before, .fw-plan::before { content: ""; position: absolute; left: clamp(20px, 3vw, 34px); right: clamp(20px, 3vw, 34px); top: 0; height: 1px; pointer-events: none; background: linear-gradient(90deg, transparent, var(--fw-accent) 30%, var(--fw-accent-ink) 50%, var(--fw-accent) 70%, transparent); }
+.fw-sim *, .fw-plan * { min-width: 0; }
+.fw-sim__k, .fw-plan__k { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--fw-accent-ink); }
+.fw-sim__title, .fw-plan__title { margin: 0 0 var(--fw-space-5); font-family: var(--fw-font-display); font-weight: 400; font-size: clamp(26px, 2.6vw, 36px); line-height: 1.08; color: var(--fw-ink-title); }
+.fw-sim__label, .fw-plan__label { display: block; margin: 0 0 8px; padding: 0; font-size: 14px; font-weight: 600; color: var(--fw-ink-soft); }
+.fw-sim__hint, .fw-plan__hint { margin: 8px 0 0; font-size: 14px; line-height: 1.45; color: var(--fw-ink-quiet); }
+.fw-sim__input, .fw-plan__input {
+  width: 100%; max-width: 240px; min-height: var(--fw-tap); padding: 0 14px; border: 0; border-radius: var(--fw-radius-small);
+  background: var(--fw-surface-raised); color: var(--fw-ink-title); font: 600 18px/1.2 var(--fw-font-ui); font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 0 0 1px var(--fw-line);
+}
+.fw-sim__input:hover, .fw-plan__input:hover { box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+.fw-sim__input:focus-visible, .fw-plan__input:focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+.fw-sim fieldset, .fw-plan fieldset { margin: 0; padding: 0; border: 0; }
+.fw-sim__nojs, .fw-plan__nojs { margin: var(--fw-space-4) 0 0; font-size: 15px; color: var(--fw-ink-soft); }
+html.fw-js .fw-sim__nojs, html.fw-js .fw-plan__nojs { display: none; }
+.fw-sim__small, .fw-plan__small { margin: var(--fw-space-4) 0 0; font-size: 14px; line-height: 1.5; color: var(--fw-ink-quiet); }
+
+/* ---------- the simulator ---------- */
+.fw-sim__setup { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--fw-space-5); align-items: start; }
+.fw-sim__giftrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.fw-sim__gift { position: relative; display: inline-flex; flex-direction: column; gap: 2px; min-width: 104px; min-height: var(--fw-tap); padding: 9px 14px; border-radius: var(--fw-radius-small); background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-line); cursor: pointer; }
+.fw-sim__gift input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.fw-sim__giftname { font-size: 15px; font-weight: 600; color: var(--fw-ink-title); }
+.fw-sim__giftprice { font-size: 13px; color: var(--fw-ink-soft); font-variant-numeric: tabular-nums; }
+.fw-sim__gift:has(input:checked) { box-shadow: inset 0 0 0 2px var(--fw-accent-light); background: color-mix(in srgb, var(--fw-accent) 12%, var(--fw-surface-raised)); }
+.fw-sim__gift:has(input:focus-visible) { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+.fw-sim__gifts:disabled .fw-sim__gift { cursor: not-allowed; opacity: .6; }
+.fw-sim__gifts:disabled .fw-sim__gift input { cursor: not-allowed; }
+.fw-sim__board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px var(--fw-space-4); margin: var(--fw-space-5) 0 0; padding: var(--fw-space-4) 0 0; border-top: 1px solid var(--fw-line-soft); }
+.fw-sim__stat { display: flex; flex-direction: column; gap: 2px; margin: 0; }
+.fw-sim__statk { font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--fw-ink-quiet); }
+.fw-sim__statv { font-family: var(--fw-font-display); font-size: clamp(22px, 2.4vw, 30px); line-height: 1.1; color: var(--fw-ink-title); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.fw-sim__stat--main .fw-sim__statv { color: var(--fw-accent-ink); }
+.fw-sim__meter { grid-column: 1 / -1; height: 6px; margin-top: 8px; border-radius: var(--fw-radius-pill); background: var(--fw-line); overflow: hidden; }
+.fw-sim__fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--fw-accent-pressed), var(--fw-accent-light)); transform: scaleX(0); transform-origin: left center; transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-sim__next { grid-column: 1 / -1; margin: 4px 0 0; font-size: 14px; color: var(--fw-ink-soft); font-variant-numeric: tabular-nums; }
+.fw-sim__controls { display: flex; flex-wrap: wrap; gap: 10px; margin: var(--fw-space-5) 0 0; }
+.fw-sim__btn { gap: 8px; }
+.fw-sim__stop.fw-btn { color: var(--fw-ink-title); box-shadow: inset 0 0 0 2px var(--fw-accent-light); }
+.fw-sim__stop.fw-btn:hover { box-shadow: inset 0 0 0 2px var(--fw-accent-ink); }
+.fw-sim[data-state="running"] .fw-sim__stop.fw-btn, .fw-sim[data-state="paused"] .fw-sim__stop.fw-btn { background: var(--fw-accent); color: var(--fw-ink-on-accent); box-shadow: none; }
+.fw-sim [data-fw-sim-pause][aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--fw-line-strong); color: var(--fw-ink-title); }
+.fw-sim__status { min-height: 1.5em; margin: var(--fw-space-4) 0 0; font-family: var(--fw-font-read); font-size: 19px; line-height: 1.45; color: var(--fw-ink-read); }
+.fw-sim__log { display: flex; flex-direction: column; gap: 4px; margin: var(--fw-space-3) 0 0; padding: 0; list-style: none; font-size: 14px; color: var(--fw-ink-soft); font-variant-numeric: tabular-nums; }
+.fw-sim__logitem { padding: 6px 0 6px 12px; border-left: 2px solid var(--fw-line); }
+.fw-sim__logitem:first-child { border-left-color: var(--fw-accent-light); color: var(--fw-ink-title); animation: fw-sim-in var(--fw-dur-ui) var(--fw-ease-out); }
+@keyframes fw-sim-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.fw-sim__note { margin: var(--fw-space-4) 0 0; font-family: var(--fw-font-read); font-size: 17px; line-height: 1.5; color: var(--fw-ink-soft); }
+
+/* ---------- the planner ---------- */
+.fw-plan__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: var(--fw-space-6); align-items: start; }
+.fw-plan__form { display: flex; flex-direction: column; gap: var(--fw-space-5); }
+.fw-plan__input--big { max-width: 200px; font-size: 22px; }
+.fw-plan__needs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.fw-plan__need { position: relative; display: flex; align-items: center; gap: 12px; min-height: var(--fw-tap); padding: 8px 12px; border-radius: var(--fw-radius-small); background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-line); font-size: 16px; color: var(--fw-ink); cursor: pointer; }
+.fw-plan__need input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.fw-plan__box { display: grid; place-items: center; width: 22px; height: 22px; flex: none; border-radius: 6px; box-shadow: inset 0 0 0 1.5px var(--fw-ink-quiet); color: transparent; }
+.fw-plan__box .fw-ico { width: 16px; height: 16px; stroke: currentColor; }
+.fw-plan__need:has(input:checked) { box-shadow: inset 0 0 0 1px var(--fw-accent-light); color: var(--fw-ink-title); }
+.fw-plan__need:has(input:checked) .fw-plan__box { background: var(--fw-accent); box-shadow: none; color: var(--fw-ink-on-accent); }
+.fw-plan__need:has(input:focus-visible) { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+.fw-plan__need:hover { box-shadow: inset 0 0 0 1px var(--fw-line-strong); }
+.fw-plan__field[hidden] { display: none; }
+.fw-plan__out { padding: var(--fw-space-5); border-radius: var(--fw-radius-card, 16px); background: var(--fw-surface-raised); box-shadow: inset 0 0 0 1px var(--fw-line); }
+.fw-plan__empty { margin: 0; font-family: var(--fw-font-read); font-size: 18px; color: var(--fw-ink-soft); }
+.fw-plan__total { margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+.fw-plan__totalv { font-family: var(--fw-font-display); font-size: clamp(34px, 3.6vw, 48px); line-height: 1; color: var(--fw-ink-title); font-variant-numeric: tabular-nums; }
+.fw-plan__total--over .fw-plan__totalv { color: var(--fw-accent-ink); }
+.fw-plan__totalk { font-size: 15px; color: var(--fw-ink-soft); }
+.fw-plan__fits { margin: 8px 0 0; font-family: var(--fw-font-read); font-size: 17px; line-height: 1.45; color: var(--fw-ink-read); }
+.fw-plan__picks, .fw-plan__items { display: flex; flex-direction: column; gap: 10px; margin: var(--fw-space-4) 0 0; padding: 0; list-style: none; }
+.fw-plan__pick, .fw-plan__item { padding: 12px 0 0; border-top: 1px solid var(--fw-line-soft); }
+.fw-plan__pname, .fw-plan__iname { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; margin: 0; font-size: 16px; color: var(--fw-ink-title); }
+.fw-plan__pcost, .fw-plan__iprice { font-size: 14px; color: var(--fw-accent-ink); font-variant-numeric: tabular-nums; }
+.fw-plan__pfor, .fw-plan__ifor { margin: 4px 0 0; font-size: 14px; color: var(--fw-ink-soft); }
+.fw-plan__pnote, .fw-plan__inote { margin: 4px 0 0; font-family: var(--fw-font-read); font-size: 16px; line-height: 1.5; color: var(--fw-ink-read); }
+.fw-plan__once { margin-top: var(--fw-space-4); padding-top: var(--fw-space-3); border-top: 1px dashed var(--fw-line); }
+.fw-plan__once ul { margin: 0; padding-left: 18px; font-size: 15px; color: var(--fw-ink-read); }
+.fw-plan__all { margin-top: var(--fw-space-5); border-top: 1px solid var(--fw-line-soft); }
+.fw-plan__summary { display: flex; align-items: center; gap: 10px; min-height: var(--fw-tap); padding-top: 8px; font-size: 15px; font-weight: 600; color: var(--fw-ink-soft); cursor: pointer; list-style: none; }
+.fw-plan__summary::-webkit-details-marker { display: none; }
+.fw-plan__summary::before { content: "+"; display: grid; place-items: center; width: 22px; height: 22px; flex: none; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--fw-line-strong); font-size: 16px; line-height: 1; color: var(--fw-accent-ink); transition: transform var(--fw-dur-ui) var(--fw-ease-out); }
+.fw-plan__all[open] > .fw-plan__summary::before { transform: rotate(45deg); }
+.fw-plan__summary:hover { color: var(--fw-ink-title); }
+.fw-plan__summary:focus-visible { outline: 2px solid var(--fw-focus); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  .fw-sim__setup, .fw-plan__grid { grid-template-columns: minmax(0, 1fr); }
+  .fw-sim__board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fw-sim__stat--main { grid-column: 1 / -1; }
+  .fw-sim__controls .fw-btn { flex: 1 1 140px; justify-content: center; }
+  .fw-sim__input, .fw-plan__input, .fw-plan__input--big { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fw-sim__fill { transition: none; }
+  .fw-sim__logitem:first-child { animation: none; }
+}
+html[data-motion="paused"] .fw-sim__fill { transition: none; }
+html[data-motion="paused"] .fw-sim__logitem:first-child { animation: none; }
+@media print {
+  .fw-sim__controls, .fw-sim__log, .fw-sim__status, .fw-plan__out, .fw-sim__nojs, .fw-plan__nojs { display: none !important; }
+  .fw-plan__all > summary { display: none; }
+  .fw-sim, .fw-plan { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: inset 0 0 0 1px var(--fw-line); }
+}
+
+/* evidence tips inside the numbered explainer cards: the card used to clip everything (overflow hidden) to trim its
+   big corner numeral, which also cut the tip off. The card now lets the tip out; the numeral trims itself instead,
+   and the card with an open tip rises above its neighbours. */
+.fw-explain .fw-explain__item { overflow: visible; }
+.fw-explain .fw-explain__list > .fw-explain__item > .fw-explain__n { clip-path: inset(0 0 22px 0); }
+.fw-explain .fw-explain__item:has(.fw-ev:hover, .fw-ev:focus-within, .fw-term:hover, .fw-term:focus-within) { z-index: 4; }
+
+/* :::media, the operator's own work shown as it is: a video and/or a grid of pictures */
+.fw-media { margin: var(--fw-space-6, 40px) 0; padding: 22px; border-radius: var(--fw-radius-card, 22px); background: var(--fw-glass, rgba(255,255,255,.03)); box-shadow: inset 0 0 0 1px var(--fw-line); }
+.fw-media__title { margin: 0 0 14px; font: var(--fw-weight-regular) clamp(22px, 1.9vw, 26px)/1.15 var(--fw-font-display); color: var(--fw-ink-title); }
+.fw-media__video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 14px; background: #000; }
+.fw-media__grid { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fw-media__item img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; }
+.fw-media__note { margin: 14px 0 0; font-size: 17px; line-height: 1.55; color: var(--fw-ink-read); }
+.fw-media__shot img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.fw-media__cap { margin-top: 6px; font: var(--fw-weight-regular) 13px/1.4 var(--fw-font-ui); color: var(--fw-ink-quiet); }
+@media (max-width: 700px) { .fw-media { padding: 14px; } .fw-media__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fw-media__grid--tall .fw-media__item img { aspect-ratio: 3 / 4; object-position: 50% 15%; }
+
+/* the longer name (The Drawn Ledger) pushed the 18+ button off a phone screen: on narrow screens it sits on two lines */
+@media (max-width: 460px) {
+  .fw-top .fw-brand__name { white-space: normal; max-width: 6.2em; font-size: 18px; line-height: 1.02; }
+}
+.fw-media__grid--full { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.fw-media__grid--full .fw-media__item img { aspect-ratio: auto; object-fit: contain; }
