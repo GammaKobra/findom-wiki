@@ -1,0 +1,275 @@
+
+
+@font-face { font-family: "fw-display"; src: url("fonts/abril-fatface-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "fw-read"; src: url("fonts/CrimsonPro-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "fw-ui"; src: url("fonts/InstrumentSans-Bold.ttf") format("truetype"); font-weight: 600 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "fw-mono"; src: url("fonts/IBMPlexMono-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root, html[data-theme="dark"] {
+  color-scheme: dark;
+  
+  --fw-surface-deepest: #050506;   
+  --fw-surface: #0a0a0b;           
+  --fw-surface-band: #0e0d0f;      
+  --fw-surface-raised: #141315;    
+  --fw-surface-hover: #1b191c;     
+  --fw-surface-selected: #221f23;  
+  --fw-surface-selected-2: #2a262b;
+  --fw-light-from-above: radial-gradient(64% 110% at 80% -30%, rgba(212, 14, 24, .26), rgba(122, 9, 16, .10) 48%, rgba(10, 10, 11, 0) 78%);
+                                   
+  --fw-glass: rgba(255, 255, 255, .035);          
+  --fw-glass-edge: rgba(255, 255, 255, .07);
+  --fw-glass-blur: 22px;
+  --fw-shadow-panel: 0 40px 80px -24px rgba(0, 0, 0, .7);
+  --fw-lacquer: linear-gradient(140deg, rgba(150, 10, 18, .42), rgba(60, 6, 10, .4) 60%, rgba(20, 8, 10, .5));  
+  --fw-lacquer-edge: rgba(255, 59, 70, .22);
+  --fw-title-fill: linear-gradient(180deg, #ffffff 0%, #f3f0f0 55%, #c9c3c5 100%);   
+  --fw-mark-fill: linear-gradient(170deg, #ff7a82 0%, #ff3b46 35%, #d40e18 70%, #7a0910 100%);  
+  --fw-sheen: rgba(255, 255, 255, .045);         
+
+  
+  --fw-depth-1: #221f23;
+  --fw-depth-2: #1a181b;
+  --fw-depth-3: #121113;
+  --fw-depth-4: #0a0a0b;
+  --fw-depth-5: #050506;
+
+  
+  --fw-ink-title: #ffffff;         
+  --fw-ink: #f3f0f0;               
+  --fw-ink-read: #e2dddf;          
+  --fw-ink-soft: #bdb7b9;          
+  --fw-ink-quiet: #908b8d;         
+  --fw-ink-on-accent: #ffffff;     
+  --fw-ink-on-pearl: #1c2340;      
+
+  
+  --fw-accent: #d40e18;            
+  --fw-accent-pressed: #a50b13;
+  --fw-accent-ink: #ff4d57;        
+  --fw-accent-light: #ff3b46;      
+  --fw-accent-soft: #ffb3b8;       
+  --fw-accent-deep: #3a0509;       
+  --fw-focus: #ff6b73;
+  --fw-accent-fill: linear-gradient(180deg, #ff4a54, #d40e18 60%, #a50b13);   
+  --fw-accent-glow: 0 10px 30px -8px rgba(212, 14, 24, .7);
+
+  
+  --fw-line: rgba(255, 255, 255, .10);
+  --fw-line-soft: rgba(255, 255, 255, .06);    
+  --fw-line-strong: rgba(255, 59, 70, .55);
+
+  
+  --fw-safe: #f3eeee;
+  --fw-safe-ink: #ffffff;
+  --fw-safe-surface: #1b191c;
+  --fw-safe-line: rgba(255, 255, 255, .62);
+  --fw-safe-hair: rgba(255, 255, 255, .24);
+  --fw-safe-wash: rgba(255, 255, 255, .07);
+
+  
+  --fw-danger: #ff3b46;            
+  --fw-danger-ink: #ff8a90;
+  --fw-danger-surface: #2a0709;
+  --fw-caution: #e8875f;           
+  --fw-caution-ink: #f7b58f;
+  --fw-caution-surface: #2b160e;
+
+  
+  --fw-cat-basics: #f3f0f0;
+  --fw-cat-variants: #ff8a90;
+  --fw-cat-kinks: #ff5a63;
+  --fw-cat-dom: #ff3b46;
+  --fw-cat-subs: #ffc2c6;
+  --fw-cat-safety: #ffffff;
+  --fw-cat-scams: #a50b13;         
+  --fw-cat-scams-ink: #ff8a90;
+  --fw-cat-code: #c9c3c5;
+  --fw-cat-dictionary: #e6dfe1;
+  --fw-cat-sources: #bdb7b9;
+
+  
+  --fw-font-display: "fw-display", "Abril Fatface", Georgia, serif;   
+  --fw-font-read: "fw-read", "Crimson Pro", Georgia, serif;           
+  --fw-font-ui: "fw-ui", "Instrument Sans", system-ui, sans-serif;    
+  --fw-font-mono: "fw-mono", "IBM Plex Mono", ui-monospace, monospace; 
+
+  --fw-fs-display-xl: clamp(64px, 9vw, 150px);
+  --fw-fs-display-l: clamp(38px, 4.6vw, 72px);
+  --fw-fs-numeral: clamp(104px, 11vw, 168px);
+  --fw-fs-heading: clamp(25px, 2vw, 30px);
+  --fw-fs-section: clamp(32px, 3.6vw, 48px);    
+  --fw-fs-read-lead: clamp(23px, 2vw, 28px);
+  --fw-fs-read: clamp(20px, 1.5vw, 22px);
+  --fw-fs-ui: 17px;
+  --fw-fs-ui-small: 15px;
+  --fw-fs-label: 15px;             
+  --fw-fs-eyebrow: 11px;           
+  --fw-track-eyebrow: .24em;
+  --fw-fs-meta: 14px;              
+  --fw-fs-mono: 14px;
+  --fw-fs-code: 14.5px;
+
+  --fw-weight-regular: 400;
+  --fw-weight-label: 600;
+  --fw-weight-strong: 700;
+
+  --fw-lh-display: .9;
+  --fw-lh-heading: 1.08;
+  --fw-lh-read-lead: 1.42;
+  --fw-lh-read: 1.6;
+  --fw-lh-ui: 1.62;
+  --fw-lh-label: 1.25;
+  --fw-lh-code: 1.75;
+
+  --fw-measure-read: 34em;         
+  --fw-measure-lead: 30em;
+
+  
+  --fw-space-1: 4px;
+  --fw-space-2: 8px;
+  --fw-space-3: 12px;
+  --fw-space-4: 16px;
+  --fw-space-5: 24px;
+  --fw-space-6: 32px;
+  --fw-space-7: 48px;
+  --fw-space-8: 64px;
+  --fw-space-9: 96px;
+  --fw-space-10: 128px;
+  --fw-gutter: clamp(16px, 5vw, 64px);          
+  --fw-wrap: 1312px;                            
+  --fw-section: clamp(72px, 8vw, 128px);        
+  --fw-block: clamp(80px, 8vw, 120px);          
+  --fw-head-gap: clamp(26px, 2.8vw, 36px);      
+  --fw-tap: 44px;                               
+
+  
+  --fw-radius-pill: 999px;         
+  --fw-radius-card: 22px;          
+  --fw-radius-panel: 22px;         
+  --fw-radius-small: 12px;
+  --fw-radius-mark: 2px;           
+
+  
+  
+  --fw-ease-out: cubic-bezier(.23, 1, .32, 1);
+  --fw-ease-in-out: cubic-bezier(.77, 0, .175, 1);
+  --fw-ease-sink: cubic-bezier(.45, 0, .15, 1);
+  --fw-ease-hover: ease;
+
+  
+  --fw-dur-press: 160ms;
+  --fw-dur-hover: 200ms;
+  --fw-dur-tip: 160ms;
+  --fw-dur-ui: 240ms;
+  --fw-dur-turn: 500ms;
+  --fw-dur-explain: 1150ms;
+  --fw-dur-settle: 1600ms;
+  --fw-dur-draw: 1400ms;
+  --fw-stagger: 50ms;
+  --fw-press-scale: .97;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --fw-surface-deepest: #f1eef4;
+  --fw-surface: #fbf9fb;
+  --fw-surface-band: #f6f2f5;
+  --fw-surface-raised: #ffffff;
+  --fw-surface-hover: #fdf3f2;
+  --fw-surface-selected: #fde3de;
+  --fw-surface-selected-2: #f8d2cb;
+  --fw-light-from-above: radial-gradient(64% 110% at 90% -30%, rgba(253, 227, 222, .95), rgba(253, 227, 222, .35) 48%, rgba(251, 249, 251, 0) 78%);
+  --fw-glass: rgba(255, 255, 255, .82);
+  --fw-glass-edge: rgba(28, 35, 64, .06);
+  --fw-shadow-panel: 0 40px 80px -24px rgba(214, 140, 140, .35);
+  --fw-lacquer: linear-gradient(140deg, #fde3de, #fff3ef 70%);
+  --fw-lacquer-edge: rgba(212, 14, 24, .14);
+  --fw-title-fill: linear-gradient(180deg, #2d3a6c 0%, #1c2340 55%, #141a33 100%);
+  --fw-mark-fill: linear-gradient(170deg, #ff6b73 0%, #ff4d57 25%, #d40e18 60%, #8e0f16 100%);
+  --fw-sheen: rgba(255, 255, 255, .6);
+
+  --fw-depth-1: #ffffff;
+  --fw-depth-2: #fdf3f2;
+  --fw-depth-3: #fbe9e6;
+  --fw-depth-4: #f8dcd7;
+  --fw-depth-5: #f3cfc9;
+
+  --fw-ink-title: #141a33;
+  --fw-ink: #1c2340;
+  --fw-ink-read: #2a2d40;
+  --fw-ink-soft: #4a4d63;
+  --fw-ink-quiet: #64627a;
+  --fw-ink-on-accent: #ffffff;
+  --fw-ink-on-pearl: #1c2340;
+
+  --fw-accent: #d40e18;
+  --fw-accent-pressed: #b00c15;
+  --fw-accent-ink: #b00c15;
+  --fw-accent-light: #d40e18;
+  --fw-accent-soft: #c43a43;
+  --fw-accent-deep: #fde3de;
+  --fw-focus: #d40e18;
+  --fw-accent-glow: 0 10px 30px -10px rgba(212, 14, 24, .55);
+
+  --fw-line: rgba(28, 35, 64, .12);
+  --fw-line-soft: rgba(28, 35, 64, .07);
+  --fw-line-strong: rgba(212, 14, 24, .5);
+
+  --fw-safe: #1c2340;
+  --fw-safe-ink: #141a33;
+  --fw-safe-surface: #eef0f6;
+  --fw-safe-line: rgba(28, 35, 64, .5);
+  --fw-safe-hair: rgba(28, 35, 64, .2);
+  --fw-safe-wash: rgba(28, 35, 64, .05);
+
+  --fw-danger: #d40e18;
+  --fw-danger-ink: #b00c15;
+  --fw-danger-surface: #fde3de;
+  --fw-caution: #b5532d;
+  --fw-caution-ink: #9a4422;
+  --fw-caution-surface: #fbe7dc;
+
+  --fw-cat-basics: #1c2340;
+  --fw-cat-variants: #c43a43;
+  --fw-cat-kinks: #d40e18;
+  --fw-cat-dom: #b00c15;
+  --fw-cat-subs: #8e0f16;
+  --fw-cat-safety: #1c2340;
+  --fw-cat-scams: #d40e18;
+  --fw-cat-scams-ink: #b00c15;
+  --fw-cat-code: #4a4d63;
+  --fw-cat-dictionary: #2d3a6c;
+  --fw-cat-sources: #4a4d63;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --fw-fs-read: 19px;
+    --fw-fs-read-lead: 21px;
+    --fw-fs-ui: 16px;
+    --fw-fs-ui-small: 16px;
+    --fw-fs-code: 13.5px;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fw-dur-press: 0ms;
+    --fw-dur-hover: 0ms;
+    --fw-dur-tip: 0ms;
+    --fw-dur-ui: 0ms;
+    --fw-dur-turn: 0ms;
+    --fw-dur-explain: 0ms;
+    --fw-dur-settle: 0ms;
+    --fw-dur-draw: 0ms;
+    --fw-stagger: 0ms;
+    --fw-press-scale: 1;
+  }
+}
