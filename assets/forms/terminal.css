@@ -37,7 +37,7 @@ html[data-form="terminal"] .fw-fhero__fig::before {
   content: attr(data-tm-ls); display: block; padding: 0 0 8px; font: 400 12px/1.4 var(--ff-mono); letter-spacing: .02em; color: var(--ff-quiet);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-html[data-form="terminal"] .fw-fhero__img { aspect-ratio: 1 / 1; border: 1px solid var(--ff-rule-strong); }
+html[data-form="terminal"] .fw-fhero__img { aspect-ratio: 1 / 1; }
 
 
 @media (min-width: 1041px) {

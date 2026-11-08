@@ -11,7 +11,7 @@ html[data-form="frise"] .fw-fhero::after {
     repeating-linear-gradient(90deg, var(--ff-acc2) 0 1px, transparent 1px 120px) 0 100% / 100% 15px no-repeat,
     repeating-linear-gradient(90deg, var(--ff-rule-strong) 0 1px, transparent 1px 12px) 0 100% / 100% 7px no-repeat;
 }
-html[data-form="frise"] .fw-fhero__fig { padding: 8px; border-color: color-mix(in srgb, var(--ff-acc2) 45%, transparent); }
+html[data-form="frise"] .fw-fhero__fig { border: 0; }
 html[data-form="frise"] .fw-fhero__rec[data-rec="span"] dd { color: var(--ff-acc2); }
 
 @media (min-width: 1041px) {

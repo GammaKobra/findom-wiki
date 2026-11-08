@@ -71,8 +71,8 @@ html[data-form] .fw-main.fw-lit { background: var(--ff-ground, var(--fw-surface)
 .fw-fhero__rec dt { font: inherit; }
 .fw-fhero__rec dd { margin: 0; color: var(--ff-title); }
 
-.fw-fhero__fig { grid-area: fig; align-self: start; margin: 0; border: 1px solid var(--ff-rule-strong); }
-.fw-fhero__img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.fw-fhero__fig { grid-area: fig; align-self: start; margin: 0; border: 0; }
+.fw-fhero__img { display: block; width: 100%; height: auto; }   
 
 
 .fw-fhero__legend { grid-area: legend; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; max-width: 40rem;
@@ -129,6 +129,6 @@ html[data-motion="paused"] .fw-fpage *, html[data-motion="paused"] .fw-fpage *::
   }
   .fw-fhero__record { display: flex; flex-wrap: wrap; gap: 0 22px; margin-top: 26px; padding-top: 10px; }
   .fw-fhero__fig { margin-top: 26px; }
-  .fw-fhero__img { aspect-ratio: 16 / 9; }
+  .fw-fhero__fig { max-width: min(100%, 360px); }
   .fw-fhero__legend { margin-top: 22px; }
 }

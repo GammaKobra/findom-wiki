@@ -15,8 +15,7 @@ html[data-form="registre"] .fw-fhero__rec dt { font: 400 11px/1.2 var(--ff-mono)
 html[data-form="registre"] .fw-fhero__rec dd { font: 400 44px/1 var(--fw-font-display); color: var(--ff-title); white-space: nowrap; }
 html[data-form="registre"] .fw-fhero__rec:is([data-rec="category"], [data-rec="checked"]) dd { padding-top: 14px; font: 400 18px/1.2 var(--fw-font-read); color: var(--ff-soft); }
 html[data-form="registre"] .fw-fhero__rec[data-rec="category"] dd { color: var(--ff-acc2); font: 400 12px/1.2 var(--ff-mono); letter-spacing: .14em; text-transform: uppercase; padding-top: 18px; }
-html[data-form="registre"] .fw-fhero__fig { align-self: stretch; }
-html[data-form="registre"] .fw-fhero__img { height: 100%; }
+html[data-form="registre"] .fw-fhero__fig { align-self: start; }
 
 
 html[data-form="registre"] .fw-compare__box { overflow-x: auto; border-radius: 0; background: none; box-shadow: none; }

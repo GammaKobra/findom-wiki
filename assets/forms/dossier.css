@@ -25,14 +25,9 @@ html[data-form="dossier"] .fw-fhero__stand { max-width: 34ch; font-size: clamp(2
 html[data-form="dossier"] .fw-fhero__rec[data-rec="status"] dt, html[data-form="dossier"] .fw-fhero__rec[data-rec="status"] dd { color: var(--ff-acc2); }
 
 
-html[data-form="dossier"] .fw-fhero__fig {
-  position: relative; overflow: hidden; height: 300px; margin-top: 56px;
-  border: 0; border-top: 1px solid var(--ff-rule-strong); border-bottom: 3px solid var(--ff-red); background: #0a0809;
-}
-html[data-form="dossier"] .fw-fhero__img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 45%; filter: grayscale(1) contrast(1.25) brightness(.85); }
-html[data-form="dossier"] .fw-fhero__fig::after { content: ""; position: absolute; inset: 0; background: var(--ds-deep); mix-blend-mode: multiply; opacity: .55; pointer-events: none; }
+html[data-form="dossier"] .fw-fhero__fig { position: relative; justify-self: start; width: min(100%, 480px); margin-top: 56px; border: 0; }
 html[data-form="dossier"] .fw-fhero__fig[data-ds-cap]::before {
-  content: attr(data-ds-cap); position: absolute; right: 0; bottom: 0; z-index: 1; padding: 8px 12px; background: var(--ff-ground);
+  content: attr(data-ds-cap); position: absolute; right: 6px; bottom: 6px; z-index: 1; padding: 8px 12px; background: var(--ff-ground);
   font: 400 12px/1 var(--ff-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ff-quiet);
 }
 
@@ -177,8 +172,7 @@ html[data-form="dossier"] .fw-fpage .fw-alert .fw-alert__title { color: var(--ff
   html[data-form="dossier"] .fw-fpage { --ds-letter: 60px; }
   html[data-form="dossier"] .fw-fhero,
   html[data-form="dossier"] .fw-fhero[data-has-picture="no"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "rec" "legend" "fig"; }
-  html[data-form="dossier"] .fw-fhero__fig { height: 180px; margin-top: 28px; }
-  html[data-form="dossier"] .fw-fhero__img { aspect-ratio: auto; }
+  html[data-form="dossier"] .fw-fhero__fig { margin-top: 28px; }
   html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row { grid-template-columns: 76px minmax(0, 1fr); gap: 14px 18px; padding: 24px 0 26px; }
   html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::before { grid-row: 1 / span 2; }
   html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::after { top: calc(24px + var(--ds-letter) * .8 + 10px); font-size: 10px; }
