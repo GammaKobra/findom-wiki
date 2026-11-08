@@ -8,12 +8,10 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var store = { set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage refused */ } } };
   if (G) {
-    var plugins = [window.ScrollTrigger, window.SplitText, window.DrawSVGPlugin, window.CustomEase].filter(Boolean);
+    var plugins = [window.CustomEase].filter(Boolean);
     if (plugins.length) G.registerPlugin.apply(G, plugins);
     if (window.CustomEase) { window.CustomEase.create("fw", "0.23,1,0.32,1"); window.CustomEase.create("fwio", "0.77,0,0.175,1"); }
   }
-  var EASE = window.CustomEase ? "fw" : "expo.out";
-  var EASEIO = window.CustomEase ? "fwio" : "power3.inOut";
 
   $$("[data-fw-theme]").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -30,33 +28,6 @@
     });
   });
 
-  function ribbon() {
-    var H = Math.max(document.body.scrollHeight, innerHeight), W = 1440, NS = "http://www.w3.org/2000/svg";
-    var d = "M1490 -40 C1300 " + H * 0.04 + " 1440 " + H * 0.1 + " 1360 " + H * 0.16;
-    var steps = Math.max(4, Math.round(H / 700));
-    for (var i = 1; i <= steps; i++) {
-      var y = H * (0.16 + 0.84 * i / steps), x = i % 2 ? 1400 : 1290;
-      d += " S" + (x + (i % 2 ? 60 : -30)) + " " + (y - H * 0.42 / steps) + " " + x + " " + y;
-    }
-    var holder = document.createElement("div");
-    holder.className = "fw-ribbon"; holder.setAttribute("aria-hidden", "true"); holder.style.height = H + "px";
-    var s = document.createElementNS(NS, "svg");
-    s.setAttribute("viewBox", "0 0 " + W + " " + H); s.setAttribute("preserveAspectRatio", "xMaxYMin slice");
-    s.setAttribute("focusable", "false"); s.style.height = H + "px";
-    s.innerHTML = '<defs><linearGradient id="fw-rib" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a61"/><stop offset=".35" stop-color="#d40e18"/>' +
-      '<stop offset=".75" stop-color="#9a0d15"/><stop offset="1" stop-color="#59060e"/></linearGradient></defs>' +
-      '<path d="' + d + '" stroke="url(#fw-rib)" stroke-width="40" fill="none" stroke-linecap="round"/>' +
-      '<path d="' + d + '" stroke="#fff" stroke-opacity=".3" stroke-width="7" fill="none" stroke-linecap="round" transform="translate(-8 -10)"/>';
-    holder.appendChild(s);
-    document.body.insertBefore(holder, document.body.firstChild);
-    if (G && window.DrawSVGPlugin && window.ScrollTrigger && ok()) {
-      var paths = $$("path", s);
-      G.set(paths, { drawSVG: "0% 0%" });
-      G.to(paths, { drawSVG: "0% 14%", duration: 2.2, ease: EASEIO, delay: 0.4 });
-      G.to(paths, { drawSVG: "0% 100%", ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
-    }
-  }
-
   function plume(wrap) {
     var THREE = window.THREE, canvas = wrap && $("canvas", wrap);
     if (!THREE || !canvas) return null;
@@ -72,7 +43,7 @@
       var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(i), side: THREE.DoubleSide }));
       m.position.set(x, y, z); m.lookAt(0, 0, 0); studio.add(m);
     }
-    box("#ffffff", 5, 6, 1.2, 0, 6, 2); box("#ff8f96", 1.0, 3, 8, -7, 1, 1); box("#ff2a36", 2.4, 8, 2, 0, -6, 0);
+    box("#ffffff", 5, 6, 1.2, 0, 6, 2); box("#e2d0ff", 1.0, 3, 8, -7, 1, 1); box("#b98cff", 2.4, 8, 2, 0, -6, 0);
     box("#ffffff", 2.2, 0.6, 5, 3, 2, 7); box("#ffffff", 1.4, 0.5, 4, -3.5, 0.5, 7);
     scene.environment = new THREE.PMREMGenerator(renderer).fromScene(studio, 0.02).texture;
 
@@ -89,9 +60,9 @@
       }
       var g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(v, 3)); g.computeVertexNormals(); return g;
     }
-    var crystal = new THREE.MeshPhysicalMaterial({ color: "#d0101b", side: THREE.DoubleSide, roughness: 0.05, metalness: 0.05, clearcoat: 1,
-      clearcoatRoughness: 0.04, ior: 1.7, transmission: 0.18, thickness: 0.6, attenuationColor: new THREE.Color("#59060e"),
-      attenuationDistance: 0.8, emissive: new THREE.Color("#2a0004"), envMapIntensity: 1.6, flatShading: true });
+    var crystal = new THREE.MeshPhysicalMaterial({ color: "#9a6fe0", side: THREE.DoubleSide, roughness: 0.05, metalness: 0.05, clearcoat: 1,
+      clearcoatRoughness: 0.04, ior: 1.7, transmission: 0.18, thickness: 0.6, attenuationColor: new THREE.Color("#4a2d80"),
+      attenuationDistance: 0.8, emissive: new THREE.Color("#1d1036"), envMapIntensity: 1.6, flatShading: true });
     var gold = new THREE.MeshPhysicalMaterial({ color: "#f0bd68", metalness: 1, roughness: 0.18, clearcoat: 0.6, envMapIntensity: 2.2, emissive: new THREE.Color("#3a2408") });
     var hs = new THREE.Shape(); hs.moveTo(0, -1); hs.lineTo(-0.86, -0.12); hs.bezierCurveTo(-1.45, 0.5, -0.85, 1.25, 0, 0.62);
     hs.bezierCurveTo(0.85, 1.25, 1.45, 0.5, 0.86, -0.12); hs.lineTo(0, -1);
@@ -115,7 +86,7 @@
     var gem = new THREE.Mesh(new THREE.IcosahedronGeometry(0.16, 0), crystal); gem.scale.setScalar(0.8); gem.position.z = 0.14; fan.add(gem);
     fan.position.y = -1.4; fan.rotation.x = -0.08;
     var key = new THREE.DirectionalLight("#ffffff", 1.4); key.position.set(3, 5, 6); scene.add(key);
-    var rim = new THREE.DirectionalLight("#ff9aa0", 1.0); rim.position.set(-6, 2, -3); scene.add(rim);
+    var rim = new THREE.DirectionalLight("#e6d6ff", 1.0); rim.position.set(-6, 2, -3); scene.add(rim);
 
     function size() { var r = canvas.getBoundingClientRect(), w = Math.max(1, r.width), hh = Math.max(1, r.height);
       renderer.setSize(w, hh, false); cam.aspect = w / hh; cam.updateProjectionMatrix(); }
@@ -150,71 +121,19 @@
 
   function intro(plumes) {
     plumes.forEach(function (p) { if (p) p.start(); });
-    if (!G || !ok()) { unveil(); return; }
-    var band = $(".fw-band"); if (!band) { unveil(); return; }
-    var tl = G.timeline({ defaults: { ease: EASE } });
-    tl.from(".fw-top__row > *", { "--fw-rv": "-16px", opacity: 0, duration: 0.9, stagger: 0.06, clearProps: "--fw-rv,opacity" })
-      .from(".fw-nav__link", { "--fw-rv": "-10px", opacity: 0, duration: 0.7, stagger: 0.03, clearProps: "--fw-rv,opacity" }, "<0.1");
-    var h = $(".fw-band .fw-head__title, .fw-band .fw-hero__title");
-    if (h && window.SplitText) {
-      var split = window.SplitText.create(h, { type: "lines,words,chars", mask: "lines", linesClass: "fw-split-line", charsClass: "fw-ch", aria: "auto" });
-      tl.from(split.chars, { yPercent: 115, rotate: 6, opacity: 0, filter: "blur(10px)", duration: 1.3, stagger: 0.028 }, 0.15);
-    }
-    var rest = $$(".fw-band__copy > *").filter(function (el) { return el !== h; });
-    if (rest.length) tl.from(rest, { "--fw-rv": "26px", opacity: 0, filter: "blur(6px)", duration: 1.1, stagger: 0.08, clearProps: "--fw-rv,filter,opacity" }, 0.45);
-    if ($(".fw-band .fw-plume__glow")) tl.from(".fw-band .fw-plume__glow", { scale: 0.4, opacity: 0, duration: 2, ease: EASEIO }, 0);
-    if ($(".fw-band .fw-pom")) tl.from(".fw-band .fw-pom", { scale: 0, opacity: 0, duration: 1.2, ease: "back.out(1.6)", stagger: 0.15 }, 1.1);
-    if ($(".fw-band__frame")) tl.from(".fw-band__frame", { clipPath: "inset(14% 14% 14% 14% round 28px)", opacity: 0, duration: 1.6, ease: EASEIO }, 0.2);
-    unveil();   // the start states are set: the head can be painted, it is hidden by the timeline itself now
+    unveil();
   }
 
-  var hidden = [];   // elements hidden by reveals() and not reached yet
-  function showAll() { if (G && hidden.length) G.set(hidden, { clearProps: "--fw-rv,filter,opacity" }); hidden = []; }
   function unveil() { doc.classList.remove("fw-pre"); }
-  function reveals() {
-    if (!G || !window.ScrollTrigger || !ok()) return;
-    var ST = window.ScrollTrigger;
-    var fold = window.innerHeight * 0.88;
-    var targets = $$("[data-fw-reveal], .fw-tiles__item").filter(function (el) { return el.getBoundingClientRect().top > fold; });
-    if (targets.length) {
-      G.set(targets, { "--fw-rv": "40px", opacity: 0, filter: "blur(8px)" });
-      hidden = targets.slice();
-      ST.batch(targets, { start: "top 88%", once: true, onEnter: function (els) {
-        hidden = hidden.filter(function (el) { return els.indexOf(el) < 0; });
-        G.to(els, { "--fw-rv": "0px", opacity: 1, filter: "blur(0px)", duration: 1.2, ease: EASE, stagger: 0.08, clearProps: "--fw-rv,filter,opacity" });
-      } });
-    }
-    var thread = $(".fw-h-thread path");
-    if (thread && window.DrawSVGPlugin) G.fromTo(thread, { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: 2, ease: EASEIO,
-      scrollTrigger: { trigger: ".fw-h-steps", start: "top 80%", once: true } });
-    var img = $(".fw-band__img");
-    if (img) G.fromTo(img, { yPercent: -4 }, { yPercent: 8, ease: "none", scrollTrigger: { trigger: ".fw-band", start: "top top", end: "bottom top", scrub: true } });
-  }
-
-  function pointerLight() {
-    $$(".fw-tiles__link, .fw-glass, .fw-h-cat").forEach(function (el) {
-      el.addEventListener("pointermove", function (e) {
-        var r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        el.style.setProperty("--fw-mx", x * 100 + "%"); el.style.setProperty("--fw-my", y * 100 + "%");
-        el.style.setProperty("--mx", x * 100 + "%"); el.style.setProperty("--my", y * 100 + "%");
-        if (ok() && el.classList.contains("fw-tiles__link")) { el.style.setProperty("--fw-ry", (x - 0.5) * 6 + "deg"); el.style.setProperty("--fw-rx", (0.5 - y) * 6 + "deg"); }
-      });
-      el.addEventListener("pointerleave", function () { el.style.setProperty("--fw-rx", "0deg"); el.style.setProperty("--fw-ry", "0deg"); });
-    });
-  }
-
   function go() {
-    ribbon();
     var plumes = $$("[data-fw-plume]").map(plume);
-    pointerLight(); reveals();
     var started = false;
     var begin = function () { if (started) return; started = true; intro(plumes); };
     if (doc.classList.contains("fw-gate-open")) {
       var mo = new MutationObserver(function () { if (!doc.classList.contains("fw-gate-open")) { mo.disconnect(); begin(); } });
       mo.observe(doc, { attributes: true, attributeFilter: ["class"] });
     } else begin();
-    if (window.ScrollTrigger) addEventListener("load", function () { window.ScrollTrigger.refresh(); });
-    if (FW.onMotion) FW.onMotion(function (on) { if (!on && G) { G.globalTimeline.progress(1); showAll(); } unveil(); });
+    if (FW.onMotion) FW.onMotion(function (on) { if (!on && G) { G.globalTimeline.progress(1); } unveil(); });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", go); else go();
 })();

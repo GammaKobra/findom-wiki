@@ -1,0 +1,190 @@
+
+
+html[data-form="dossier"] .fw-fpage {
+  --ff-acc2: #d9a441;
+  --ds-acc2-rule: rgba(217, 164, 65, .5);
+  --ds-deep: #4c2186;
+  --ds-letter: 84px;
+}
+html[data-form="dossier"][data-theme="light"] .fw-fpage {
+  --ff-acc2: #8a5a0c;
+  --ds-acc2-rule: rgba(138, 90, 12, .45);
+}
+
+
+html[data-form="dossier"] .fw-fhero,
+html[data-form="dossier"] .fw-fhero[data-has-picture="no"] {
+  grid-template-columns: var(--ff-col) minmax(0, 1fr);
+  grid-template-areas: "rec main" "rec legend" "fig fig";
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+html[data-form="dossier"] .fw-fhero[data-has-picture="no"] { grid-template-areas: "rec main" "rec legend"; padding-bottom: 36px; border-bottom: 3px solid var(--ff-red); }
+html[data-form="dossier"] .fw-fhero__title { font-size: clamp(64px, 9vw, 150px); line-height: .86; }
+html[data-form="dossier"] .fw-fhero__stand { max-width: 34ch; font-size: clamp(21px, 2vw, 25px); }
+html[data-form="dossier"] .fw-fhero__rec[data-rec="status"] dt, html[data-form="dossier"] .fw-fhero__rec[data-rec="status"] dd { color: var(--ff-acc2); }
+
+
+html[data-form="dossier"] .fw-fhero__fig {
+  position: relative; overflow: hidden; height: 300px; margin-top: 56px;
+  border: 0; border-top: 1px solid var(--ff-rule-strong); border-bottom: 3px solid var(--ff-red); background: #0a0809;
+}
+html[data-form="dossier"] .fw-fhero__img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 45%; filter: grayscale(1) contrast(1.25) brightness(.85); }
+html[data-form="dossier"] .fw-fhero__fig::after { content: ""; position: absolute; inset: 0; background: var(--ds-deep); mix-blend-mode: multiply; opacity: .55; pointer-events: none; }
+html[data-form="dossier"] .fw-fhero__fig[data-ds-cap]::before {
+  content: attr(data-ds-cap); position: absolute; right: 0; bottom: 0; z-index: 1; padding: 8px 12px; background: var(--ff-ground);
+  font: 400 12px/1 var(--ff-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ff-quiet);
+}
+
+
+html[data-form="dossier"] .fw-fpage .fw-fsec { display: flow-root; }
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__label,
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__text { color: var(--ff-acc2); }
+html[data-form="dossier"] .fw-fpage .fw-note {
+  padding: 2px 0 2px 16px; border: 0; border-left: 1px solid var(--ds-acc2-rule); border-radius: 0; background: none; box-shadow: none;
+}
+html[data-form="dossier"] .fw-fpage .fw-note::before, html[data-form="dossier"] .fw-fpage .fw-note::after { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__label { gap: 0; margin-bottom: 8px; font: 400 12px/1.4 var(--ff-mono); letter-spacing: .12em; text-transform: uppercase; }
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__seal { display: none; }
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__text { max-width: 44ch; font: italic 400 18px/1.45 var(--fw-font-read); }
+html[data-form="dossier"] .fw-fpage .fw-note .fw-note__badge { margin-top: 6px; }
+
+
+@media (min-width: 1200px) {
+  html[data-form="dossier"] .fw-fpage .fw-fsec { display: grid; grid-template-columns: minmax(0, 1fr) 200px; grid-auto-flow: row dense; column-gap: 32px; align-items: start; }
+  html[data-form="dossier"] .fw-fpage .fw-fsec > * { grid-column: 1 / -1; min-width: 0; }
+  html[data-form="dossier"] .fw-fpage .fw-fsec > .fw-prose { grid-column: 1; max-width: none; }
+  html[data-form="dossier"] .fw-fpage .fw-fsec > .fw-site-block[data-kind="note"] { grid-column: 2; margin-top: 8px; }
+  html[data-form="dossier"] .fw-fpage .fw-fsec > .fw-site-block[data-kind="note"] .fw-note__text { font-size: 17px; }
+}
+
+
+html[data-form="dossier"] .fw-fpage .fw-table--tactic { padding: 0; border: 0; background: none; box-shadow: none; overflow: visible; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic::before, html[data-form="dossier"] .fw-fpage .fw-table--tactic::after { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__grid,
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__grid > tbody { display: block; width: 100%; border: 0; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__grid > tbody { counter-reset: ds-ex; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__caption {
+  display: block; padding: 0 0 16px; border-bottom: 3px solid var(--ff-red); caption-side: top; text-align: left;
+  font: 400 clamp(32px, 3.6vw, 46px)/1.04 var(--fw-font-display); letter-spacing: 0; text-transform: none; color: var(--ff-title);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__caption::before {
+  content: "Register"; display: block; margin-bottom: 12px; font: 700 11px/1.2 var(--fw-font-ui); letter-spacing: .22em; text-transform: uppercase; color: var(--ff-red-ink);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__grid > thead {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row {
+  position: relative; counter-increment: ds-ex;
+  display: grid; grid-template-columns: 104px minmax(0, 1fr) minmax(0, 1fr); gap: 0 32px; align-items: start;
+  padding: 28px 0 30px; border: 0; border-bottom: 1px solid var(--ff-rule); background: none;
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row:hover { background: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::before {
+  content: counter(ds-ex, upper-alpha); grid-column: 1; grid-row: 1; font: 400 var(--ds-letter)/.8 var(--fw-font-display); color: var(--ff-red);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::after {
+  content: "Exhibit"; position: absolute; left: 0; top: calc(28px + var(--ds-letter) * .8 + 12px);
+  font: 400 11px/1 var(--ff-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ff-quiet);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody td { display: block; width: auto; max-width: none; min-width: 0; padding: 0; border: 0; background: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody td::before { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__says {
+  grid-column: 2; padding: 0; font: 400 clamp(22px, 2vw, 26px)/1.18 var(--fw-font-display); color: var(--ff-title);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__says > .fw-table__num { display: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__counter {
+  grid-column: 3; display: block; padding: 0 0 0 18px; border-left: 2px solid var(--ff-red);
+  font: 500 16px/1.5 var(--fw-font-ui); color: var(--ff-ink);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__counter::before {
+  content: attr(data-label); display: block; margin-bottom: 6px; font: 700 11px/1 var(--fw-font-ui); letter-spacing: .2em; text-transform: uppercase; color: var(--ff-red-ink);
+}
+html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__counter > span { display: inline; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__arrow { display: none; }
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__note,
+html[data-form="dossier"] .fw-fpage .fw-table--tactic .fw-table__out { padding: 14px 0 0; border: 0; background: none; color: var(--ff-soft); }
+
+
+html[data-form="dossier"] .ds-stamp {
+  position: absolute; left: 30px; top: 66px; z-index: 1; padding: 5px 10px; border: 2px solid var(--ff-red); background: var(--ff-ground);
+  font: 700 12px/1 var(--ff-mono); letter-spacing: .14em; white-space: nowrap; color: var(--ff-red-ink);
+  transform: rotate(-7deg); opacity: .9; pointer-events: none;
+}
+
+html[data-form="dossier"] .ds-stamp { top: 118px; }
+
+
+html[data-form="dossier"] .fw-fpage .fw-myth { gap: 0; counter-reset: ds-claim; border-top: 1px solid var(--ff-rule-strong); }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item {
+  counter-increment: ds-claim; display: grid; grid-template-columns: 104px minmax(0, 1fr) minmax(0, 1fr); gap: 0 32px; align-items: baseline;
+  padding: 24px 0; border: 0; border-bottom: 1px solid var(--ff-rule); border-radius: 0; background: none; box-shadow: none;
+}
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item::after { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item::before {
+  content: "Claim " counter(ds-claim); grid-column: 1; font: 400 12px/1.6 var(--ff-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ff-quiet);
+}
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__line { display: none; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part { padding: 0; border: 0; background: none; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__ico { display: none; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__k { margin: 0 0 8px; font: 400 11px/1 var(--ff-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ff-quiet); }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part--fact .fw-myth__k { color: var(--ff-red-ink); }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part--myth .fw-myth__text {
+  margin: 0; font: italic 400 clamp(20px, 1.8vw, 23px)/1.35 var(--fw-font-read); color: var(--ff-soft);
+  text-decoration: line-through 2px var(--ff-red); text-decoration-skip-ink: none;
+}
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part--myth .fw-myth__text::before { content: "\201C"; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part--myth .fw-myth__text::after { content: "\201D"; }
+html[data-form="dossier"] .fw-fpage .fw-myth .ds-arm .fw-myth__part--myth .fw-myth__text,
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item.ds-arm .fw-myth__part--myth .fw-myth__text { text-decoration-color: transparent; transition: text-decoration-color .7s cubic-bezier(.23, 1, .32, 1) .2s; }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item.ds-arm.is-seen .fw-myth__part--myth .fw-myth__text { text-decoration-color: var(--ff-red); }
+@media (prefers-reduced-motion: reduce) { html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item.ds-arm .fw-myth__part--myth .fw-myth__text { text-decoration-color: var(--ff-red); } }
+html[data-form="dossier"][data-motion="paused"] .fw-fpage .fw-myth .fw-myth__item.ds-arm .fw-myth__part--myth .fw-myth__text { text-decoration-color: var(--ff-red); }
+html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__part--fact .fw-myth__text { margin: 0; font-size: 18px; line-height: 1.5; color: var(--ff-ink); }
+
+
+html[data-form="dossier"] .fw-fpage .fw-steps { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 0 32px; align-items: start; }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__head { margin: 0; padding-top: 8px; border-top: 1px solid var(--ff-red); }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__head::before {
+  content: "Procedure"; display: block; margin-bottom: 12px; font: 700 11px/1.2 var(--fw-font-ui); letter-spacing: .22em; text-transform: uppercase; color: var(--ff-red-ink);
+}
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__title { margin: 0; font: 400 26px/1.12 var(--fw-font-display); letter-spacing: 0; text-transform: none; color: var(--ff-title); }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__title::before { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list { gap: 0; border: 0; border-top: 1px solid var(--ff-rule-strong); counter-reset: ds-step; }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list > .fw-steps__item {
+  counter-increment: ds-step; grid-template-columns: 44px minmax(0, 1fr); gap: 0; align-items: baseline; padding: 13px 0; border: 0; border-bottom: 1px solid var(--ff-rule);
+}
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list > .fw-steps__item::before { content: none; }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list > .fw-steps__item > .fw-steps__n {
+  display: block; width: auto; height: auto; border-radius: 0; background: none; box-shadow: none; font: 400 0/1.5 var(--ff-mono); color: var(--ff-red-ink);
+}
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list > .fw-steps__item > .fw-steps__n::after { content: counter(ds-step, decimal-leading-zero); font-size: 14px; }
+html[data-form="dossier"] .fw-fpage .fw-steps .fw-steps__list > .fw-steps__item > .fw-steps__text { padding: 0; font: 500 17px/1.5 var(--fw-font-ui); color: var(--ff-ink); }
+
+
+html[data-form="dossier"] .fw-fpage :is(.fw-quiz__q, .fw-choice, .fw-chat) { --fwl-hairline: linear-gradient(var(--ff-rule-strong), var(--ff-rule-strong)); }
+html[data-form="dossier"] .fw-fpage .fw-alert .fw-alert__title { color: var(--ff-title); }
+
+
+@media (max-width: 1040px) {
+  html[data-form="dossier"] .fw-rail__nav { background: var(--ff-ground); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  html[data-form="dossier"] .fw-rail__node { border-radius: 0; font-family: var(--ff-mono); font-size: 12px; }
+  html[data-form="dossier"] .fw-rail__item--current .fw-rail__node,
+  html[data-form="dossier"] .fw-rail__item--done.fw-rail__item--current .fw-rail__node { background: var(--ff-red); color: #fff; box-shadow: none; }
+  html[data-form="dossier"] .fw-rail__item--done .fw-rail__node { background: var(--ff-rule-strong); }
+}
+@media (max-width: 900px) {
+  html[data-form="dossier"] .fw-fpage { --ds-letter: 60px; }
+  html[data-form="dossier"] .fw-fhero,
+  html[data-form="dossier"] .fw-fhero[data-has-picture="no"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "rec" "legend" "fig"; }
+  html[data-form="dossier"] .fw-fhero__fig { height: 180px; margin-top: 28px; }
+  html[data-form="dossier"] .fw-fhero__img { aspect-ratio: auto; }
+  html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row { grid-template-columns: 76px minmax(0, 1fr); gap: 14px 18px; padding: 24px 0 26px; }
+  html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::before { grid-row: 1 / span 2; }
+  html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__row::after { top: calc(24px + var(--ds-letter) * .8 + 10px); font-size: 10px; }
+  html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__says,
+  html[data-form="dossier"] .fw-fpage .fw-table--tactic tbody .fw-table__counter { grid-column: 2; }
+  html[data-form="dossier"] .ds-stamp { left: 12px; top: 92px; font-size: 10px; padding: 4px 6px; }
+  html[data-form="dossier"] .fw-fpage .fw-myth .fw-myth__item { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  html[data-form="dossier"] .fw-fpage .fw-steps { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+}

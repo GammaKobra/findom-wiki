@@ -1,0 +1,189 @@
+
+
+.fw-fpage[data-form="glossaire"] {
+  --ff-acc2: #d77a9a;
+  --glo-acc-ink: #e08aa8;
+  --glo-railh: 0px;
+  --glo-barh: 0px;
+}
+html[data-theme="light"] .fw-fpage[data-form="glossaire"] {
+  --ff-acc2: #c0587e;
+  --glo-acc-ink: #a33a62;
+}
+
+
+html[data-form="glossaire"] .glo-bar { position: sticky; top: calc(var(--fw-top-offset, 0px) + var(--glo-railh)); z-index: 7;
+  margin: 0 0 34px; padding: 12px 0 0; background: var(--ff-ground);
+  border-top: 3px solid var(--ff-red); border-bottom: 1px solid var(--ff-rule-strong); }
+html[data-form="glossaire"] .glo-bar.is-past { visibility: hidden; }
+html[data-form="glossaire"] .glo-bar__find { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; gap: 0 14px; }
+html[data-form="glossaire"] .glo-bar__label { font: 400 12px/1 var(--ff-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ff-quiet); }
+html[data-form="glossaire"] .glo-bar__input { width: 100%; min-width: 0; height: 40px; padding: 0 2px; border: 0; border-bottom: 1px solid var(--ff-rule-strong); border-radius: 0;
+  background: transparent; color: var(--ff-title); font: 400 19px/1 var(--fw-font-read); -webkit-appearance: none; appearance: none; }
+html[data-form="glossaire"] .glo-bar__input::placeholder { color: var(--ff-quiet); opacity: 1; }
+html[data-form="glossaire"] .glo-bar__input:focus { outline: none; border-bottom-color: var(--ff-acc2); box-shadow: 0 1px 0 0 var(--ff-acc2); }
+html[data-form="glossaire"] .glo-bar__input:focus-visible { outline: 2px solid var(--ff-red); outline-offset: 2px; }
+html[data-form="glossaire"] .glo-bar__input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+html[data-form="glossaire"] .glo-bar__count { min-width: 9ch; font: 400 13px/1 var(--ff-mono); letter-spacing: .06em; color: var(--ff-quiet); text-align: right; white-space: nowrap; }
+html[data-form="glossaire"] .glo-bar__count b { font-weight: 400; color: var(--glo-acc-ink); }
+html[data-form="glossaire"] .glo-bar__clear { min-height: 32px; padding: 0 10px; border: 1px solid var(--ff-rule-strong); border-radius: 0; background: transparent;
+  color: var(--ff-title); font: 600 13px/1 var(--fw-font-ui); cursor: pointer; }
+html[data-form="glossaire"] .glo-bar__clear[hidden] { display: none; }
+html[data-form="glossaire"] .glo-bar__clear:focus-visible { outline: 2px solid var(--ff-red); outline-offset: 2px; }
+html[data-form="glossaire"] .glo-bar__tail { display: inline-flex; align-items: center; gap: 12px; }
+
+
+html[data-form="glossaire"] .glo-az { margin: 8px 0 0; }
+html[data-form="glossaire"] .glo-az ol, .fw-fpage[data-form="glossaire"] .glo-az .fw-site-letters__list { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 0;
+  margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: none; }
+html[data-form="glossaire"] .glo-az ol::-webkit-scrollbar { display: none; }
+.fw-fpage[data-form="glossaire"] .glo-az.fw-site-letters { position: static; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; margin: 8px 0 0; }
+.fw-fpage[data-form="glossaire"] .glo-az.fw-site-letters::before { display: none; }
+html[data-form="glossaire"] .glo-az li { flex: 0 0 auto; }
+html[data-form="glossaire"] .glo-az :is(a, button, .fw-site-letters__off),
+.fw-fpage[data-form="glossaire"] .glo-az :is(.fw-site-letters__link, .fw-site-letters__off) {
+  display: inline-grid; place-items: center; min-width: 26px; min-height: 40px; padding: 0 2px; border: 0; border-radius: 0;
+  background: none; box-shadow: none; color: var(--ff-title); font: 400 20px/1 var(--fw-font-display); text-decoration: none; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: color 120ms ease-out, border-color 120ms ease-out; }
+html[data-form="glossaire"] .glo-az .glo-az__all { min-width: 40px; font: 400 12px/1 var(--ff-mono); letter-spacing: .1em; text-transform: uppercase; }
+html[data-form="glossaire"] .glo-az :is(.fw-site-letters__off, [aria-disabled="true"], button[disabled]),
+.fw-fpage[data-form="glossaire"] .glo-az .fw-site-letters__off { color: var(--ff-quiet); opacity: .45; cursor: default; }
+html[data-form="glossaire"] .glo-az :is([aria-current="true"], [aria-pressed="true"]) { color: var(--glo-acc-ink) !important; border-bottom-color: var(--ff-acc2) !important; }
+html[data-form="glossaire"] .glo-az :is(a, button):focus-visible { outline: 2px solid var(--ff-red); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  html[data-form="glossaire"] .glo-az :is(a, button):not([aria-disabled="true"]):not([disabled]):hover,
+  .fw-fpage[data-form="glossaire"] .glo-az .fw-site-letters__link:hover { color: var(--ff-red-ink); background: none; box-shadow: none; border-bottom-color: var(--ff-red); }
+}
+
+
+html[data-form="glossaire"] .glo-none { margin: 0 0 30px; padding: 14px 0; border-bottom: 1px solid var(--ff-rule); font: 400 18px/1.5 var(--fw-font-read); color: var(--ff-soft); }
+html[data-form="glossaire"] .glo-none[hidden] { display: none; }
+html[data-form="glossaire"] .glo-none q { color: var(--ff-title); }
+
+html[data-form="glossaire"] mark.glo-hit { padding: 0; background: none; color: inherit; text-decoration: underline 2px var(--ff-acc2); text-underline-offset: 4px; }
+
+@media screen {
+  html[data-form="glossaire"] .glo-out { display: none !important; }
+}
+
+
+html[data-form="glossaire"] .fw-site-letter + .fw-site-letter { margin-top: 56px; }
+html[data-form="glossaire"] .fw-site-letter__k { display: flex; align-items: baseline; gap: 18px; width: auto; margin: 0; padding: 0 0 10px;
+  border-bottom: 3px solid var(--ff-red); font: 400 clamp(52px, 5vw, 76px)/.9 var(--fw-font-display); color: var(--ff-red-ink);
+  background: none; -webkit-background-clip: border-box; background-clip: border-box; scroll-margin-top: calc(var(--glo-railh) + var(--glo-barh) + 18px); }
+html[data-form="glossaire"] .fw-site-letter__k .glo-n { margin-left: auto; font: 400 12px/1 var(--ff-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ff-quiet); }
+html[data-form="glossaire"] .fw-site-letter__k .glo-n b { font-weight: 400; color: var(--glo-acc-ink); }
+
+html[data-form="glossaire"] .fw-site-entry { grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr); gap: 4px 36px; margin: 0; padding: 22px 0 18px;
+  border-top: 0; border-bottom: 1px solid var(--ff-rule); border-radius: 0; background: none; box-shadow: none;
+  scroll-margin-top: calc(var(--glo-railh) + var(--glo-barh) + 18px); }
+html[data-form="glossaire"] .fw-site-letter > .fw-site-entry:last-child { border-bottom: 1px solid var(--ff-rule); }
+html[data-form="glossaire"] .fw-site-entry .fw-site-entry__word { font-size: clamp(24px, 2vw, 29px); line-height: 1.08; color: var(--ff-title); }
+html[data-form="glossaire"] .fw-site-entry .fw-entry__class { margin-top: 6px; font: italic 400 16px/1.3 var(--fw-font-read); color: var(--glo-acc-ink); }
+html[data-form="glossaire"] .fw-site-entry__def { margin: 0; }
+html[data-form="glossaire"] .fw-site-entry:target { margin-inline: 0; padding-inline: 0; border-radius: 0; background: none; box-shadow: inset 3px 0 0 var(--ff-acc2);
+  padding-left: 16px; border-top-color: transparent; }
+html[data-form="glossaire"] .fw-site-entry__body { border-left: 1px solid var(--ff-rule-strong); }
+html[data-form="glossaire"] .fw-site-entry__body .fw-entry__k { color: var(--ff-red-ink); }
+html[data-form="glossaire"] .fw-site-entry__body .fw-entry__k::before { content: ""; width: 18px; height: 2px; background: var(--ff-red); }
+
+
+html[data-form="glossaire"] .fw-compare { --fwc-glass-shadow: none; --fwc-rim: linear-gradient(transparent, transparent); --fwc-solid: var(--ff-ground);
+  --fwc-hair-strong: var(--ff-rule); --fwc-hair: var(--ff-rule); }
+html[data-form="glossaire"] .fw-compare__box { border-radius: 0; box-shadow: none; background: none; }
+html[data-form="glossaire"] .fw-compare__grid thead th { padding: 0 18px 10px 0; border-bottom: 3px solid var(--ff-red); vertical-align: bottom;
+  font: 400 12px/1.3 var(--ff-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ff-quiet); }
+html[data-form="glossaire"] .fw-compare__grid thead .fw-compare__corner { box-shadow: none; }
+html[data-form="glossaire"] .fw-compare__col::before { display: none; }
+html[data-form="glossaire"] .fw-compare__h { font: inherit; color: inherit; }
+html[data-form="glossaire"] .fw-compare__grid tbody th { width: 240px; padding: 14px 18px 14px 0; background: var(--ff-ground); box-shadow: none;
+  border-bottom: 1px solid var(--ff-rule); font: 400 17px/1.4 var(--fw-font-display); color: var(--ff-title); }
+html[data-form="glossaire"] .fw-compare__grid td { padding: 14px 18px 14px 0; border-bottom: 1px solid var(--ff-rule); font-size: 18px; color: var(--ff-ink); }
+html[data-form="glossaire"] .fw-compare__grid tbody tr:last-child > * { border-bottom: 1px solid var(--ff-rule); }
+html[data-form="glossaire"] .fw-compare__grid tbody tr { scroll-margin-top: calc(var(--glo-railh) + var(--glo-barh) + 24px); }
+@media (hover: hover) and (pointer: fine) {
+  html[data-form="glossaire"] .fw-compare__grid tbody tr:hover td { background: none; }
+}
+
+
+html[data-form="glossaire"] .glo-tags .fw-compare__grid thead .fw-compare__corner { width: 34%; }
+html[data-form="glossaire"] .glo-tags .fw-compare__grid tbody th { width: 34%; font: 400 16px/1.45 var(--ff-mono); letter-spacing: 0; overflow-wrap: anywhere; hyphens: none; }
+html[data-form="glossaire"] .glo-tags .fw-compare__grid td { font-size: 17px; line-height: 1.5; color: var(--ff-soft); }
+html[data-form="glossaire"] .glo-tags .fw-compare__cue { display: none; }
+html[data-form="glossaire"] .glo-tags .fw-compare__corner::before { content: "Tag"; content: "Tag" / ""; }
+
+
+html[data-form="glossaire"] .glo-tally { display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px; font: 400 12px/1.3 var(--ff-mono); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ff-quiet); }
+html[data-form="glossaire"] .glo-tally b { font-weight: 400; color: var(--glo-acc-ink); }
+
+
+html[data-form="glossaire"] .glo-flash { box-shadow: inset 3px 0 0 var(--ff-acc2); transition: box-shadow 900ms cubic-bezier(.2, .8, .2, 1) 700ms; }
+html[data-form="glossaire"] .glo-flash.glo-flash--off { box-shadow: inset 3px 0 0 transparent; }
+html[data-form="glossaire"] tr.glo-flash > th { box-shadow: inset 3px 0 0 var(--ff-acc2); padding-left: 12px; }
+html[data-form="glossaire"] tr.glo-flash.glo-flash--off > th { box-shadow: inset 3px 0 0 transparent; transition: box-shadow 900ms cubic-bezier(.2, .8, .2, 1) 700ms; }
+
+
+html[data-form="glossaire"] .glo-panel { margin: 0; padding: 4px 0 14px; border-top: 1px solid var(--ff-rule); max-height: min(58vh, 520px); overflow-y: auto; overscroll-behavior: contain; }
+html[data-form="glossaire"] .glo-panel[hidden] { display: none; }
+html[data-form="glossaire"] .glo-panel__cols { columns: 3 13rem; column-gap: 32px; column-rule: 1px solid var(--ff-rule); }
+html[data-form="glossaire"] .glo-panel__group { break-inside: avoid; margin: 0 0 12px; }
+html[data-form="glossaire"] .glo-panel__k { margin: 10px 0 2px; font: 400 26px/1 var(--fw-font-display); color: var(--ff-red-ink); }
+html[data-form="glossaire"] .glo-panel ul { margin: 0; padding: 0; list-style: none; }
+html[data-form="glossaire"] .glo-panel li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--ff-rule); }
+.fw-fpage[data-form="glossaire"] .glo-panel a.glo-panel__link { color: var(--ff-title); font: 400 17px/1.3 var(--fw-font-read); text-decoration: none;
+  background: none; box-shadow: none; }
+.fw-fpage[data-form="glossaire"] .glo-panel a.glo-panel__link:focus-visible { outline: 2px solid var(--ff-red); outline-offset: 2px; }
+html[data-form="glossaire"] .glo-panel li span { flex: none; font: 400 11px/1 var(--ff-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ff-quiet); }
+@media (hover: hover) and (pointer: fine) {
+  .fw-fpage[data-form="glossaire"] .glo-panel a.glo-panel__link:hover { color: var(--ff-red-ink); text-decoration: underline 1px var(--ff-red); text-underline-offset: 3px; }
+}
+
+.fw-fpage[data-form="glossaire"] .fw-term.glo-flash { box-shadow: none; background: color-mix(in srgb, var(--ff-acc2) 30%, transparent);
+  transition: background-color 900ms cubic-bezier(.2, .8, .2, 1) 900ms; }
+.fw-fpage[data-form="glossaire"] .fw-term.glo-flash.glo-flash--off { background: transparent; }
+.fw-fpage[data-form="glossaire"] :is(.glo-target, .glo-spot)[tabindex="-1"]:focus { outline: none; }
+html[data-form="glossaire"] .glo-bar__toggle { min-height: 34px; padding: 0 12px; border: 1px solid var(--ff-rule-strong); border-radius: 0; background: transparent; color: var(--ff-title);
+  font: 600 13px/1 var(--fw-font-ui); cursor: pointer; white-space: nowrap; }
+html[data-form="glossaire"] .glo-bar__toggle[aria-expanded="true"] { border-color: var(--ff-acc2); }
+html[data-form="glossaire"] .glo-bar__toggle b { font: 400 12px/1 var(--ff-mono); color: var(--glo-acc-ink); margin-left: 6px; }
+html[data-form="glossaire"] .glo-bar__toggle:focus-visible { outline: 2px solid var(--ff-red); outline-offset: 2px; }
+html[data-form="glossaire"] .glo-target { scroll-margin-top: calc(var(--glo-railh) + var(--glo-barh) + 28px); }
+
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-form="glossaire"] .glo-flash, html[data-form="glossaire"] .glo-flash > th, html[data-form="glossaire"] .glo-az :is(a, button) { transition: none !important; }
+}
+html[data-motion="paused"] :is(.glo-flash, .glo-flash > th) { transition: none !important; }
+
+
+@media (max-width: 900px) {
+  html[data-form="glossaire"] .glo-bar { margin: 0 0 26px; padding-top: 8px; }
+  html[data-form="glossaire"] .glo-bar__find { grid-template-columns: minmax(0, 1fr) auto; }
+  html[data-form="glossaire"] .glo-bar__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  html[data-form="glossaire"] .glo-bar__input { height: 38px; font-size: 18px; }
+  html[data-form="glossaire"] .glo-az ol, .fw-fpage[data-form="glossaire"] .glo-az .fw-site-letters__list { justify-content: flex-start; }
+  html[data-form="glossaire"] .glo-az :is(a, button, .fw-site-letters__off),
+  .fw-fpage[data-form="glossaire"] .glo-az :is(.fw-site-letters__link, .fw-site-letters__off) { min-width: 32px; min-height: 40px; font-size: 19px; }
+  html[data-form="glossaire"] .glo-panel { max-height: 52vh; }
+  html[data-form="glossaire"] .glo-panel__cols { columns: 1; }
+  
+  html[data-form="glossaire"] .glo-az ol, .fw-fpage[data-form="glossaire"] .glo-az .fw-site-letters__list { scrollbar-width: thin; padding-bottom: 6px; }
+  html[data-form="glossaire"] .glo-az ol::-webkit-scrollbar { display: block; height: 3px; }
+}
+
+html[data-form="glossaire"] .fw-fpage table td:first-child, html[data-form="glossaire"] .fw-fpage table th:first-child { padding-left: 10px; }
+@media (max-width: 600px) {
+  html[data-form="glossaire"] .glo-bar--index .glo-bar__count { display: none; }
+  html[data-form="glossaire"] .fw-site-entry { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  html[data-form="glossaire"] .glo-tags .fw-compare[data-fw-site-fit] .fw-compare__grid tbody tr { padding: 12px 0; border-bottom: 1px solid var(--ff-rule); }
+  html[data-form="glossaire"] .glo-tags .fw-compare[data-fw-site-fit] .fw-compare__grid tbody th { width: auto; padding: 0 0 4px; font: 400 16px/1.4 var(--ff-mono); color: var(--ff-title); border: 0; }
+  html[data-form="glossaire"] .glo-tags .fw-compare[data-fw-site-fit] .fw-compare__grid td { padding: 0; border: 0; font-size: 17px; }
+  html[data-form="glossaire"] .glo-tags .fw-compare[data-fw-site-fit] .fw-compare__grid td::before { display: none; }
+  html[data-form="glossaire"] .fw-compare[data-fw-site-fit] .fw-compare__grid tbody tr { padding: 14px 0 16px; }
+}
+
+@media print {
+  html[data-form="glossaire"] .glo-bar, html[data-form="glossaire"] .glo-none, html[data-form="glossaire"] .glo-tally { display: none !important; }
+}
