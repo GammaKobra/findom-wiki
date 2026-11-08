@@ -11,14 +11,14 @@
 <meta name="color-scheme" content="dark light">
 <link rel="icon" href="data:,">
 <script>(function(){var d=document.documentElement,t=null;try{t=new URLSearchParams(location.search).get("theme")||localStorage.getItem("fw-theme");}catch(e){}d.setAttribute("data-theme",t==="light"?"light":"dark");try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("fw-pre");setTimeout(function(){d.classList.remove("fw-pre");},6000);}}catch(e){}})();</script>
-<script>(function(){var d=document.documentElement;d.classList.add("fw-js");try{if(/[?&]gate=off(?:&|$)/.test(location.search))return;if(window.localStorage.getItem("fw-adult")==="yes")return;}catch(e){}d.classList.add("fw-gate-open");})();</script>
+<script>(function(){var d=document.documentElement;d.classList.add("fw-js");try{if(/[?&]gate=off(?:&|$)/.test(location.search)&&/^(localhost|127\.0\.0\.1|)$/.test(location.hostname))return;var v=window.localStorage.getItem("fw-adult");if(v&&/^y:\d+$/.test(v)&&Date.now()-v.slice(2)<2592e6)return;}catch(e){}d.classList.add("fw-gate-open");})();</script>
 <link rel="stylesheet" href="../assets/tokens.css?v=26b75bb346">
-<link rel="stylesheet" href="../assets/fw-base.css?v=4968e1c8a6">
+<link rel="stylesheet" href="../assets/fw-base.css?v=299daeb2c1">
 <link rel="stylesheet" href="../assets/kit-content.css?v=8deb4cc448">
 <link rel="stylesheet" href="../assets/kit-learn.css?v=b34a520b8e">
 <link rel="stylesheet" href="../assets/site.css?v=1765dde7e0">
 <link rel="stylesheet" href="../assets/pages.css?v=2e70332200">
-<link rel="stylesheet" href="../assets/proto.css?v=0c2ffec750">
+<link rel="stylesheet" href="../assets/proto.css?v=591f832020">
 <link rel="stylesheet" href="../assets/forms/_base.css?v=bd57b9bc45">
 <link rel="stylesheet" href="../assets/forms/guide.css?v=e7b638b906">
 </head>
@@ -73,7 +73,7 @@
   </div>
 </footer>
 </div>
-<script src="../assets/site.js?v=116264c499"></script>
+<script src="../assets/site.js?v=b220ca1e0c"></script>
 <script src="../assets/vendor/gsap/gsap.min.js?v=92bb9a9647"></script>
 <script src="../assets/vendor/gsap/CustomEase.min.js?v=466e426a5c"></script>
 <script src="../assets/fw-base.js?v=ef4106ce01"></script>

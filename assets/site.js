@@ -21,7 +21,7 @@
       if (docEl.classList.contains("fw-gate-open") && !gate.contains(e.target)) dialog.focus();
     });
     yes.addEventListener("click", function () {
-      try { window.localStorage.setItem(KEY, "yes"); } catch (e) { /* not stored: the gate comes back on the next page */ }
+      try { window.localStorage.setItem(KEY, "y:" + Date.now());   /* asked again after 30 days */ } catch (e) { /* not stored: the gate comes back on the next page */ }
       held.forEach(function (el) { el.removeAttribute("inert"); });
       var done = false;
       function finish() {
@@ -29,7 +29,12 @@
         done = true;
         docEl.classList.remove("fw-gate-open");
         gate.classList.remove("is-leaving");
-        if (document.activeElement && gate.contains(document.activeElement)) document.activeElement.blur();
+        var body = document.body;
+        if (document.activeElement && gate.contains(document.activeElement)) {
+          body.setAttribute("tabindex", "-1");
+          try { body.focus({ preventScroll: true }); } catch (e) { body.focus(); }
+          body.addEventListener("blur", function () { body.removeAttribute("tabindex"); }, { once: true });
+        }
       }
       gate.classList.add("is-leaving");
       gate.addEventListener("transitionend", function (e) { if (e.target === gate) finish(); });

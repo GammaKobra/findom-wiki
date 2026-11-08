@@ -245,7 +245,7 @@
 
 .fw-ev__btn { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 28px; padding: 0 12px 0 9px; border: 0; border-radius: var(--fw-radius-pill); background: var(--fw-glass); color: var(--ev-ink); box-shadow: inset 0 0 0 1px var(--ev-line); font: var(--fw-weight-label) var(--fw-fs-meta)/1 var(--fw-font-ui); white-space: nowrap; cursor: help; scale: 1; transition: box-shadow var(--fw-dur-hover) var(--fw-ease-hover), scale var(--fw-dur-press) var(--fw-ease-out); }
 
-button.fw-ev__btn::after { content: ""; position: absolute; inset: -8px -4px; }
+button.fw-ev__btn::after { content: ""; position: absolute; inset: -9px -4px; }   
 button.fw-ev__btn:active { scale: var(--fw-press-scale); }
 .fw-ev--static .fw-ev__btn { cursor: default; }
 .fw-ev__glyph { width: 14px; height: 14px; flex: none; }

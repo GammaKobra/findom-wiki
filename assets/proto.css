@@ -440,3 +440,9 @@ html[data-theme="light"] .fw-steps__n { color: var(--fw-accent-pressed) !importa
 .fw-media__grid { align-items: start; }
 .fw-band__frame { aspect-ratio: auto; overflow: visible; border: 0 !important; }
 .fw-band__frame::after { display: none; }
+
+
+:is(.fw-search__input, .fw-search-page__input, .fw-sim__input, .fw-plan__input):not(:focus) { box-shadow: inset 0 0 0 1px var(--fw-ink-quiet) !important; }
+html[data-form] :is(.glo-bar__input, .gd-tick, .glo-bar__toggle):not(:focus-visible) { border-color: var(--fw-ink-quiet) !important; }
+
+#fw-main:focus, body:focus { outline: none; }
